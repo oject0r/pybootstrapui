@@ -7,7 +7,7 @@ def parse_requirements(filename):
 
 setup(
     name="pybootstrapui",
-    version="1.0.1",
+    version="1.0.2",
     description="A Python library for building web interfaces with dynamic and desktop features.",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",

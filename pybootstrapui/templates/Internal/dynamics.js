@@ -9,6 +9,7 @@ function fetchJSON(url, options = {}) {
         });
 }
 
+
 function sendJSON(url, data) {
     return fetchJSON(url, {
         method: "POST",
@@ -139,6 +140,15 @@ function sendEventCustom(eventContext, eventType, customData) {
         event: eventType,
         data: customData,
     });
+}
+
+function sendAction(eventContext, eventType) {
+    sendJSON(host + '/action', {
+        event: eventType,
+        data: {
+            id: eventContext
+        }
+    })
 }
 
 function sendButtonClick(buttonId) {

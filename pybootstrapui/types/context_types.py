@@ -23,8 +23,20 @@ class ChoiceCallbackContext(CallbackContext):
 		super().__init__(id)
 		self.value: str = ''
 
+class BlurCallbackContext(CallbackContext):
+	def __init__(self, id):
+		super().__init__(id)
+
+
+class FocusCallbackContext(CallbackContext):
+	def __init__(self, id):
+		super().__init__(id)
+
+
 types: dict[str, Type[CallbackContext]] = {
 	'button_click': ButtonCallbackContext,
 	'on_input': InputCallbackContext,
+	'on_focus': FocusCallbackContext,
+	'on_blur': BlurCallbackContext,
 	'on_choice': ChoiceCallbackContext
 }
