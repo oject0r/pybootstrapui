@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{page_name}</title>
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://bootswatch.com/5/united/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        /* Gradient Background Animation */
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        body {
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        li {
+            list-style-type: none;
+        }
+
+        .histogram {
+            background-color: rgba(32, 32, 32, 0.8);
+            padding: 2em;
+            border-radius: 3em;
+        }
+
+        .gradient-text {
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            background-image: linear-gradient(45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        /* Стили для кнопки переключателя */
+        .theme-switcher {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            font-size: 1.5rem;
+            border-radius: 50%;
+            width: 2em;
+            height: 2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Плавный переход для иконки */
+        .theme-switcher i {
+            transition: transform 0.5s ease-in-out;
+        }
+
+        /* Анимация вращения иконки при смене темы */
+        .theme-switcher.rotate i {
+            transform: rotate(360deg);
+        }
+
+    </style>
+    {custom_head}
+</head>
+
+<body>
+    <!-- Toast Notification Container -->
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1050;">
+        <div class="toast text-white" role="alert" aria-live="assertive" aria-atomic="true" id="errorToast">
+            <div class="toast-header">
+                <strong class="me-auto" id="errorHeader">Error</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="errorMessage">Error occurred...</div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container mt-4" id="container">
+        <!-- Navigation Content Placeholder -->
+        {nav_content}
+
+        <!-- Page Main Content Placeholder -->
+        {page_main}
+    </div>
+
+    <!-- JavaScript Section -->
+    <script>
+
+        Chart.defaults.elements.line.borderWidth = 100;
+        {javascript_here}
+    </script>
+</body>
+</html>
