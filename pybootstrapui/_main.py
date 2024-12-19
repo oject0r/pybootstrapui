@@ -16,6 +16,28 @@ with open(templates.InternalTemplates.JavaScript, 'r', encoding='utf-8') as js_f
 
 custom_head_additions = '''
 <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" /> <!-- Connect video.js -->
+<style>
+.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease-out;
+}
+
+.transition {
+    transition: opacity 0.5s ease-in-out;
+}
+
+.progress-bar {
+    transition: width 0.3s ease-in-out;
+}
+
+
+</style>
 '''
 
 class Page:
@@ -343,6 +365,39 @@ class Page:
 		if self.dynamic:
 			thread = threading.Thread(target=start_ajax_server, daemon=True)
 			thread.start()
+
+	def clear(self):
+		"""
+		Clears the content of the page.
+
+		This method resets the `self.content` list to an empty state and sends a task
+		to the frontend to clear the container's content dynamically.
+
+		Example:
+			# Clear all elements from the page
+			page.clear()
+		"""
+		self.content = []
+		queue.add_task('container', 'rewriteContent', newContent='')
+
+	def get_element_by_id(self, element_id: str) -> HTMLElement | None:
+		"""
+		Retrieves an element from the page by its unique ID.
+
+		Parameters:
+			- `element_id` (str): The ID of the element to retrieve.
+
+		Returns:
+			- `HTMLElement | None`: The element with the specified ID, or None if not found.
+
+		Example:
+			# Get an element by ID
+			element = page.get_element_by_id('button1')
+		"""
+		for element in self.content:
+			if element.id == element_id:
+				return element
+		return None
 
 	def run_in_desktop(self, nwjs_path: os.PathLike[str] | os.PathLike[bytes] | str | bytes, *,
 					   icon: os.PathLike[str] | os.PathLike[bytes] | str | bytes | None = None,

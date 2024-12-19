@@ -15,4 +15,5 @@ from .lists import *
 from .markdown import *
 from .modals import *
 from .tables import *
+from .progress import *
 from .text import *

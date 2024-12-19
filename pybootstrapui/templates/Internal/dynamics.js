@@ -40,12 +40,13 @@ function handleTask(task) {
         getValue: () => getValueFromInput(task.id),
         setValue: () => setValueToInput(task.id, task.value),
         executeJavascript: () => executeJavascriptCode(task.code),
-        rewriteContent: () => rewriteContent(task.id, task.newContent),
+        rewriteContent: () => rewriteContent(task.id, task.newContent, task.transitionTime),
         focusOn: () => focusOn(task.id),
         getCaret: () => getCaret(task.id),
         setCaret: () => moveCursorTo(task.id, task.newPosition),
         addNew: () => addInto(task.id, task.content),
         deleteElement: () => deleteById(task.id),
+        updateProgressBar: () => updateProgressBar(task.id, task.newValue, task.newText),
         customTask: () => performCustomTask(task.id),
 
     };
@@ -72,15 +73,61 @@ function setValueToInput(inputId, value) {
     return value;
 }
 
-function rewriteContent(containerId, newContent) {
-    console.log('Got rewrite content!')
+function rewriteContent(containerId, newContent, transitionTime = 0) {
     const container = document.getElementById(containerId);
+
     if (container) {
-        container.innerHTML = newContent;
+        // Устанавливаем переход для плавного исчезновения
+        container.style.transition = `opacity ${transitionTime}ms ease-in-out`;
+        container.style.opacity = "0"; // Плавно скрываем элемент
+
+        // После завершения скрытия проверяем тип изменения
+        setTimeout(() => {
+            if (typeof newContent === "string") {
+                // Если передан HTML-контент, обновляем содержимое
+                container.innerHTML = newContent;
+            } else if (typeof newContent === "object") {
+                // Если передан объект изменений, применяем стили
+                if (newContent.style) {
+                    Object.assign(container.style, newContent.style);
+                }
+                if (newContent.text) {
+                    container.textContent = newContent.text;
+                }
+            }
+
+            // Плавное появление
+            container.style.opacity = "1";
+        }, transitionTime);
+
         return "Content updated successfully!";
     }
+
     return `Error: Container '${containerId}' not found.`;
 }
+
+
+function updateProgressBar(elementId, newValue, newText) {
+    const progressBar = document.getElementById(elementId);
+    const hostPB = document.getElementById(elementId + 'HOST');
+
+    if (progressBar) {
+        // Ограничиваем значение в диапазоне 0-100
+        const clampedValue = Math.max(0, Math.min(100, newValue));
+
+        // Изменяем ширину прогресс-бара
+        progressBar.style.width = `${clampedValue}%`;
+
+        // Обновляем значение внутри прогресс-бара
+        progressBar.textContent = newText;
+        hostPB.setAttribute("aria-valuenow", clampedValue);
+    } else {
+        console.error(`Progress bar with ID "${elementId}" not found.`);
+    }
+    return 'h';
+}
+
+
 
 // Focus and Caret Handling
 function focusOn(elementId) {
@@ -179,12 +226,28 @@ function getValueId(id) {
 function addInto(id, content) {
     const element = document.getElementById(id);
     if (element) {
-        element.insertAdjacentHTML('beforeend', content);
+        // Создаём временный контейнер для нового контента
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = content.trim(); // Вставляем новый контент
+        const newElement = tempDiv.firstElementChild;
+
+        // Добавляем класс hidden для начального состояния
+        newElement.classList.add('hidden');
+        element.appendChild(newElement);
+
+        // Переключаем на видимый через короткую задержку
+        setTimeout(() => {
+            newElement.classList.add('visible');
+            newElement.classList.remove('hidden');
+        }, 10);
+
         return 'Content added successfully!';
     } else {
         return 'Element not found!';
     }
 }
+
+
 
 function deleteById(id) {
     const element = document.getElementById(id);

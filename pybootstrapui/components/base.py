@@ -56,13 +56,13 @@ class HTMLElement:
 		"""
 		return ''
 
-	def update(self) -> None:
+	def update(self, transition_time = 0) -> None:
 		"""
 		Updates the HTML content of the element on the frontend by queuing a task.
 
 		Replaces the current content of the element with the newly constructed HTML.
 		"""
-		queue.add_task(self.id, 'rewriteContent', newContent=self.construct())
+		queue.add_task(self.id, 'rewriteContent', newContent=self.construct(), transitionTime = transition_time)
 
 	def remove(self):
 		"""
