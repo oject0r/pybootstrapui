@@ -1,6 +1,6 @@
 from .buttons import ButtonStyle
 from .spacing import Spacing
-from .colors import ColorUtilities
+from .colors import ColorUtilities as Colors
 from .utilities import (
     FloatUtilities, Display, Flex, TextTransform,
     FontWeight, Overflow, Position, Shadow, Visibility
@@ -9,7 +9,7 @@ from .utilities import (
 __all__ = [
     "ButtonStyle",
     "Spacing",
-    "ColorUtilities",
+    "Colors",
     "FloatUtilities",
     "Display",
     "Flex",

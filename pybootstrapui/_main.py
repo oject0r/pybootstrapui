@@ -38,6 +38,64 @@ custom_head_additions = '''
 
 
 </style>
+<style>
+    .file-upload-container {
+        max-width: 15em;
+    }
+
+    .file-upload-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: var(--bs-primary);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
+
+    .file-upload-button:hover {
+        background-color: var(--bs-primary-dark);
+    }
+
+    .uploaded-files {
+        margin-top: 15px;
+        list-style: none;
+        padding: 0;
+        font-size: 14px;
+    }
+
+    .uploaded-files li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid var(--bs-secondary);
+        border-radius: 5px;
+        margin-bottom: 10px;
+        background-color: var(--bs-primary-dark);
+    }
+
+    .uploaded-files li .file-name {
+        color: var(--bs-primary);
+    }
+
+    .uploaded-files li .file-size {
+        color: var(--bs-muted);
+    }
+
+    .uploaded-files li .delete-button {
+        color: var(--bs-danger);
+        cursor: pointer;
+        font-size: 20px;
+        transition: color 0.3s ease;
+    }
+
+    .uploaded-files li .delete-button:hover {
+        color: var(--bs-danger-dark);
+    }
+</style>
 '''
 
 class Page:

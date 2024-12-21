@@ -45,8 +45,10 @@ function handleTask(task) {
         getCaret: () => getCaret(task.id),
         setCaret: () => moveCursorTo(task.id, task.newPosition),
         addNew: () => addInto(task.id, task.content),
+        addTooltip: () => addTooltip(task.id, task.content, task.placement),
         deleteElement: () => deleteById(task.id),
         updateProgressBar: () => updateProgressBar(task.id, task.newValue, task.newText),
+        getSelectedFiles: () => getSelectedFiles(task.id),
         customTask: () => performCustomTask(task.id),
 
     };
@@ -259,6 +261,91 @@ function deleteById(id) {
     }
 
 
+}
+
+function addTooltip(targetId, content, placement = "top") {
+    const targetElement = document.getElementById(targetId);
+
+    if (!targetElement) {
+        console.error(`Tooltip target with ID "${targetId}" not found.`);
+        return;
+    }
+
+    // Проверяем, если тултип уже существует, удаляем старый
+    if (targetElement._tooltipInstance) {
+        targetElement._tooltipInstance.dispose();
+    }
+
+    // Инициализация тултипа с помощью Bootstrap
+    const tooltip = new bootstrap.Tooltip(targetElement, {
+        title: content,
+        placement: placement,
+    });
+
+    // Сохраняем экземпляр тултипа для удаления при необходимости
+    targetElement._tooltipInstance = tooltip;
+}
+
+function getSelectedFiles(inputId) {
+    const inputElement = document.getElementById(inputId);
+
+    if (!inputElement) {
+        console.error(`File input with ID "${inputId}" not found.`);
+        return [];
+    }
+
+    const files = Array.from(inputElement.files || []);
+    return files.map(file => ({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        path: file.path,
+    }));
+}
+
+function handleFiles(files, inputId) {
+    const inputElement = document.getElementById(inputId);
+    const uploadedFiles = document.getElementById(`${inputId}-uploaded-files`);
+
+    Array.from(files).forEach((file, index) => {
+        const fileSize = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <span class="file-name"><i class="bi bi-file-earmark"></i> ${file.name}</span>
+            <span class="file-size">${fileSize}</span>
+            <span class="delete-button" onclick="deleteFile('${inputId}', ${index}, this.parentElement)">
+                <i class="bi bi-trash"></i>
+            </span>
+        `;
+        uploadedFiles.appendChild(listItem);
+    });
+}
+
+// Функция для удаления файла
+function deleteFile(inputId, index, listItem) {
+    const inputElement = document.getElementById(inputId);
+
+    if (!inputElement || !inputElement.files) {
+        console.error('File input not found or unsupported.');
+        return;
+    }
+
+    const dataTransfer = new DataTransfer();
+    const files = Array.from(inputElement.files);
+
+    // Добавляем все файлы, кроме удаляемого
+    files.forEach((file, i) => {
+        if (i !== index) {
+            dataTransfer.items.add(file);
+        }
+    });
+
+    // Присваиваем обновлённый список файлов обратно в input
+    inputElement.files = dataTransfer.files;
+
+    // Удаляем элемент из DOM
+    listItem.remove();
 }
 
 

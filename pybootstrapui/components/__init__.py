@@ -16,4 +16,6 @@ from .markdown import *
 from .modals import *
 from .tables import *
 from .progress import *
+from .notifications import *
+from .file_uploads import FileUpload
 from .text import *
