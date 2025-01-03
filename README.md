@@ -64,7 +64,7 @@ def on_button_click(context):
 # Create a page with a button callback
 page = Page(template_filename=Default, page_title="Callback Demo")
 page.add(Header(label="Dynamic Callbacks Example"))
-page.add(Button(label="Click Me", btn_style_type="primary", callback=on_button_click))
+page.add(Button(label="Click Me", btn_style_type="primary", on_click=on_button_click))
 
 # Run as a desktop application
 page.run_in_desktop(
