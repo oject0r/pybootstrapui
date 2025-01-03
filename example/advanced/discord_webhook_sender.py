@@ -14,7 +14,7 @@ async def send_webhook(ctx: ButtonCallbackContext):
 		message_content = await content_input.get_value()
 		await session.post(webhook_url, data={'content': message_content})
 
-send_button = Button('Send', callback=send_webhook)
+send_button = Button('Send', on_click=send_webhook)
 
 page.add(
 	Card([webhook_input, content_input, send_button])

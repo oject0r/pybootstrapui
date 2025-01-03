@@ -38,7 +38,7 @@ async def fetch_weather(ctx: ButtonCallbackContext):
 	weather_display.update()
 
 
-get_weather_button = Button('Get Weather', callback=fetch_weather)
+get_weather_button = Button('Get Weather', on_click=fetch_weather)
 
 page.add(
 	city_input,

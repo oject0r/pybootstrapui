@@ -23,7 +23,7 @@ async def convert_currency(ctx: ButtonCallbackContext):
             result_display.label = f'Converted Amount: {amount * conversion_rate:.2f} EUR'
             result_display.update()
 
-convert_button = Button('Convert to EUR', callback=convert_currency)
+convert_button = Button('Convert to EUR', on_click=convert_currency)
 
 page.add(
     amount_input, result_display, convert_button

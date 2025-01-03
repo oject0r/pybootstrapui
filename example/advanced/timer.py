@@ -22,7 +22,7 @@ async def start_timer(ctx: ButtonCallbackContext):
     timer_display.label = 'Time is up!'
     timer_display.update()
 
-start_button = Button('Start Timer', callback=start_timer)
+start_button = Button('Start Timer', on_click=start_timer)
 
 page.add(
     time_input, timer_display, start_button
