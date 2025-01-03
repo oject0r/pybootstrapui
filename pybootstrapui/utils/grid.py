@@ -2,6 +2,7 @@ class GridHelper:
     """
     A helper class for generating Bootstrap grid classes.
     """
+
     @staticmethod
     def generate_column_class(size: str, columns: int) -> str:
         """

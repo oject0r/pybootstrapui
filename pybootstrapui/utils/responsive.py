@@ -2,6 +2,7 @@ class ResponsiveUtilities:
     """
     A utility class for managing Bootstrap responsive utilities, including visibility and spacing.
     """
+
     def __init__(self):
         self.classes = []
 

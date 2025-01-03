@@ -25,7 +25,7 @@ def add_new_callback(context: ButtonCallbackContext):
 page.add(
 	header_1,
 	components.Text('This file is made to show dynamic additions to pages.'),
-	components.Button('Click me!', btn_style_type=ButtonStyle.SUCCESS, callback=add_new_callback, classes=['bottom-left-corner'])
+	components.Button('Click me!', btn_style_type=ButtonStyle.SUCCESS, on_click=add_new_callback, classes=['bottom-left-corner'])
 )
 
 if __name__ == '__main__':

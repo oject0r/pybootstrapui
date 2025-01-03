@@ -3,12 +3,14 @@ class Grid:
     COLUMN = "col"
     COLUMN_AUTO = "col-auto"
 
+
 class GridBreakpoints:
     SM = "sm"
     MD = "md"
     LG = "lg"
     XL = "xl"
     XXL = "xxl"
+
 
 class GridAlignment:
     ALIGN_START = "align-items-start"
@@ -21,6 +23,7 @@ class GridAlignment:
     JUSTIFY_BETWEEN = "justify-content-between"
     JUSTIFY_EVENLY = "justify-content-evenly"
 
+
 class GridOrder:
     FIRST = "order-first"
     LAST = "order-last"
@@ -30,6 +33,7 @@ class GridOrder:
     ORDER_3 = "order-3"
     ORDER_4 = "order-4"
     ORDER_5 = "order-5"
+
 
 class GridColumnSizes:
     COL_1 = "col-1"
@@ -44,6 +48,7 @@ class GridColumnSizes:
     COL_10 = "col-10"
     COL_11 = "col-11"
     COL_12 = "col-12"
+
 
 class GridGap:
     GAP_0 = "gap-0"

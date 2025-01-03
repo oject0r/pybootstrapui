@@ -29,6 +29,8 @@ Vapor = str(Path(__file__).parent.absolute()) + "/vapor.html"
 Yeti = str(Path(__file__).parent.absolute()) + "/yeti.html"
 Zephyr = str(Path(__file__).parent.absolute()) + "/zephyr.html"
 
+
 class InternalTemplates:
-	JavaScript = str(Path(__file__).parent.absolute()) + '/Internal/dynamics.js'
-	IconSample = str(Path(__file__).parent.absolute()) + '/Internal/iconsample.ico'
+    JavaScript = str(Path(__file__).parent.absolute()) + "/Internal/dynamics.js"
+    GeneralStyle = str(Path(__file__).parent.absolute()) + "/Internal/general.css"
+    IconSample = str(Path(__file__).parent.absolute()) + "/Internal/iconsample.ico"

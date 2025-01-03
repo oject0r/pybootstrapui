@@ -12,7 +12,7 @@ def button_callback(context: ui.ButtonCallbackContext):
 
 page.add(
     Text('Press the button below:'),
-    Button('Click Me', btn_style_type=ui.enums.ButtonStyle.PRIMARY, callback=button_callback)
+    Button('Click Me', btn_style_type=ui.enums.ButtonStyle.PRIMARY, on_click=button_callback)
 )
 
 if __name__ == '__main__':

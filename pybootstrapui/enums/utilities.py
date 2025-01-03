@@ -3,6 +3,7 @@ class FloatUtilities:
     END = "float-end"
     NONE = "float-none"
 
+
 class Display:
     NONE = "d-none"
     BLOCK = "d-block"
@@ -12,6 +13,7 @@ class Display:
     INLINE_FLEX = "d-inline-flex"
     GRID = "d-grid"
     INLINE_GRID = "d-inline-grid"
+
 
 class Flex:
     ROW = "flex-row"
@@ -27,10 +29,12 @@ class Flex:
     SHRINK_0 = "flex-shrink-0"
     SHRINK_1 = "flex-shrink-1"
 
+
 class TextTransform:
     LOWERCASE = "text-lowercase"
     UPPERCASE = "text-uppercase"
     CAPITALIZE = "text-capitalize"
+
 
 class FontWeight:
     LIGHTER = "fw-lighter"
@@ -39,11 +43,13 @@ class FontWeight:
     BOLD = "fw-bold"
     BOLDER = "fw-bolder"
 
+
 class Overflow:
     AUTO = "overflow-auto"
     HIDDEN = "overflow-hidden"
     VISIBLE = "overflow-visible"
     SCROLL = "overflow-scroll"
+
 
 class Position:
     STATIC = "position-static"
@@ -52,11 +58,13 @@ class Position:
     FIXED = "position-fixed"
     STICKY = "position-sticky"
 
+
 class Shadow:
     NONE = "shadow-none"
     SMALL = "shadow-sm"
     REGULAR = "shadow"
     LARGE = "shadow-lg"
+
 
 class Visibility:
     VISIBLE = "visible"
