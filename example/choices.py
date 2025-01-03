@@ -16,4 +16,4 @@ page.add(
 )
 
 if __name__ == '__main__':
-    page.run_in_desktop('D:\\nwjs\\nw.exe', title='Choice Example')
+    page.run_in_desktop('/path/to/nwjs', title='Choice Example')

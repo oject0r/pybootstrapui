@@ -17,4 +17,4 @@ class MainPage(Page):
         )
 
 if __name__ == '__main__':
-    MainPage().run_in_desktop('D:\\nwjs\\nw.exe')
+    MainPage().run_in_desktop('/path/to/nwjs')
