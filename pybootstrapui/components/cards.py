@@ -40,7 +40,7 @@ class Card(HTMLElement):
                         children=[Text("Card content"), button],
                         header=Header("Card Header"),
                         footer=[Text("Card Footer"), link],
-                        image="https://example.com/image.jpg",
+                        image=URLImage("https://example.com/image.jpg"),
                         classes=["custom-card"]
                 )
 
@@ -77,7 +77,10 @@ class Card(HTMLElement):
             if self.footer
             else ""
         )
-        self.image.add_class("card-img-top")
+
+        if self.image:
+            self.image.add_class("card-img-top")
+
         image_html = self.image.construct() if self.image else ""
         body_html = "\n".join([child.construct() for child in self.children])
 
