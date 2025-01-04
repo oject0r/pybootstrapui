@@ -52,6 +52,14 @@ class ProgressBar(HTMLElement):
             f"{self.id}", "updateProgressBar", newValue=self.value, newText=self.label
         )
 
+    def remove(self):
+        """
+        Removes the progress bar from the DOM.
+        """
+
+        add_task(f"{self.id}HOST", "deleteElement")
+        del self
+
     def construct(self) -> str:
         """
         Constructs the HTML representation of the progress bar.

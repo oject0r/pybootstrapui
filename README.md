@@ -4,19 +4,19 @@
 
 ---
 
-## Key Features
+## 🚀 **Key Features**
 
-- **Dynamic UI**: Build interactive web pages with server-side callbacks for user events.
-- **Desktop Applications**: Launch web pages as standalone desktop apps using NW.js.
-- **Prebuilt Components**: Access a library of ready-to-use HTML components like buttons, headers, forms, modals, and more.
-- **Custom Templates**: Use predefined themes or your own HTML templates for quick styling.
-- **Seamless Integration**: Works well with FastAPI and Bootstrap for modern web development.
+- **🖥️ Dynamic UI:** Build interactive web pages with server-side callbacks for user events.
+- **💻 Desktop Applications:** Launch web pages as standalone desktop apps using NW.js.
+- **📦 Prebuilt Components:** Access a library of ready-to-use HTML components like buttons, headers, forms, modals, and more.
+- **🎨 Custom Templates:** Use predefined themes or your own HTML templates for quick styling.
+- **🔗 Seamless Integration:** Works well with FastAPI and Bootstrap for modern web development.
 
 ---
 
-## Quick Start
+## ⚡ **Quick Start**
 
-### Installation
+### 📥 **Installation**
 
 1. Install the package:
    ```bash
@@ -25,12 +25,16 @@
 
 2. Install **NW.js** if you plan to build desktop applications:
    - [Download NW.js](https://nwjs.io/).
+   - Or use the PyBootstrapUI command:
+     ```bash
+     python -m pybootstrapui download %path_to_nwjs%
+     ```
 
 ---
 
-### Basic Usage
+### 📝 **Basic Usage**
 
-#### Creating a Page
+#### **📄 Creating a Page**
 
 ```python
 from pybootstrapui import Page
@@ -50,7 +54,7 @@ print(page.compile())
 
 ---
 
-### Adding Callbacks
+#### **🔄 Adding Callbacks**
 
 ```python
 from pybootstrapui import Page
@@ -77,7 +81,7 @@ page.run_in_desktop(
 
 ---
 
-## Running as a Desktop App
+## 🖥️ **Running as a Desktop App**
 
 Use the `Page.run_in_desktop` method to run your page as a desktop application.
 
@@ -104,21 +108,52 @@ page.run_in_desktop(
 
 ---
 
-## Documentation
+## 📦 **Easy Packaging**
 
-Comprehensive documentation is available at [PyBootstrapUI Docs](https://pybootstrapui.076s.pw).
+Easily package and distribute your **PyBootstrapUI** applications with minimal effort!
+
+### 🛠️ **Step 1: Create a New Project**
+
+Generate a fully templated **PyBootstrapUI** project structure:
+
+```bash
+python -m pybootstrapui create MyProject
+```
+
+### ⚙️ **Step 2: Build Your Application**
+
+Package your application into a standalone build:
+
+```bash
+python -m pybootstrapui build MyProject
+```
+
+- **Dependencies Management:** All required packages are bundled.
+- **Optimized Build Process:** Ensures efficient and clean packaging.
+- **Platform-Specific Binaries:** Create executables for Windows, macOS, or Linux seamlessly.
 
 ---
 
-## Links
+## 📚 **Documentation**
 
-- **GitHub**: [oject0r/pybootstrapui](https://github.com/oject0r/pybootstrapui)
-- **Documentation**: [pybootstrapui.076s.pw](https://pybootstrapui.076s.pw)
-- **Bootstrap**: [getbootstrap.com](https://getbootstrap.com)
-- **FastAPI**: [fastapi.tiangolo.com](https://fastapi.tiangolo.com)
+Detailed API reference is available at [PyBootstrapUI Docs](https://pybootstrapui.076s.pw).
 
 ---
 
-## License
+## 🔗 **Useful Links**
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+- **GitHub:** [oject0r/pybootstrapui](https://github.com/oject0r/pybootstrapui)
+- **Documentation:** [pybootstrapui.076s.pw](https://pybootstrapui.076s.pw)
+- **Bootstrap:** [getbootstrap.com](https://getbootstrap.com)
+- **FastAPI:** [fastapi.tiangolo.com](https://fastapi.tiangolo.com)
+
+---
+
+## 📜 **License**
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+---
+
+✨ Start building beautiful, dynamic, and cross-platform applications with **PyBootstrapUI** today! 🚀
+

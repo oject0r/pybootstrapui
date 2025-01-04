@@ -48,7 +48,7 @@ class Page:
 
     def __init__(
         self,
-        template_filename: os.PathLike | str | bytes,
+        template_filename: os.PathLike | str | bytes = templates.Default,
         content: list[HTMLElement] = None,
         page_title: str | None = None,
         dynamic_ui: bool = True,

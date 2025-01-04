@@ -14,9 +14,6 @@ class InvalidIconFile(Exception):
             - `message` (str): Error message describing the issue.
     """
 
-    def __init__(self, *args):
-        super().__init__(" ".join(list(args)).strip(" "))
-
 
 def run_page_in_desktop(
     page,

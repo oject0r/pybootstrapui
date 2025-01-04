@@ -126,7 +126,7 @@ class ButtonGroup(HTMLElement):
         """
         buttons_compiled = "\n".join([button.construct() for button in self.buttons])
         return f"""
-		<div class="btn-group" id="{self.id if self.id else ''}" class="{self.classes_str}">
+		<div class="btn-group {self.classes_str}" id="{self.id if self.id else ''}">
 			{buttons_compiled}
 		</div>
 		"""
