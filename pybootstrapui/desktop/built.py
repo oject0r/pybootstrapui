@@ -1,6 +1,6 @@
 import sys
 import os
-from pybootstrapui.zeroconfig import zeroconfig
+from pybootstrapui import zeroconfig
 from pathlib import Path
 from pybootstrapui.__main__ import get_system_info
 

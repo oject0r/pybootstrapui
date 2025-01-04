@@ -2,7 +2,7 @@ import os
 from PyInstaller.__main__ import run as pyi_run
 import sys
 from pathlib import Path
-from pybootstrapui.zeroconfig import zeroconfig
+from pybootstrapui import zeroconfig
 from pybootstrapui.templates import InternalTemplates
 import shutil
 
