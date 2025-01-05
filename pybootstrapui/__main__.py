@@ -50,9 +50,8 @@ MIRROR_SDK_LINKS = {
 
 
 def download_file(url, dest_folder):
-    """
-    Download a file with progress bar without external libraries.
-    """
+    """Download a file with progress bar without
+    external libraries."""
     os.makedirs(dest_folder, exist_ok=True)
     file_name = os.path.join(dest_folder, url.split("/")[-1])
 
@@ -80,9 +79,7 @@ def download_file(url, dest_folder):
 
 
 def get_system_info():
-    """
-    Detect system type and architecture.
-    """
+    """Detect system type and architecture."""
     # Determine OS type
     if sys.platform.startswith("win"):
         os_type = "windows"
@@ -108,13 +105,17 @@ def get_system_info():
 
 
 def extract_archive(archive_path: str, dest_folder: str):
-    """
-    Automatically extracts a ZIP or TAR.GZ archive to the specified destination folder.
-    If the archive contains only one top-level folder, its contents are extracted directly.
+    """Automatically extracts a ZIP or TAR.GZ
+    archive to the specified destination folder.
 
-    Args:
-        archive_path (str): Path to the archive file.
-        dest_folder (str): Destination folder for extraction.
+    If the archive contains only one top-level
+    folder, its contents are extracted directly.
+    :param archive_path: Path to the archive
+        file.
+    :type archive_path: str
+    :param dest_folder: Destination folder for
+        extraction.
+    :type dest_folder: str
     """
     archive_path = Path(archive_path)
     dest_folder = Path(dest_folder)
@@ -162,9 +163,8 @@ def extract_archive(archive_path: str, dest_folder: str):
 
 
 def download_nwjs(source, version, dest_folder):
-    """
-    Download NW.js based on user's choice of source.
-    """
+    """Download NW.js based on user's choice of
+    source."""
     os_type, arch = get_system_info()
     key = f"{os_type}_{arch}"
 
@@ -187,9 +187,8 @@ def download_nwjs(source, version, dest_folder):
 
 
 def download(path_to_nwjs: Path):
-    """
-    Download NW.js to the specified directory.
-    """
+    """Download NW.js to the specified
+    directory."""
 
     print("Which source would you like to use for download?")
     print("1. Official NW.js website (slow download, more reliable)")
@@ -220,8 +219,8 @@ def download(path_to_nwjs: Path):
 
 
 def create_project(project_path: Path):
-    """
-    Create a new NW.js project with system-specific configurations.
+    """Create a new NW.js project with system-
+    specific configurations.
 
     Parameters:
         - project_path (Path): Path where the project will be created.
@@ -299,8 +298,8 @@ pyinstaller_args ["--onefile", "--windowed"]
 
 
 def handle_existing_nwjs(project_path: Path):
-    """
-    Handle copying an existing NW.js installation.
+    """Handle copying an existing NW.js
+    installation.
 
     Parameters:
         - project_path (Path): Path where NW.js will be copied.
@@ -319,9 +318,8 @@ def handle_existing_nwjs(project_path: Path):
 
 
 def parse_args():
-    """
-    Parse command-line arguments and execute the appropriate function.
-    """
+    """Parse command-line arguments and execute
+    the appropriate function."""
     parser = argparse.ArgumentParser(
         description="Utility for building and downloading NW.js projects."
     )

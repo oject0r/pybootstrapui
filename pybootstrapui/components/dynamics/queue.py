@@ -6,12 +6,14 @@ import time
 
 class QueueTask:
     def __init__(self, html_id: str, task_type: str):
+        """Init function."""
         self.id = html_id
         self.type = task_type
         self.task_id = uuid.uuid4().hex
         self.result: QueueResult | None = None
 
     def wait(self):
+        """Wait function."""
         result = get_result(self)
         while not result:
             time.sleep(0.1)
@@ -32,15 +34,18 @@ class QueueTask:
 
 class QueueResult:
     def __init__(self, result: Any, task_id: str):
+        """Init function."""
         self.task_id = task_id
         self.result = result
 
     def get(self):
+        """Get function."""
         return self.result
 
 
 class InvalidTaskException(Exception):
     def __init__(self, *args):
+        """Init function."""
         super().__init__(args)
 
 
@@ -49,6 +54,7 @@ task_results = {}
 
 
 def get_result(task: QueueTask) -> Any:
+    """Get result."""
     if task.task_id not in task_results:
         return None
 
@@ -59,6 +65,7 @@ def get_result(task: QueueTask) -> Any:
 
 
 def add_task(html_id: str, task_type: str, **kwargs):
+    """Add task."""
     task = QueueTask(html_id, task_type)
     for key, value in kwargs.items():
         setattr(task, key, value)

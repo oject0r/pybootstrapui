@@ -1,17 +1,27 @@
 from typing import Type, Any
 
+from pybootstrapui.components import add_task
+
 
 class CallbackContext:
     def __init__(self, id):
+        """Init function."""
         self.id: str = id
 
     def from_dict(self, dictionary: dict[str, Any]):
+        """From dict."""
         for key, value in dictionary.items():
             setattr(self, key, value)
 
 
 class ButtonCallbackContext(CallbackContext):
     data: str
+
+    def show_spinner(self):
+        add_task(self.id, "showButtonSpinner")
+
+    def hide_spinner(self):
+        add_task(self.id, "hideButtonSpinner")
 
 
 class InputCallbackContext(CallbackContext):

@@ -1,6 +1,7 @@
-"""
-This module contains the paths to the templates that are used in the package.
-The templates are stored in the templates folder of the package.
+"""This module contains the paths to the
+templates that are used in the package. The
+templates are stored in the templates folder of
+the package.
 
 Attributes:
     - Aero (str): Path to the Aero template. Has a moving gradient background with Quartz theme.
@@ -66,14 +67,15 @@ Zephyr = str(Path(__file__).parent.absolute()) + "/zephyr.html"
 
 
 class InternalTemplates:
-    """
-    Internal templates for the package.
-    Do not touch these unless you know what you are doing.
+    """Internal templates for the package.
 
-    Attributes:
-        - JavaScript (str): The path to the JavaScript (dynamics.js) file.
-        - GeneralStyle (str): The path to the general CSS (general.css) file.
-        - IconSample (str): The path to the sample icon (doesn't exist anymore) file.
+    Do not touch these unless you know what you are doing.
+    :var - JavaScript: The path to the JavaScript (dynamics.js) file.
+    :type - JavaScript: str
+    :var - GeneralStyle: The path to the general CSS (general.css) file.
+    :type - GeneralStyle: str
+    :var - IconSample: The path to the sample icon (doesn't exist anymore) file.
+    :type - IconSample: str
     """
 
     JavaScript = str(Path(__file__).parent.absolute()) + "/Internal/dynamics.js"

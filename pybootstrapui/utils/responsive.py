@@ -1,14 +1,14 @@
 class ResponsiveUtilities:
-    """
-    A utility class for managing Bootstrap responsive utilities, including visibility and spacing.
-    """
+    """A utility class for managing Bootstrap
+    responsive utilities, including visibility
+    and spacing."""
 
     def __init__(self):
         self.classes = []
 
     def add_visibility_class(self, size: str, display: str):
-        """
-        Adds a visibility control class based on the screen size and display type.
+        """Adds a visibility control class based
+        on the screen size and display type.
 
         Parameters:
             size (str): Screen size (e.g., sm, md, lg, etc.).
@@ -17,8 +17,8 @@ class ResponsiveUtilities:
         self.classes.append(f"d-{size}-{display}")
 
     def add_spacing_class(self, property: str, size: str, value: int):
-        """
-        Adds a spacing class based on the property, screen size, and value.
+        """Adds a spacing class based on the
+        property, screen size, and value.
 
         Parameters:
             property (str): Spacing property (e.g., m, p, mt, mb).
@@ -28,10 +28,7 @@ class ResponsiveUtilities:
         self.classes.append(f"{property}-{size}-{value}")
 
     def construct(self) -> str:
-        """
-        Returns the full class string for the responsive utilities.
-
-        Returns:
-            str: Space-separated string of utility classes.
+        """Returns the full class string for the
+        responsive utilities.
         """
         return " ".join(self.classes)

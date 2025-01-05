@@ -3,37 +3,37 @@ from .base import HTMLElement
 
 class ListElement(HTMLElement):
     """
-    A class representing an individual list item (<li>) element that can contain other elements.
+    Represents an individual list item (`<li>`) element that can contain other elements.
 
     Attributes:
-            - child (list[HTMLElement]): A list of child elements to include inside the <li>.
-            - classes (list[str] | None): Optional list of classes to apply to the <li> element.
-            - unique_id (str | None): Optional unique ID for the <li> element.
+        child (list[HTMLElement]): A list of child elements to include inside the `<li>` element.
+        classes (list[str] | None): Optional list of CSS classes to apply to the `<li>` element.
+        id (str | None): Optional unique ID for the `<li>` element.
     """
 
     def __init__(
         self,
         child_elements: list[HTMLElement],
         classes: list[str] | None = None,
-        unique_id: str | None = None,
+        id: str | None = None,
     ):
         """
-        Initializes a ListElement with the specified child elements, classes, and unique ID.
+        Initializes a `ListElement` with the specified child elements, classes, and unique ID.
 
-        Parameters:
-                - child_elements (list[HTMLElement]): The child elements to be included inside the <li>.
-                - classes (list[str] | None): Optional list of classes to apply to the <li> element.
-                - unique_id (str | None): Optional unique ID for the <li> element.
+        Args:
+            child_elements (list[HTMLElement]): The child elements to include inside the `<li>` element.
+            classes (list[str] | None): Optional list of CSS classes to apply to the `<li>` element.
+            id (str | None): Optional unique ID for the `<li>` element.
         """
-        super().__init__(classes, unique_id)
+        super().__init__(classes, id)
         self.child = child_elements
 
     def construct(self) -> str:
         """
-        Generates the HTML for the <li> element, including its child elements.
+        Generates the HTML for the `<li>` element, including its child elements.
 
         Returns:
-                - str: The HTML code for the <li> element with its children.
+            str: The HTML code for the `<li>` element with its children.
         """
         compiled_child = "\n".join([child.construct() for child in self.child])
         id_attr = f'id="{self.id}"' if self.id else ""
@@ -42,37 +42,37 @@ class ListElement(HTMLElement):
 
 class List(HTMLElement):
     """
-    A class representing an unordered list (<ul>) element containing multiple ListElements.
+    Represents an unordered list (`<ul>`) element containing multiple `ListElement` objects.
 
     Attributes:
-            - child (list[ListElement]): A list of ListElement objects to be included inside the <ul>.
-            - classes (list[str] | None): Optional list of classes to apply to the <ul> element.
-            - unique_id (str | None): Optional unique ID for the <ul> element.
+        child (list[ListElement]): A list of `ListElement` objects to include inside the `<ul>` element.
+        classes (list[str] | None): Optional list of CSS classes to apply to the `<ul>` element.
+        id (str | None): Optional unique ID for the `<ul>` element.
     """
 
     def __init__(
         self,
         elements: list[ListElement],
         classes: list[str] | None = None,
-        unique_id: str | None = None,
+        id: str | None = None,
     ):
         """
-        Initializes a List object with the specified ListElements, classes, and unique ID.
+        Initializes a `List` object with the specified `ListElement` objects, classes, and unique ID.
 
-        Parameters:
-                - elements (list[ListElement]): The ListElement objects to include in the list.
-                - classes (list[str] | None): Optional list of classes to apply to the <ul> element.
-                - unique_id (str | None): Optional unique ID for the <ul> element.
+        Args:
+            elements (list[ListElement]): The `ListElement` objects to include in the `<ul>` element.
+            classes (list[str] | None): Optional list of CSS classes to apply to the `<ul>` element.
+            id (str | None): Optional unique ID for the `<ul>` element.
         """
-        super().__init__(classes, unique_id)
+        super().__init__(classes, id)
         self.child = elements
 
     def construct(self) -> str:
         """
-        Generates the HTML for the <ul> element, including all ListElement children.
+        Generates the HTML for the `<ul>` element, including all `ListElement` children.
 
         Returns:
-                - str: The HTML code for the <ul> element with its ListElement children.
+            str: The HTML code for the `<ul>` element with its `ListElement` children.
         """
         compiled_child = "\n".join([child.construct() for child in self.child])
         id_attr = f'id="{self.id}"' if self.id else ""

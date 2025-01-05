@@ -7,11 +7,11 @@ from pathlib import Path
 
 
 class InvalidIconFile(Exception):
-    """
-    Custom exception raised when an invalid icon file is provided.
+    """Custom exception raised when an invalid
+    icon file is provided.
 
-    Attributes:
-            - message (str): Error message describing the issue.
+    :var - message: Error message describing the issue.
+    :type - message: str
     """
 
 
@@ -24,8 +24,8 @@ def run_page_in_desktop(
     height=600,
     resizable=True,
 ):
-    """
-    Renders a Page instance and launches it in NW.js.
+    """Renders a Page instance and launches it in
+    NW.js.
 
     Parameters:
             - page (Page): Instance of the Page class to render.
@@ -35,28 +35,25 @@ def run_page_in_desktop(
             - height (int): Height of the NW.js window (default: 600).
             - icon (str | None): Path to the icon file (optional, must be PNG if provided).
             - resizable (bool): Whether the NW.js window is resizable (default: True).
-
-    Raises:
-            - FileNotFoundError: If NW.js executable or icon file is not found.
-            - InvalidIconFile: If the icon file is not a PNG.
+    :raises - FileNotFoundError: If NW.js executable or icon file is not found.
+    :raises - InvalidIconFile: If the icon file is not a PNG.
 
     Example:
-            # Launch a page in NW.js with a custom icon and dimensions
-            
-            run_page_in_desktop(
-                    page=page_instance,
-                    nwjs_path="/path/to/nwjs",
-                    icon="/path/to/icon.png",
-                    title="My NW.js App",
-                    width=1024,
-                    height=768,
-                    resizable=False
-            )
-            
+        # Launch a page in NW.js with a custom icon and dimensions
+
+        run_page_in_desktop(
+                page=page_instance,
+                nwjs_path="/path/to/nwjs",
+                icon="/path/to/icon.png",
+                title="My NW.js App",
+                width=1024,
+                height=768,
+                resizable=False
+        )
 
     Note:
-            - A temporary directory is created to store main.html and package.json.
-            - The directory is removed after the NW.js application is closed.
+        - A temporary directory is created to store main.html and package.json.
+        - The directory is removed after the NW.js application is closed.
     """
 
     # Create a temporary directory for NW.js application files
@@ -109,8 +106,8 @@ def build_package_json(
     version: str = "1.0.0",
     description: str = "A NW.js application",
 ) -> dict[str, str | dict[str, str | bool]]:
-    """
-    Builds a package.json dictionary for NW.js configuration.
+    """Builds a package.json dictionary for NW.js
+    configuration.
 
     Parameters:
             - title (str): Title of the NW.js application window.
@@ -121,26 +118,24 @@ def build_package_json(
             - icon (str | None): Path to the application icon (optional).
             - version (str): Version of the application (default: "1.0.0").
             - description (str): Description of the application (default: "A NW.js application").
-
-    Returns:
-            - dict: The configuration dictionary for package.json.
+    :return: The configuration dictionary for package.json.
+    :rtype: - dict
 
     Example:
-            # Create a package.json configuration
-            
-            package_json = build_package_json(
-                    title="My App",
-                    width=1024,
-                    height=768,
-                    resizable=False,
-                    name="my-nwjs-app",
-                    icon="icon.png"
-            )
-            
+        # Create a package.json configuration
+
+        package_json = build_package_json(
+                title="My App",
+                width=1024,
+                height=768,
+                resizable=False,
+                name="my-nwjs-app",
+                icon="icon.png"
+        )
 
     Note:
-            - This function includes default Chromium arguments for media playback
-              and disabled user gesture requirements.
+        - This function includes default Chromium arguments for media playback
+          and disabled user gesture requirements.
     """
 
     return {

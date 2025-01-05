@@ -8,13 +8,16 @@ from pybootstrapui.utils.callbacks import wrap_callback
 
 class Button(HTMLElement):
     """
-    A class representing a <button> HTML element.
+    A class representing an HTML <button> element.
 
     Attributes:
-            - label (str): The text label of the button.
-            - style_type (str): The style type of the button (default is 'primary').
-            - type (str | None): The type of the button (e.g., 'submit', 'button', etc.).
-            - callback (Callable | None): A server-side function to handle button clicks (default is None).
+        label (str | None): The text label of the button.
+        style_type (str): The style type of the button (default is 'primary').
+        type (str | None): The type of the button (e.g., 'submit', 'button').
+        callback (Callable | Awaitable | None): A server-side function to handle button clicks.
+        data (str): Additional data associated with the button.
+        icon (BootstrapIcon | None): The icon displayed on the button.
+        font_size (int): The font size of the button text.
     """
 
     def __init__(
@@ -25,30 +28,32 @@ class Button(HTMLElement):
         data: str | None = None,
         type: str | None = None,
         style: str | None = "primary",
-        spinner: bool = False,
         font_size: int = 18,
         classes: list[str] | None = None,
-        unique_id: str | None = None,
+        id: str | None = None,
     ):
         """
         Initializes a Button object.
-        Either label or icon should be provided
 
-        Parameters:
-                - label (str): The text label of the button.
-                - icon (BootstrapIcon | None): Icon of the button that is going to be used.
-                - on_click (Callable | Awaitable | None): A server-side function to handle button clicks (default is None).
-                - type (str | None): The type of the button (e.g., 'submit', 'button', etc., default is None).
-                - style (str): The style type of the button (default is 'primary').
-                - classes (list[str] | None): A list of CSS classes for the button (default is None).
-                - unique_id (str | None): A unique identifier for the button (default is None).
+        Args:
+            label (str | None): The text label of the button.
+            icon (BootstrapIcon | None): Icon of the button.
+            on_click (Callable | Awaitable | None): A server-side function to handle button clicks.
+            data (str | None): Additional data associated with the button.
+            type (str | None): The type of the button (e.g., 'submit', 'button').
+            style (str): The style type of the button (default is 'primary').
+            font_size (int): Font size for the button text (default is 18).
+            classes (list[str] | None): A list of CSS classes for the button.
+            id (str | None): A unique identifier for the button.
+
+        Raises:
+            ValueError: If neither `label` nor `icon` is provided.
 
         Note:
-                - If no unique_id is provided, an ID is automatically generated.
-                - If a callback is provided, it is automatically registered with the server.
+            If no `id` is provided, an ID is automatically generated.
+            If a callback is provided, it is automatically registered with the server.
         """
-
-        super().__init__(classes, unique_id)
+        super().__init__(classes, id)
 
         data = data or ''
 
@@ -59,8 +64,7 @@ class Button(HTMLElement):
         self.style_type = style
         self.type = type
         self.callback = on_click or None
-        self.indicate_callback = spinner
-        self.data = data.replace('`', "'")
+        self.data = data.replace("`", r"\`")
         self.icon = icon
         self.font_size = font_size
 
@@ -75,28 +79,28 @@ class Button(HTMLElement):
         """
         Registers a callback for the button click event.
 
-        Parameters:
-                - on_click (Callable | Awaitable | None): The callback function to execute when the button is clicked.
+        Args:
+            on_click (Callable | Awaitable | None): The callback function to execute when the button is clicked.
 
-        Notes:
-                - If a callback is already registered, it will not be replaced.
+        Note:
+            If a callback is already registered, it will not be replaced.
         """
         if not self.callback:
             self.callback = on_click
             add_handler("button_click", self.id, wrap_callback(self.callback))
 
-    def construct(self):
+    def construct(self) -> str:
         """
         Converts the Button object into an HTML <button> element.
 
         Returns:
-                - str: The HTML code for the <button> element.
+            str: The HTML code for the <button> element.
         """
         # Prepare optional attributes
         type_attr = f'type="{self.type}"' if self.type else ""
         id_attr = f'id="{self.id}"' if self.id else ""
         onclick_attr = (
-            f'onclick="sendButtonClick(\'{self.id}\', {"true" if self.indicate_callback else "false"}, `{self.data}`)"'
+            f'onclick="sendButtonClick(\'{self.id}\', false, `{self.data}`)"'
             if self.callback
             else ""
         )
@@ -121,47 +125,47 @@ class Button(HTMLElement):
 
         # Generate the HTML string
         return f"""
-			<button {type_attr} {total_class} {style_attr} {id_attr} {onclick_attr}>
-				{total_label}
-			</button>
-		"""
+            <button {type_attr} {total_class} {style_attr} {id_attr} {onclick_attr}>
+                {total_label}
+            </button>
+        """
 
 
 class ButtonGroup(HTMLElement):
     """
-    A class representing a group of <button> HTML elements, wrapped in a <div> element.
+    A class representing a group of HTML <button> elements, wrapped in a <div>.
 
     Attributes:
-            - buttons (list[Button]): A list of Button objects to be grouped together.
+        buttons (list[Button]): A list of Button objects grouped together.
     """
 
     def __init__(
         self,
         buttons: list[Button],
         classes: list[str] | None = None,
-        unique_id: str | None = None,
+        id: str | None = None,
     ):
         """
         Initializes a ButtonGroup object.
 
-        Parameters:
-                - buttons (list[Button]): A list of Button objects to be grouped together.
-                - classes (list[str] | None): A list of CSS classes for the button group (default is None).
-                - unique_id (str | None): A unique identifier for the button group (default is None).
+        Args:
+            buttons (list[Button]): A list of Button objects to be grouped together.
+            classes (list[str] | None): A list of CSS classes for the button group.
+            id (str | None): A unique identifier for the button group.
         """
-        super().__init__(classes, unique_id)
+        super().__init__(classes, id)
         self.buttons = buttons
 
-    def construct(self):
+    def construct(self) -> str:
         """
         Converts the ButtonGroup object into an HTML <div> containing all the buttons.
 
         Returns:
-                - str: The HTML code for the <div> element containing all the buttons in the group.
+            str: The HTML code for the <div> element containing all the buttons in the group.
         """
         buttons_compiled = "\n".join([button.construct() for button in self.buttons])
         return f"""
-		<div class="btn-group {self.classes_str}" id="{self.id if self.id else ''}">
-			{buttons_compiled}
-		</div>
-		"""
+        <div class="btn-group {self.classes_str}" id="{self.id if self.id else ''}">
+            {buttons_compiled}
+        </div>
+        """

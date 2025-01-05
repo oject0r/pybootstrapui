@@ -17,6 +17,7 @@ async def handle_action(data):
 
 
 def add_handler(handler_type: str, ctx_id: str, callback: Callable):
+    """Add handler."""
     if not handler_type in handlers:
         handlers[handler_type] = {}
     handlers[handler_type][ctx_id] = callback
@@ -34,13 +35,7 @@ async def call_handler(event: str, ctx_id: str, data: dict):
     data_typed = ctx_types.types[event](ctx_id)
     data_typed.from_dict(data)
 
-    if event == "button_click" and data["indicateSpinner"]:
-        add_task(ctx_id, "showButtonSpinner")
-
     if inspect.iscoroutinefunction(handler):
         await handler(data_typed)
     else:
         handler(data_typed)
-
-    if event == "button_click" and data["indicateSpinner"]:
-        add_task(ctx_id, "hideButtonSpinner")

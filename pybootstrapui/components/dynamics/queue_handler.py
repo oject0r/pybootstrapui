@@ -3,8 +3,8 @@ from typing import Any, Union
 
 
 def fetch_task_results(data: dict[str, Any]):
-    """
-    Updates task results with data from the client.
+    """Updates task results with data from the
+    client.
 
     Parameters:
             data (dict[str, Any]): A dictionary where keys are task IDs (html_id) and values are results.
@@ -20,6 +20,7 @@ def fetch_task_results(data: dict[str, Any]):
 
 
 def get_tasks() -> dict[str, dict[str, Union[int, str, dict]]]:
+    """Get tasks."""
     tasks = {}
     for task in task_queue:
         task_data = {
