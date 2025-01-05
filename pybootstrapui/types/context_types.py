@@ -11,31 +11,24 @@ class CallbackContext:
 
 
 class ButtonCallbackContext(CallbackContext):
-    def __init__(self, id):
-        super().__init__(id)
+    data: str
 
 
 class InputCallbackContext(CallbackContext):
-    def __init__(self, id):
-        super().__init__(id)
-        self.value: str | int = ""
-        self.cursor_position: int = 0
+    value: str | int = ""
+    cursor_position: int = 0
 
 
 class ChoiceCallbackContext(CallbackContext):
-    def __init__(self, id):
-        super().__init__(id)
-        self.value: str = ""
+    value: str = ""
 
 
 class BlurCallbackContext(CallbackContext):
-    def __init__(self, id):
-        super().__init__(id)
+    pass
 
 
 class FocusCallbackContext(CallbackContext):
-    def __init__(self, id):
-        super().__init__(id)
+    pass
 
 
 class SliderCallbackContext(CallbackContext):

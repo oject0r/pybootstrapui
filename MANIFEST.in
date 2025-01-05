@@ -1,1 +1,1 @@
-recursive-include pybootstrapui/templates *.html *.js *.css
+recursive-include pybootstrapui/templates *.html *.js *.css *.py

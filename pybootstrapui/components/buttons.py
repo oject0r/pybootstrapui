@@ -20,6 +20,7 @@ class Button(HTMLElement):
         self,
         label: str,
         on_click: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
+        data: str | None = None,
         btn_type: str | None = None,
         btn_style_type: str = "primary",
         indicate_on_click_spinner: bool = True,
@@ -47,6 +48,8 @@ class Button(HTMLElement):
         self.type = btn_type
         self.callback = on_click or None
         self.indicate_callback = indicate_on_click_spinner
+        data = data or ''
+        self.data = data.replace('`', "'")
 
         # Register the callback if provided
         if on_click and self.id:
@@ -80,7 +83,7 @@ class Button(HTMLElement):
         type_attr = f'type="{self.type}"' if self.type else ""
         id_attr = f'id="{self.id}"' if self.id else ""
         onclick_attr = (
-            f'onclick="sendButtonClick(\'{self.id}\', {"true" if self.indicate_callback else "false"})"'
+            f'onclick="sendButtonClick(\'{self.id}\', {"true" if self.indicate_callback else "false"}, `{self.data}`)"'
             if self.callback
             else ""
         )

@@ -334,10 +334,11 @@ function sendAction(eventContext, eventType) {
     });
 }
 
-function sendButtonClick(buttonId, spinnerIndicator = true) {
+function sendButtonClick(buttonId, spinnerIndicator = true, customData = '') {
     sendEventCustom(buttonId, "button_click", {
         id: buttonId,
-        indicateSpinner: spinnerIndicator
+        indicateSpinner: spinnerIndicator,
+        data: customData
     });
 }
 
