@@ -22,7 +22,7 @@ class Br(HTMLElement):  # Deprecated
         Converts the Br object into an HTML <br> element.
 
         Returns:
-                - `str`: The HTML code for the <br> element.
+                - str: The HTML code for the <br> element.
         """
         return "<br>"
 
@@ -43,7 +43,7 @@ class Hr(HTMLElement):
         Converts the Hr object into an HTML <hr> element.
 
         Returns:
-                - `str`: The HTML code for the <hr> element.
+                - str: The HTML code for the <hr> element.
         """
         return "<hr>"
 
@@ -60,8 +60,8 @@ class Spacer(HTMLElement):
         Initializes the Spacer object with custom top and bottom margins.
 
         Parameters:
-                - `margin_top` (str): The margin-top value (default is '1em').
-                - `margin_bottom` (str): The margin-bottom value (default is '1em').
+                - margin_top (str): The margin-top value (default is '1em').
+                - margin_bottom (str): The margin-bottom value (default is '1em').
         """
         self.mt = margin_top
         self.mb = margin_bottom
@@ -72,6 +72,6 @@ class Spacer(HTMLElement):
         Converts the Spacer object into an HTML <div> element with customizable margins.
 
         Returns:
-                - `str`: The HTML code for the <div> element that acts as a spacer.
+                - str: The HTML code for the <div> element that acts as a spacer.
         """
         return f'<div style="width: 100%; margin-top: {self.mt}; margin-bottom: {self.mb}"></div>'

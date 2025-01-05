@@ -8,7 +8,7 @@ class CustomHTML(HTMLElement):
     This class allows for inserting raw HTML content into the DOM, bypassing other structured components.
 
     Attributes:
-            - `content` (str): The raw HTML content to be included.
+            - content (str): The raw HTML content to be included.
 
     Warning:
             - Using raw HTML can pose security risks (e.g., XSS attacks) if the content is not sanitized.
@@ -21,13 +21,13 @@ class CustomHTML(HTMLElement):
         Initializes a CustomHTML object with the specified raw HTML content.
 
         Parameters:
-                - `content` (str): The raw HTML content to be included.
+                - content (str): The raw HTML content to be included.
 
         Example:
                 # Create a custom HTML component
-                ```
+                
                 custom_html = CustomHTML('<div class="custom">Hello, World!</div>')
-                ```
+                
         """
         super().__init__()
         self.content = content
@@ -37,12 +37,12 @@ class CustomHTML(HTMLElement):
         Generates the raw HTML content.
 
         Returns:
-                - `str`: The raw HTML content.
+                - str: The raw HTML content.
 
         Example:
                 # Render the custom HTML
-                ```
+                
                 html = custom_html.construct()
-                ```
+                
         """
         return self.content

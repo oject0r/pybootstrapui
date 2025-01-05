@@ -36,14 +36,14 @@ class Page:
     and JavaScript inclusion. It can compile and serve the final HTML based on a template file.
 
     Attributes:
-            - `path` (os.PathLike | str | bytes): The file path to the HTML template.
-            - `content` (list[HTMLElement]): A list of `HTMLElement` objects to be included in the page.
-            - `title` (str | None): The title of the page (optional).
-            - `javascript` (str): A string containing JavaScript code to be included in the page (default is empty).
-            - `dynamic` (bool): Indicates if the page should use Dynamic UI features (e.g., WebSocket server for callbacks).
-            - `running` (bool): A flag indicating if the page is actively running.
-            - `inputs_saved_states` (dict): Stores the saved states of input elements on the page.
-            - `head` (str): Custom HTML content to include in the `<head>` section of the template.
+            - path (os.PathLike | str | bytes): The file path to the HTML template.
+            - content (list[HTMLElement]): A list of HTMLElement objects to be included in the page.
+            - title (str | None): The title of the page (optional).
+            - javascript (str): A string containing JavaScript code to be included in the page (default is empty).
+            - dynamic (bool): Indicates if the page should use Dynamic UI features (e.g., WebSocket server for callbacks).
+            - running (bool): A flag indicating if the page is actively running.
+            - inputs_saved_states (dict): Stores the saved states of input elements on the page.
+            - head (str): Custom HTML content to include in the <head> section of the template.
     """
 
     def __init__(
@@ -55,29 +55,29 @@ class Page:
         dynamic_ui_task_timing: int = 25,
     ):
         """
-        Initializes a `Page` object.
+        Initializes a Page object.
 
         Parameters:
-                - `template_filename` (os.PathLike | str | bytes): The file path to the HTML template.
-                - `content` (list[HTMLElement]): A list of `HTMLElement` objects to be included in the page (optional).
-                - `page_title` (str | None): The title of the page (optional).
-                - `dynamic_ui` (bool): Specifies whether Dynamic UI features should be enabled, such as WebSocket support.
-                - `dynamic_ui_task_timing` (int): How fast client is going to check for new tasks and complete them.
+                - template_filename (os.PathLike | str | bytes): The file path to the HTML template.
+                - content (list[HTMLElement]): A list of HTMLElement objects to be included in the page (optional).
+                - page_title (str | None): The title of the page (optional).
+                - dynamic_ui (bool): Specifies whether Dynamic UI features should be enabled, such as WebSocket support.
+                - dynamic_ui_task_timing (int): How fast client is going to check for new tasks and complete them.
 
         Example:
                 # Create a page with a template and title
-                ```
+                
                 page = Page(
                         template_filename="path/to/template.html",
                         content=[header, footer],
                         page_title="My Page",
                         dynamic_ui=True
                 )
-                ```
+                
 
         Note:
-                - If `content` is not provided, it defaults to an empty list.
-                - The `dynamic_ui` flag determines if callbacks and server-based interactions are enabled.
+                - If content is not provided, it defaults to an empty list.
+                - The dynamic_ui flag determines if callbacks and server-based interactions are enabled.
         """
         self.path = template_filename
         self.content = content if content else []
@@ -94,18 +94,18 @@ class Page:
         """
         Adds an element (or a list of elements) to the content of the page.
 
-        This method appends new elements to the page's `self.content` list if the page
+        This method appends new elements to the page's self.content list if the page
         is not currently running. If the page is running, the new elements are compiled
         into HTML and dynamically added to the frontend.
 
         Parameters:
-                - `*args`: One or more elements to add to the page's content.
+                - *args: One or more elements to add to the page's content.
 
         Example:
                 # Add elements to the page
-                ```
+                
                 page.add(button, table, header)
-                ```
+                
 
         Note:
                 - If the page is running, the elements are directly sent to the frontend for
@@ -125,13 +125,13 @@ class Page:
         Sets the JavaScript code for the page from a string.
 
         Parameters:
-                - `js_string` (str): The JavaScript code to include in the page.
+                - js_string (str): The JavaScript code to include in the page.
 
         Example:
                 # Add custom JavaScript to the page
-                ```
+                
                 page.set_js("alert('Welcome to the page!');")
-                ```
+                
 
         Note:
                 - The provided JavaScript will be used as the page's custom script.
@@ -140,22 +140,22 @@ class Page:
 
     def set_additional_head(self, html_string: str):
         """
-        Adds custom HTML code to the `<head>` section of the template.
+        Adds custom HTML code to the <head> section of the template.
 
-        If the page's template includes a `{custom_head}` placeholder, this method
+        If the page's template includes a {custom_head} placeholder, this method
         allows for injecting custom HTML content into that section.
 
         Parameters:
-                - `html_string` (str): The HTML code to inject into the page's `<head>`.
+                - html_string (str): The HTML code to inject into the page's <head>.
 
         Example:
                 # Add meta tags to the page
-                ```
+                
                 page.set_additional_head('<meta name="viewport" content="width=device-width, initial-scale=1">')
-                ```
+                
 
         Note:
-                - This method is only effective if the template supports custom `<head>` content.
+                - This method is only effective if the template supports custom <head> content.
         """
         self.head = html_string
 
@@ -164,16 +164,16 @@ class Page:
         Asynchronously reads and sets the JavaScript code for the page from a file.
 
         This method reads the contents of the provided JavaScript file, minifies it
-        using `rjsmin.jsmin_for_posers`, and sets it as the page's custom script.
+        using rjsmin.jsmin_for_posers, and sets it as the page's custom script.
 
         Parameters:
-                - `js_file` (str | os.PathLike | bytes): The path to the JavaScript file.
+                - js_file (str | os.PathLike | bytes): The path to the JavaScript file.
 
         Example:
                 # Load and set JavaScript from a file
-                ```
+                
                 await page.set_js_from_async("path/to/script.js")
-                ```
+                
 
         Note:
                 - The file must be UTF-8 encoded for proper reading.
@@ -196,7 +196,7 @@ class Page:
         Warning:
                 # Not recommended to use much.
 
-                # Better use ``HTMLElement.update()`` ESPECIALLY if you have inputs and page updates on their change.
+                # Better use HTMLElement.update() ESPECIALLY if you have inputs and page updates on their change.
 
                 # Still useful in some cases, so this method is still here.
 
@@ -206,8 +206,8 @@ class Page:
 
         Queues a task to reload the content of a specific container.
 
-        This method compiles all the elements in the `self.content` list,
-        constructs their HTML representation, and creates a `rewriteContent`
+        This method compiles all the elements in the self.content list,
+        constructs their HTML representation, and creates a rewriteContent
         task to update the frontend's container with the new content.
 
         Tasks are added to the task queue for asynchronous execution.
@@ -217,7 +217,7 @@ class Page:
         Example:
                 # Reload the container with updated content
 
-                ``await page.reload()``
+                await page.reload()
 
         --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
@@ -244,15 +244,15 @@ class Page:
         """
         Queues a task to execute custom JavaScript code on the frontend.
 
-        This method creates an `executeJavascript` task in the task queue
+        This method creates an executeJavascript task in the task queue
         to execute the provided JavaScript code asynchronously in the browser.
 
         Parameters:
-                - `javascript_code` (str): The JavaScript code to be executed.
+                - javascript_code (str): The JavaScript code to be executed.
 
         Example:
                 # Run custom JavaScript on the frontend
-                ``Page.run_js("console.log('Hello, world!');")``
+                Page.run_js("console.log('Hello, world!');")
 
         Note:
                 - Ensure the provided JavaScript code is safe to execute and
@@ -340,8 +340,8 @@ class Page:
 
         --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-        Collects the current states of all `InputObject` instances in `self.content`,
-        requesting their values asynchronously and saving them in `self.inputs_saved_states`.
+        Collects the current states of all InputObject instances in self.content,
+        requesting their values asynchronously and saving them in self.inputs_saved_states.
 
         This method uses a task queue to ensure asynchronous execution and
         collects results into a local dictionary.
@@ -349,13 +349,13 @@ class Page:
         --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
         Note:
-                - Relies on `queue.add_task` to send commands to the frontend.
-                - Only works if `InputObject` instances are properly added to `self.content`.
-                - Results are stored with keys corresponding to each input's `special_id`.
+                - Relies on queue.add_task to send commands to the frontend.
+                - Only works if InputObject instances are properly added to self.content.
+                - Results are stored with keys corresponding to each input's special_id.
 
         Example:
                 # Save input states for later restoration
-                ``await page._save_input_states()``
+                await page._save_input_states()
 
         """
         tasks = []
@@ -377,9 +377,9 @@ class Page:
         """
         Starts a local server for dynamic page updates.
 
-        If the page is marked as dynamic (`self.dynamic` is True),
+        If the page is marked as dynamic (self.dynamic is True),
         this method creates a separate thread to handle AJAX requests
-        using `start_ajax_server`.
+        using start_ajax_server.
 
         Note:
                 - This is essential for server-side interaction with the frontend.
@@ -395,7 +395,7 @@ class Page:
         """
         Clears the content of the page.
 
-        This method resets the `self.content` list to an empty state and sends a task
+        This method resets the self.content list to an empty state and sends a task
         to the frontend to clear the container's content dynamically.
 
         Example:
@@ -412,10 +412,10 @@ class Page:
         Retrieves an element from the page by its unique ID.
 
         Parameters:
-                - `element_id` (str): The ID of the element to retrieve.
+                - element_id (str): The ID of the element to retrieve.
 
         Returns:
-                - `HTMLElement | None`: The element with the specified ID, or None if not found.
+                - HTMLElement | None: The element with the specified ID, or None if not found.
 
         Example:
                 # Get an element by ID
@@ -446,22 +446,22 @@ class Page:
         starts a local server in the background, and launches the app window.
 
         Parameters:
-                - `nwjs_path` (str | bytes): Path to the NW.js executable.
-                - `icon` (str | bytes | None): Optional path to the window icon file.
-                - `title` (str): Title of the application window.
-                - `width` (int): Width of the application window (default: 800).
-                - `height` (int): Height of the application window (default: 600).
-                - `resizable` (bool): Whether the application window is resizable (default: True).
-                - `server_bind` (str): IP address to bind the local server (default: '127.0.0.1').
-                - `server_port` (int): Port number for the local server (default: random port if 0).
+                - nwjs_path (str | bytes): Path to the NW.js executable.
+                - icon (str | bytes | None): Optional path to the window icon file.
+                - title (str): Title of the application window.
+                - width (int): Width of the application window (default: 800).
+                - height (int): Height of the application window (default: 600).
+                - resizable (bool): Whether the application window is resizable (default: True).
+                - server_bind (str): IP address to bind the local server (default: '127.0.0.1').
+                - server_port (int): Port number for the local server (default: random port if 0).
 
         Note:
-                - If `server_port` is not specified, a random port between 51000 and 65535 is chosen.
-                - Calls `run_page_in_desktop` with the appropriate arguments after configuring the server.
+                - If server_port is not specified, a random port between 51000 and 65535 is chosen.
+                - Calls run_page_in_desktop with the appropriate arguments after configuring the server.
 
         Example:
                 # Run the page as a desktop application with NW.js
-                ```
+                
                 page.run_in_desktop(
                         nwjs_path="path/to/nwjs",
                         icon="path/to/icon.png",
@@ -470,7 +470,7 @@ class Page:
                         height=768,
                         resizable=False
                 )
-                ```
+                
 
         """
         if server_port == 0:

@@ -6,10 +6,10 @@ class Table(HTMLElement):
     A class for creating Bootstrap tables.
 
     Attributes:
-            - `headers` (list[str]): The table headers.
-            - `rows` (list[list[str]]): The table rows.
-            - `classes` (list[str] | None): Additional CSS classes for the table.
-            - `unique_id` (str | None): Unique identifier for the table.
+            - headers (list[str]): The table headers.
+            - rows (list[list[str]]): The table rows.
+            - classes (list[str] | None): Additional CSS classes for the table.
+            - unique_id (str | None): Unique identifier for the table.
     """
 
     def __init__(
@@ -23,19 +23,19 @@ class Table(HTMLElement):
         Initializes the Table object with headers, rows, and optional CSS classes.
 
         Parameters:
-                - `headers` (list[str] | None): The table headers (optional).
-                - `rows` (list[list[str]] | None): The table rows (optional).
-                - `classes` (list[str] | None): Additional CSS classes for the table (optional).
-                - `unique_id` (str | None): Unique identifier for the table (optional).
+                - headers (list[str] | None): The table headers (optional).
+                - rows (list[list[str]] | None): The table rows (optional).
+                - classes (list[str] | None): Additional CSS classes for the table (optional).
+                - unique_id (str | None): Unique identifier for the table (optional).
 
         Example:
-                ```
+                
                 table = Table(
                         headers=["Name", "Age", "City"],
                         rows=[["Alice", "30", "New York"], ["Bob", "25", "Los Angeles"]],
                         classes=["table-striped"]
                 )
-                ```
+                
         """
         super().__init__(classes, unique_id)
         self.headers = headers or []
@@ -46,12 +46,12 @@ class Table(HTMLElement):
         Adds a row to the table.
 
         Parameters:
-                - `row` (list[str]): A list of strings representing the row cells.
+                - row (list[str]): A list of strings representing the row cells.
 
         Example:
-                ```
+                
                 table.add_row(["Charlie", "35", "Chicago"])
-                ```
+                
         """
         self.rows.append(row)
 
@@ -60,13 +60,13 @@ class Table(HTMLElement):
         Constructs the HTML for the table.
 
         Returns:
-                - `str`: The HTML representation of the table.
+                - str: The HTML representation of the table.
 
         Example:
-                ```
+                
                 html = table.construct()
                 print(html)
-                ```
+                
         """
         header_html = "".join(
             [f"<th scope='col'>{header}</th>" for header in self.headers]

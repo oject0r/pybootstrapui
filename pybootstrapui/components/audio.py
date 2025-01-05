@@ -10,10 +10,10 @@ class Audio(HTMLElement):
     and fallback text for unsupported environments.
 
     Attributes:
-            - `sources` (list[str]): A list of audio source URLs.
-            - `controls` (bool): Whether to display audio controls (default: True).
-            - `classes` (list[str] | None): CSS classes applied to the audio element.
-            - `unique_id` (str | None): A unique identifier for the audio element.
+            - sources (list[str]): A list of audio source URLs.
+            - controls (bool): Whether to display audio controls (default: True).
+            - classes (list[str] | None): CSS classes applied to the audio element.
+            - unique_id (str | None): A unique identifier for the audio element.
     """
 
     def __init__(
@@ -27,19 +27,19 @@ class Audio(HTMLElement):
         Initializes the Audio element.
 
         Parameters:
-                - `sources` (list[str]): A list of audio source URLs.
-                - `controls` (bool): Whether to display audio controls (default: True).
-                - `classes` (list[str] | None): Optional CSS classes applied to the audio element.
-                - `unique_id` (str | None): Optional unique identifier for the audio element.
+                - sources (list[str]): A list of audio source URLs.
+                - controls (bool): Whether to display audio controls (default: True).
+                - classes (list[str] | None): Optional CSS classes applied to the audio element.
+                - unique_id (str | None): Optional unique identifier for the audio element.
 
         Example:
-                ```
+                
                 audio = Audio(
                         sources=["audio1.mp3", "audio2.ogg"],
                         controls=True,
                         classes=["audio-player"]
                 )
-                ```
+                
         """
         super().__init__(classes, unique_id)
         self.sources = sources
@@ -50,13 +50,13 @@ class Audio(HTMLElement):
         Generates the HTML representation of the audio element.
 
         Returns:
-                - `str`: The HTML string for the <audio> element.
+                - str: The HTML string for the <audio> element.
 
         Example:
-                ```
+                
                 html = audio.construct()
                 print(html)
-                ```
+                
         """
         sources_html = "\n".join(
             [

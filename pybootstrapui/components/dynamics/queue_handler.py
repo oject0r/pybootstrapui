@@ -10,7 +10,7 @@ def fetch_task_results(data: dict[str, Any]):
             data (dict[str, Any]): A dictionary where keys are task IDs (html_id) and values are results.
 
     Notes:
-            - Ensures that only valid task IDs are updated in `task_results`.
+            - Ensures that only valid task IDs are updated in task_results.
             - Ignores any invalid or unexpected entries in the input data.
     """
     if not isinstance(data, dict):

@@ -7,9 +7,9 @@ class Notification(HTMLElement):
     A class representing a notification (alert) component.
 
     Attributes:
-            - `message` (str): The text content of the notification.
-            - `style` (str): The style of the notification (e.g., "success", "info", "warning", "danger").
-            - `dismissable` (bool): Whether the notification can be dismissed (default: True).
+            - message (str): The text content of the notification.
+            - style (str): The style of the notification (e.g., "success", "info", "warning", "danger").
+            - dismissable (bool): Whether the notification can be dismissed (default: True).
     """
 
     def __init__(
@@ -24,11 +24,11 @@ class Notification(HTMLElement):
         Initializes a notification.
 
         Parameters:
-                - `message` (str): The text content of the notification.
-                - `style` (str): The style of the notification (e.g., "success", "info").
-                - `dismissable` (bool): Whether the notification can be dismissed.
-                - `classes` (list[str] | None): Additional CSS classes.
-                - `unique_id` (str | None): Optional unique identifier.
+                - message (str): The text content of the notification.
+                - style (str): The style of the notification (e.g., "success", "info").
+                - dismissable (bool): Whether the notification can be dismissed.
+                - classes (list[str] | None): Additional CSS classes.
+                - unique_id (str | None): Optional unique identifier.
         """
         super().__init__(classes, unique_id)
         self.message = message
@@ -40,7 +40,7 @@ class Notification(HTMLElement):
         Constructs the HTML representation of the notification.
 
         Returns:
-                - `str`: The HTML string.
+                - str: The HTML string.
         """
         dismiss_button = ""
         if self.dismissable:

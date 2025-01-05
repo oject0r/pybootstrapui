@@ -9,13 +9,13 @@ class Video(HTMLElement):
     optional controls, and a poster image.
 
     Attributes:
-            - `sources` (list[str]): A list of video source URLs.
-            - `controls` (bool): Whether to display video controls (default: True).
-            - `width` (int): The width of the video element (default: 640).
-            - `height` (int): The height of the video element (default: 264).
-            - `poster` (str | None): URL of the poster image displayed before playback starts.
-            - `classes` (list[str] | None): CSS classes applied to the video element.
-            - `unique_id` (str | None): A unique identifier for the video element.
+            - sources (list[str]): A list of video source URLs.
+            - controls (bool): Whether to display video controls (default: True).
+            - width (int): The width of the video element (default: 640).
+            - height (int): The height of the video element (default: 264).
+            - poster (str | None): URL of the poster image displayed before playback starts.
+            - classes (list[str] | None): CSS classes applied to the video element.
+            - unique_id (str | None): A unique identifier for the video element.
     """
 
     def __init__(
@@ -33,13 +33,13 @@ class Video(HTMLElement):
         Initializes a Video element.
 
         Parameters:
-                - `source` (str | list[str]): A single video source URL or a list of video sources.
-                - `controls` (bool): Whether to display video controls (default: True).
-                - `width` (int): The width of the video element (default: 640).
-                - `height` (int): The height of the video element (default: 264).
-                - `poster_source` (str | None): URL of the poster image displayed before playback starts (default: None).
-                - `classes` (list[str] | None): CSS classes applied to the video element (default: None).
-                - `unique_id` (str | None): A unique identifier for the video element (default: None).
+                - source (str | list[str]): A single video source URL or a list of video sources.
+                - controls (bool): Whether to display video controls (default: True).
+                - width (int): The width of the video element (default: 640).
+                - height (int): The height of the video element (default: 264).
+                - poster_source (str | None): URL of the poster image displayed before playback starts (default: None).
+                - classes (list[str] | None): CSS classes applied to the video element (default: None).
+                - unique_id (str | None): A unique identifier for the video element (default: None).
         """
         super().__init__(classes, unique_id)
 
@@ -65,7 +65,7 @@ class Video(HTMLElement):
         Constructs the HTML representation of the video element.
 
         Returns:
-                - `str`: The HTML string for the video element.
+                - str: The HTML string for the video element.
         """
         sources_html = "\n".join(
             [

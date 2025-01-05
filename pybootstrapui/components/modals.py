@@ -7,11 +7,11 @@ class Modal(HTMLElement):
     A class for creating Bootstrap modals.
 
     Attributes:
-            - `title` (str | None): The modal's title.
-            - `body` (list[HTMLElement]): Child elements within the modal body.
-            - `footer` (list[HTMLElement]): Child elements within the modal footer.
-            - `classes` (list[str] | None): Additional CSS classes for the modal.
-            - `unique_id` (str | None): Unique identifier for the modal.
+            - title (str | None): The modal's title.
+            - body (list[HTMLElement]): Child elements within the modal body.
+            - footer (list[HTMLElement]): Child elements within the modal footer.
+            - classes (list[str] | None): Additional CSS classes for the modal.
+            - unique_id (str | None): Unique identifier for the modal.
     """
 
     def __init__(
@@ -26,20 +26,20 @@ class Modal(HTMLElement):
         Initializes the Modal object with title, body, footer, and optional CSS classes.
 
         Parameters:
-                - `title` (str | None): The modal's title (optional).
-                - `body` (list[HTMLElement] | None): Child elements for the modal body (default: empty list).
-                - `footer` (list[HTMLElement] | None): Child elements for the modal footer (default: empty list).
-                - `classes` (list[str] | None): Additional CSS classes for the modal (optional).
-                - `unique_id` (str | None): Unique identifier for the modal (optional).
+                - title (str | None): The modal's title (optional).
+                - body (list[HTMLElement] | None): Child elements for the modal body (default: empty list).
+                - footer (list[HTMLElement] | None): Child elements for the modal footer (default: empty list).
+                - classes (list[str] | None): Additional CSS classes for the modal (optional).
+                - unique_id (str | None): Unique identifier for the modal (optional).
 
         Example:
-                ```
+                
                 modal = Modal(
                         title="My Modal",
                         body=[Text("This is the modal body.")],
                         footer=[Button("Close")]
                 )
-                ```
+                
         """
         super().__init__(classes, "customModal")
         self.title = title
@@ -52,12 +52,12 @@ class Modal(HTMLElement):
         Adds a child element to the modal body.
 
         Parameters:
-                - `element` (HTMLElement): The element to add.
+                - element (HTMLElement): The element to add.
 
         Example:
-                ```
+                
                 modal.add_body_element(TextElement("New body content"))
-                ```
+                
         """
         self.body.append(element)
 
@@ -66,12 +66,12 @@ class Modal(HTMLElement):
         Adds a child element to the modal footer.
 
         Parameters:
-                - `element` (HTMLElement): The element to add.
+                - element (HTMLElement): The element to add.
 
         Example:
-                ```
+                
                 modal.add_footer_element(Button("Save Changes"))
-                ```
+                
         """
         self.footer.append(element)
 
@@ -80,8 +80,8 @@ class Modal(HTMLElement):
         Display the modal window.
 
         Notes:
-                - Automatically assigns the modal an ``id`` of ``customModal``.
-                - Triggers the ``showModal`` task.
+                - Automatically assigns the modal an id of customModal.
+                - Triggers the showModal task.
         """
         self.id = "customModal"
         add_task("", "showModal", content=self.construct())
@@ -91,7 +91,7 @@ class Modal(HTMLElement):
         Hide the modal window.
 
         Notes:
-                - Triggers the ``hideModal`` task to close the modal dynamically.
+                - Triggers the hideModal task to close the modal dynamically.
         """
         add_task("", "hideModal", content=self.construct())
 
@@ -100,13 +100,13 @@ class Modal(HTMLElement):
         Constructs the HTML for the modal.
 
         Returns:
-                - `str`: The HTML representation of the modal.
+                - str: The HTML representation of the modal.
 
         Example:
-                ```
+                
                 html = modal.construct()
                 print(html)
-                ```
+                
         """
         header_html = (
             f'''

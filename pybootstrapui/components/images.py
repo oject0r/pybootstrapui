@@ -10,12 +10,12 @@ class ImageObject(HTMLElement):
     Represents a base64-encoded image element for use in an HTML page.
 
     Attributes:
-            - `data` (str): Base64-encoded image data.
-            - `width` (str): The width of the image (default is 'auto').
-            - `height` (str): The height of the image (default is 'auto').
-            - `alt` (str): Alternative text for the image.
-            - `classes` (list[str] | None): CSS classes to apply to the image.
-            - `unique_id` (str | None): Unique identifier for the image element.
+            - data (str): Base64-encoded image data.
+            - width (str): The width of the image (default is 'auto').
+            - height (str): The height of the image (default is 'auto').
+            - alt (str): Alternative text for the image.
+            - classes (list[str] | None): CSS classes to apply to the image.
+            - unique_id (str | None): Unique identifier for the image element.
     """
 
     def __init__(
@@ -32,12 +32,12 @@ class ImageObject(HTMLElement):
         Initializes an ImageObject.
 
         Parameters:
-                - `base64_data` (bytes | str): The base64-encoded image data.
-                - `width` (str): The width of the image (default is 'auto').
-                - `height` (str): The height of the image (default is 'auto').
-                - `alt` (str | None): Alternative text for the image.
-                - `classes` (list[str] | None): CSS classes to apply to the image.
-                - `unique_id` (str | None): Unique identifier for the image element.
+                - base64_data (bytes | str): The base64-encoded image data.
+                - width (str): The width of the image (default is 'auto').
+                - height (str): The height of the image (default is 'auto').
+                - alt (str | None): Alternative text for the image.
+                - classes (list[str] | None): CSS classes to apply to the image.
+                - unique_id (str | None): Unique identifier for the image element.
         """
         super().__init__(classes, unique_id)
 
@@ -54,7 +54,7 @@ class ImageObject(HTMLElement):
         Constructs the HTML representation of the image.
 
         Returns:
-                - `str`: The HTML string for the image.
+                - str: The HTML string for the image.
         """
         return f"""
 		<img src="data:image/png;base64, {self.data}"
@@ -83,15 +83,15 @@ class FileImage(ImageObject):
         Initializes a FileImage.
 
         Parameters:
-                - `file_path` (str | bytes | PathLike): Path to the image file.
-                - `width` (str): The width of the image (default is 'auto').
-                - `height` (str): The height of the image (default is 'auto').
-                - `alt` (str | None): Alternative text for the image.
-                - `classes` (list[str] | None): CSS classes to apply to the image.
-                - `unique_id` (str | None): Unique identifier for the image element.
+                - file_path (str | bytes | PathLike): Path to the image file.
+                - width (str): The width of the image (default is 'auto').
+                - height (str): The height of the image (default is 'auto').
+                - alt (str | None): Alternative text for the image.
+                - classes (list[str] | None): CSS classes to apply to the image.
+                - unique_id (str | None): Unique identifier for the image element.
 
         Raises:
-                - `FileNotFoundError`: If the file does not exist.
+                - FileNotFoundError: If the file does not exist.
         """
         path = Path(file_path)
 
@@ -133,12 +133,12 @@ class Base64Image(ImageObject):
         Initializes a Base64Image.
 
         Parameters:
-                - `base64_data` (bytes | str): The base64-encoded image data.
-                - `width` (str): The width of the image (default is 'auto').
-                - `height` (str): The height of the image (default is 'auto').
-                - `alt` (str | None): Alternative text for the image.
-                - `classes` (list[str] | None): CSS classes to apply to the image.
-                - `unique_id` (str | None): Unique identifier for the image element.
+                - base64_data (bytes | str): The base64-encoded image data.
+                - width (str): The width of the image (default is 'auto').
+                - height (str): The height of the image (default is 'auto').
+                - alt (str | None): Alternative text for the image.
+                - classes (list[str] | None): CSS classes to apply to the image.
+                - unique_id (str | None): Unique identifier for the image element.
         """
         super().__init__(
             base64_data,
@@ -169,12 +169,12 @@ class RawImage(ImageObject):
         Initializes a RawImage.
 
         Parameters:
-                - `image_content` (bytes): The raw binary data of the image.
-                - `width` (str): The width of the image (default is 'auto').
-                - `height` (str): The height of the image (default is 'auto').
-                - `alt` (str | None): Alternative text for the image.
-                - `classes` (list[str] | None): CSS classes to apply to the image.
-                - `unique_id` (str | None): Unique identifier for the image element.
+                - image_content (bytes): The raw binary data of the image.
+                - width (str): The width of the image (default is 'auto').
+                - height (str): The height of the image (default is 'auto').
+                - alt (str | None): Alternative text for the image.
+                - classes (list[str] | None): CSS classes to apply to the image.
+                - unique_id (str | None): Unique identifier for the image element.
         """
         content = base64.b64encode(image_content).decode("utf-8")
         super().__init__(
@@ -192,12 +192,12 @@ class URLImage(HTMLElement):
     Represents an image loaded from a URL.
 
     Attributes:
-            - `url` (str): The URL of the image.
-            - `width` (str): The width of the image (default is 'auto').
-            - `height` (str): The height of the image (default is 'auto').
-            - `alt` (str): Alternative text for the image.
-            - `classes` (list[str] | None): CSS classes to apply to the image.
-            - `unique_id` (str | None): Unique identifier for the image element.
+            - url (str): The URL of the image.
+            - width (str): The width of the image (default is 'auto').
+            - height (str): The height of the image (default is 'auto').
+            - alt (str): Alternative text for the image.
+            - classes (list[str] | None): CSS classes to apply to the image.
+            - unique_id (str | None): Unique identifier for the image element.
     """
 
     def __init__(
@@ -214,17 +214,17 @@ class URLImage(HTMLElement):
         Initializes a URLImage.
 
         Parameters:
-                - `image_url` (str): The URL of the image.
-                - `width` (str): The width of the image (default is 'auto').
-                - `height` (str): The height of the image (default is 'auto').
-                - `alt` (str | None): Alternative text for the image.
-                - `classes` (list[str] | None): CSS classes to apply to the image.
-                - `unique_id` (str | None): Unique identifier for the image element.
+                - image_url (str): The URL of the image.
+                - width (str): The width of the image (default is 'auto').
+                - height (str): The height of the image (default is 'auto').
+                - alt (str | None): Alternative text for the image.
+                - classes (list[str] | None): CSS classes to apply to the image.
+                - unique_id (str | None): Unique identifier for the image element.
 
         Example:
-                ```
+                
                 image = URLImage("https://example.com/image.png", width="300px", alt="Example Image")
-                ```
+                
         """
         self.url = image_url
         self.width = width
@@ -237,12 +237,12 @@ class URLImage(HTMLElement):
         Constructs the HTML representation of the URL image.
 
         Returns:
-                - `str`: The HTML string for the image element.
+                - str: The HTML string for the image element.
 
         Example:
-                ```
+                
                 html = image.construct()
-                ```
+                
         """
         return f"""
 		<img src="{self.url}"
@@ -265,23 +265,23 @@ async def image_from_file_async(
     Asynchronously creates an ImageObject from a file.
 
     Parameters:
-            - `file_path` (str | bytes | PathLike): The path to the image file.
-            - `width` (str): The width of the image (default is 'auto').
-            - `height` (str): The height of the image (default is 'auto').
-            - `alt` (str | None): Alternative text for the image.
-            - `classes` (list[str] | None): CSS classes to apply to the image.
-            - `unique_id` (str | None): Unique identifier for the image element.
+            - file_path (str | bytes | PathLike): The path to the image file.
+            - width (str): The width of the image (default is 'auto').
+            - height (str): The height of the image (default is 'auto').
+            - alt (str | None): Alternative text for the image.
+            - classes (list[str] | None): CSS classes to apply to the image.
+            - unique_id (str | None): Unique identifier for the image element.
 
     Returns:
-            - `ImageObject`: An instance of ImageObject containing the base64-encoded image.
+            - ImageObject: An instance of ImageObject containing the base64-encoded image.
 
     Raises:
-            - `FileNotFoundError`: If the file at the given path does not exist.
+            - FileNotFoundError: If the file at the given path does not exist.
 
     Example:
-            ```
+            
             image = await image_from_file_async("path/to/image.png", width="100px")
-            ```
+            
     """
     path = Path(file_path)
 

@@ -10,14 +10,14 @@ class Slider(HTMLElement):
     A class representing a range slider component.
 
     Attributes:
-            - `min` (int): Minimum value of the slider.
-            - `max` (int): Maximum value of the slider.
-            - `step` (int): Increment step for the slider.
-            - `value` (int): Default value of the slider.
-            - `label` (str | None): Optional label for the slider.
-            - `callback` (Callable | None): Function called on value change.
-            - `classes` (list[str] | None): Additional CSS classes.
-            - `unique_id` (str | None): Unique identifier.
+            - min (int): Minimum value of the slider.
+            - max (int): Maximum value of the slider.
+            - step (int): Increment step for the slider.
+            - value (int): Default value of the slider.
+            - label (str | None): Optional label for the slider.
+            - callback (Callable | None): Function called on value change.
+            - classes (list[str] | None): Additional CSS classes.
+            - unique_id (str | None): Unique identifier.
     """
 
     def __init__(
@@ -36,18 +36,18 @@ class Slider(HTMLElement):
         Initializes a slider component.
 
         Parameters:
-                - `min` (int): Minimum value of the slider.
-                - `max` (int): Maximum value of the slider.
-                - `step` (int): Increment step.
-                - `value` (int): Default value of the slider.
-                - `label` (str | None): Optional label displayed above the slider.
-                - `callback` (Callable | None): Function to be executed when the slider value changes.
-                - `classes` (list[str] | None): Additional CSS classes for styling the slider.
-                - `unique_id` (str | None): Unique identifier for the slider element.
+                - min (int): Minimum value of the slider.
+                - max (int): Maximum value of the slider.
+                - step (int): Increment step.
+                - value (int): Default value of the slider.
+                - label (str | None): Optional label displayed above the slider.
+                - callback (Callable | None): Function to be executed when the slider value changes.
+                - classes (list[str] | None): Additional CSS classes for styling the slider.
+                - unique_id (str | None): Unique identifier for the slider element.
 
         Notes:
-                - If `callback` is provided, it will be executed every time the slider value changes.
-                - The `unique_id` is required for identifying slider events on the frontend.
+                - If callback is provided, it will be executed every time the slider value changes.
+                - The unique_id is required for identifying slider events on the frontend.
         """
         super().__init__(classes, unique_id)
         self.min = min
@@ -67,19 +67,19 @@ class Slider(HTMLElement):
         Constructs the HTML and JavaScript representation of the slider.
 
         Returns:
-                - `str`: Combined HTML and JavaScript as a string.
+                - str: Combined HTML and JavaScript as a string.
 
         HTML Structure:
-        - A `div` container wraps the slider, an optional label, and the displayed value.
-        - The slider is created using an `<input>` of type `range`.
-        - A `<span>` element displays the current value dynamically.
+        - A div container wraps the slider, an optional label, and the displayed value.
+        - The slider is created using an <input> of type range.
+        - A <span> element displays the current value dynamically.
 
         JavaScript Behavior:
-        - The `oninput` event updates the displayed value in real-time.
+        - The oninput event updates the displayed value in real-time.
         - If a callback is set, an event is triggered on the server-side with the new value.
 
         Example Output:
-        ```html
+        html
         <div class="slider-container">
                 <label for="slider-id">Volume</label>
                 <input
@@ -93,7 +93,7 @@ class Slider(HTMLElement):
                 >
                 <span id="slider-id-value">50</span>
         </div>
-        ```
+        
         """
         callback_js = (
             f"""
@@ -128,16 +128,16 @@ class Slider(HTMLElement):
         Sets the slider's value dynamically.
 
         Parameters:
-                - `new_value` (int): The new value to set for the slider.
+                - new_value (int): The new value to set for the slider.
 
         Notes:
                 - The value is updated both on the frontend and server-side.
-                - The value is clamped between `min` and `max`.
+                - The value is clamped between min and max.
 
         Example:
-                ```python
+                python
                 slider.set_value(75)
-                ```
+                
         """
         self.value = max(self.min, min(new_value, self.max))
         add_task(self.id, "setValue", value=new_value)
@@ -153,17 +153,17 @@ class Slider(HTMLElement):
         Asynchronously retrieves the current value of the slider.
 
         Returns:
-                - `int`: The current value of the slider.
+                - int: The current value of the slider.
 
         Notes:
                 - This method queues a task to fetch the slider's value dynamically from the frontend.
                 - If the value cannot be fetched, it will return the last known value.
 
         Example:
-                ```python
+                python
                 current_value = await slider.get_value()
                 print(f"Slider value: {current_value}")
-                ```
+                
         """
         task = add_task(self.id, "getValue")
         await task.wait_async()

@@ -7,11 +7,11 @@ class ProgressBar(HTMLElement):
     A class representing a Bootstrap progress bar.
 
     Attributes:
-            - `value` (int): The current progress value (0-100).
-            - `label` (str | None): Optional label to display inside the progress bar.
-            - `style` (str): Bootstrap style (e.g., "success", "info", "warning", "danger").
-            - `striped` (bool): Whether the progress bar is striped (default: False).
-            - `animated` (bool): Whether the progress bar is animated (default: False).
+            - value (int): The current progress value (0-100).
+            - label (str | None): Optional label to display inside the progress bar.
+            - style (str): Bootstrap style (e.g., "success", "info", "warning", "danger").
+            - striped (bool): Whether the progress bar is striped (default: False).
+            - animated (bool): Whether the progress bar is animated (default: False).
     """
 
     def __init__(
@@ -28,13 +28,13 @@ class ProgressBar(HTMLElement):
         Initializes the progress bar.
 
         Parameters:
-                - `value` (int): The current progress value (0-100).
-                - `label` (str | None): Optional label to display inside the progress bar.
-                - `style` (str): Bootstrap style (e.g., "primary", "success").
-                - `striped` (bool): Whether the progress bar is striped.
-                - `animated` (bool): Whether the progress bar is animated.
-                - `classes` (list[str] | None): Optional CSS classes.
-                - `unique_id` (str | None): Unique identifier.
+                - value (int): The current progress value (0-100).
+                - label (str | None): Optional label to display inside the progress bar.
+                - style (str): Bootstrap style (e.g., "primary", "success").
+                - striped (bool): Whether the progress bar is striped.
+                - animated (bool): Whether the progress bar is animated.
+                - classes (list[str] | None): Optional CSS classes.
+                - unique_id (str | None): Unique identifier.
         """
         super().__init__(classes, unique_id)
         self.value = max(0, min(value, 100))  # Clamp value between 0 and 100
@@ -65,7 +65,7 @@ class ProgressBar(HTMLElement):
         Constructs the HTML representation of the progress bar.
 
         Returns:
-                - `str`: HTML string.
+                - str: HTML string.
         """
         progress_classes = f"progress-bar bg-{self.style}"
         if self.striped:

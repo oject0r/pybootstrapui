@@ -7,10 +7,10 @@ class HTMLElement:
     A class representing a basic HTML element.
 
     Attributes:
-            - `classes` (list[str] | None): A list of CSS classes for the element.
-            - `unique_id` (str | None): A unique identifier for the element.
-            - `classes_str` (str): A string representation of the classes, joined by spaces.
-            - `id` (str | None): A unique identifier for the element.
+            - classes (list[str] | None): A list of CSS classes for the element.
+            - unique_id (str | None): A unique identifier for the element.
+            - classes_str (str): A string representation of the classes, joined by spaces.
+            - id (str | None): A unique identifier for the element.
     """
 
     def __init__(self, classes: list[str] | None = None, unique_id: str | None = None):
@@ -18,8 +18,8 @@ class HTMLElement:
         Initializes an HTMLElement object.
 
         Parameters:
-                - `classes` (list[str] | None): A list of CSS classes for the element (default is None).
-                - `unique_id` (str | None): A unique identifier for the element (default is None).
+                - classes (list[str] | None): A list of CSS classes for the element (default is None).
+                - unique_id (str | None): A unique identifier for the element (default is None).
         """
         self.classes = classes or []
         self.classes_str = " ".join(self.classes).strip(" ")
@@ -31,7 +31,7 @@ class HTMLElement:
         Adds a class to the element and updates the class string.
 
         Parameters:
-                - `classname` (str): The class name to add.
+                - classname (str): The class name to add.
         """
         self.classes.append(classname)
         self.classes_str = " ".join(self.classes).strip(" ")
@@ -41,7 +41,7 @@ class HTMLElement:
         Removes a class from the element and updates the class string.
 
         Parameters:
-                - `classname` (str): The class name to remove.
+                - classname (str): The class name to remove.
         """
         if classname in self.classes:
             self.classes.remove(classname)
@@ -52,7 +52,7 @@ class HTMLElement:
         Converts the object into an HTML string. Not implemented in the base class.
 
         Returns:
-                - `str`: An empty string in the base class.
+                - str: An empty string in the base class.
         """
         return ""
 
@@ -93,7 +93,7 @@ class Div(HTMLElement):
     A class representing a <div> HTML element, which can contain child elements.
 
     Attributes:
-            - `child` (list[HTMLElement]): A list of child HTMLElement objects to be included inside the <div>.
+            - child (list[HTMLElement]): A list of child HTMLElement objects to be included inside the <div>.
     """
 
     def __init__(
@@ -106,9 +106,9 @@ class Div(HTMLElement):
         Initializes a Div object.
 
         Parameters:
-                - `child_elements` (list[HTMLElement]): A list of child elements to include inside the <div>.
-                - `classes` (list[str] | None): A list of CSS classes for the <div> (default is None).
-                - `unique_id` (str | None): A unique identifier for the <div> (default is None).
+                - child_elements (list[HTMLElement]): A list of child elements to include inside the <div>.
+                - classes (list[str] | None): A list of CSS classes for the <div> (default is None).
+                - unique_id (str | None): A unique identifier for the <div> (default is None).
         """
         super().__init__(classes, unique_id)
         self.child = child_elements
@@ -118,7 +118,7 @@ class Div(HTMLElement):
         Converts the Div object into an HTML <div> element, including its child elements.
 
         Returns:
-                - `str`: The HTML code for the <div> element with its child elements.
+                - str: The HTML code for the <div> element with its child elements.
         """
         compiled_child = "\n".join([child.construct() for child in self.child])
         return f'<div id="{self.id}" class="{self.classes_str}">{compiled_child}</div>'

@@ -13,12 +13,12 @@ from typing_extensions import deprecated
 #             - Use this only as a basic example or for debugging purposes.
 #
 #     Attributes:
-#             - `labels` (list[str]): The labels for the chart (e.g., categories on the X-axis).
-#             - `values` (list[float]): The values for the chart (e.g., data points on the Y-axis).
-#             - `chart_label` (str): The label for the chart dataset.
-#             - `bg_color` (tuple[int, int, int, float]): The background color for the chart (RGBA).
-#             - `border_color` (tuple[int, int, int, float]): The border color for the chart (RGBA).
-#             - `thickness` (int): The thickness of the chart borderline.
+#             - labels (list[str]): The labels for the chart (e.g., categories on the X-axis).
+#             - values (list[float]): The values for the chart (e.g., data points on the Y-axis).
+#             - chart_label (str): The label for the chart dataset.
+#             - bg_color (tuple[int, int, int, float]): The background color for the chart (RGBA).
+#             - border_color (tuple[int, int, int, float]): The border color for the chart (RGBA).
+#             - thickness (int): The thickness of the chart borderline.
 #     """
 #
 #     def __init__(
@@ -39,17 +39,17 @@ from typing_extensions import deprecated
 #                 - This class is deprecated and may not function as expected in modern Chart.js versions.
 #
 #         Parameters:
-#                 - `chart_labels` (list[str]): The chart labels.
-#                 - `chart_values` (list[float]): The data points corresponding to the labels.
-#                 - `unique_id` (str): The unique ID for the canvas element.
-#                 - `chart_label` (str): The label for the dataset.
-#                 - `classes` (list[str] | None): Optional list of classes for styling the chart.
-#                 - `bg_color` (tuple[int, int, int, float]): Optional background color (RGBA).
-#                 - `border_color` (tuple[int, int, int, float]): Optional border color (RGBA).
-#                 - `thickness` (int): The thickness of the border line for the chart.
+#                 - chart_labels (list[str]): The chart labels.
+#                 - chart_values (list[float]): The data points corresponding to the labels.
+#                 - unique_id (str): The unique ID for the canvas element.
+#                 - chart_label (str): The label for the dataset.
+#                 - classes (list[str] | None): Optional list of classes for styling the chart.
+#                 - bg_color (tuple[int, int, int, float]): Optional background color (RGBA).
+#                 - border_color (tuple[int, int, int, float]): Optional border color (RGBA).
+#                 - thickness (int): The thickness of the border line for the chart.
 #
 #         Raises:
-#                 - `ValueError`: If the lengths of `chart_labels` and `chart_values` do not match.
+#                 - ValueError: If the lengths of chart_labels and chart_values do not match.
 #         """
 #         super().__init__(classes, unique_id)
 #         if len(chart_values) != len(chart_labels):
@@ -67,7 +67,7 @@ from typing_extensions import deprecated
 #         Generates the HTML code for embedding the chart in a webpage.
 #
 #         Returns:
-#                 - `str`: The HTML and JavaScript code to render the chart.
+#                 - str: The HTML and JavaScript code to render the chart.
 #
 #         Warning:
 #                 - This method generates inline JavaScript, which may not be ideal for production environments.

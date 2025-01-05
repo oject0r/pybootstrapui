@@ -45,10 +45,10 @@ class Card(HTMLElement):
                 )
 
         Note:
-                - The `classes` parameter allows adding custom CSS styles.
-                - If `header` is provided, it will be rendered at the top of the card.
-                - If `footer` is provided, it will be rendered at the bottom of the card.
-                - If `image` is provided, it will be displayed at the top of the card.
+                - The classes parameter allows adding custom CSS styles.
+                - If header is provided, it will be rendered at the top of the card.
+                - If footer is provided, it will be rendered at the bottom of the card.
+                - If image is provided, it will be displayed at the top of the card.
         """
         super().__init__(classes, unique_id)
         self.header = header

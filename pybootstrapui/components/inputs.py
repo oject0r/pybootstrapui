@@ -11,17 +11,17 @@ class InputObject(HTMLElement):
     A class representing an input element with customizable properties and event handlers.
 
     Attributes:
-            - `label` (str | None): Optional label for the input element.
-            - `type` (Literal): The type of the input (e.g., text, email, password, etc.).
-            - `placeholder` (str | None): Placeholder text for the input.
-            - `prefix` (str | None): Optional text displayed as a prefix.
-            - `classes` (list[str] | None): CSS classes to apply to the input element.
-            - `unique_id` (str | None): Unique identifier for the input element.
-            - `name` (str | None): Name attribute for the input.
-            - `value` (str | None): Default value for the input field.
-            - `required` (bool): Whether the input field is required.
-            - `tag` (str): The tag type (default is 'input', can be 'textarea').
-            - `on_input`, `on_focus`, `on_blur`: Optional callbacks for events.
+            - label (str | None): Optional label for the input element.
+            - type (Literal): The type of the input (e.g., text, email, password, etc.).
+            - placeholder (str | None): Placeholder text for the input.
+            - prefix (str | None): Optional text displayed as a prefix.
+            - classes (list[str] | None): CSS classes to apply to the input element.
+            - unique_id (str | None): Unique identifier for the input element.
+            - name (str | None): Name attribute for the input.
+            - value (str | None): Default value for the input field.
+            - required (bool): Whether the input field is required.
+            - tag (str): The tag type (default is 'input', can be 'textarea').
+            - on_input, on_focus, on_blur: Optional callbacks for events.
     """
 
     def __init__(
@@ -94,12 +94,12 @@ class InputObject(HTMLElement):
         on_blur: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
     ):
         """
-        Registers or updates callbacks for events like `on_input`, `on_focus`, and `on_blur`.
+        Registers or updates callbacks for events like on_input, on_focus, and on_blur.
 
         Parameters:
-                - `on_input` (Callable | Awaitable | None): Callback for handling the input event.
-                - `on_focus` (Callable | Awaitable | None): Callback for handling the focus event.
-                - `on_blur` (Callable | Awaitable | None): Callback for handling the blur event.
+                - on_input (Callable | Awaitable | None): Callback for handling the input event.
+                - on_focus (Callable | Awaitable | None): Callback for handling the focus event.
+                - on_blur (Callable | Awaitable | None): Callback for handling the blur event.
 
         Notes:
                 If a handler is already registered, it will be replaced.
@@ -121,7 +121,7 @@ class InputObject(HTMLElement):
         Updates the value of the input field locally before rendering.
 
         Parameters:
-                - `value` (str | None): The new value for the input field. If None, resets to an empty string.
+                - value (str | None): The new value for the input field. If None, resets to an empty string.
         """
         self.value = value or ""
 
@@ -134,14 +134,14 @@ class InputObject(HTMLElement):
         from the frontend through the task queue system.
 
         Returns:
-                - `any`: The value of the input element, as returned by the frontend.
-                - `None`: If the element does not have a unique ID.
+                - any: The value of the input element, as returned by the frontend.
+                - None: If the element does not have a unique ID.
 
         Example:
-                ```
+                
                 value = await input_element.get_value()
                 print(f"The input value is: {value}")
-                ```
+                
         """
         if not self.id:
             return
@@ -157,12 +157,12 @@ class InputObject(HTMLElement):
         Sends a task of type 'setValue' to the frontend to update the displayed value.
 
         Parameters:
-                - `new_value` (str): The new value to be set in the input element.
+                - new_value (str): The new value to be set in the input element.
 
         Example:
-                ```
+                
                 input_element.change_value("New Value")
-                ```
+                
         """
         queue.add_task(self.id, "setValue", value=new_value)
         self.value = new_value
@@ -172,7 +172,7 @@ class InputObject(HTMLElement):
         Generates the HTML for the input element with support for floating labels, prefixes, and event handlers.
 
         Returns:
-                - `str`: The HTML code for the input element.
+                - str: The HTML code for the input element.
         """
         return f"""
 		<div class="input-group mb-3">
@@ -181,9 +181,9 @@ class InputObject(HTMLElement):
 				<{self.tag} class="form-control"
 					id="{self.id}" type="{self.type}" name="{self.name}" value="{self.value}"
 					placeholder="{self.placeholder}" {'required' if self.required else ''}
-					{f'oninput="sendInputOnInput(`{self.id}`, getValueId(`{self.id}`))"' if self.on_input else ''}
-					{f'onfocus="sendAction(`{self.id}`, `on_focus`)"' if self.on_focus else ''}
-					{f'onblur="sendAction(`{self.id}`, `on_blur`)"' if self.on_blur else ''}>
+					{f'oninput="sendInputOnInput({self.id}, getValueId({self.id}))"' if self.on_input else ''}
+					{f'onfocus="sendAction({self.id}, on_focus)"' if self.on_focus else ''}
+					{f'onblur="sendAction({self.id}, on_blur)"' if self.on_blur else ''}>
 				</{self.tag}>
 				<label for="{self.id}">{self.label}</label>
 			</div>

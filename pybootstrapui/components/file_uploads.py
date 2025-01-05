@@ -15,10 +15,10 @@ class FileUpload(HTMLElement):
     A class representing a file upload input.
 
     Attributes:
-            - `accept` (str): Accepted file types (e.g., "image/*", ".txt").
-            - `multiple` (bool): Whether to allow multiple file uploads (default: False).
-            - `label` (str | None): Optional label for the input.
-            - `classes` (list[str] | None): Additional CSS classes for customization.
+            - accept (str): Accepted file types (e.g., "image/*", ".txt").
+            - multiple (bool): Whether to allow multiple file uploads (default: False).
+            - label (str | None): Optional label for the input.
+            - classes (list[str] | None): Additional CSS classes for customization.
     """
 
     def __init__(
@@ -34,11 +34,11 @@ class FileUpload(HTMLElement):
         Initializes a file upload input.
 
         Parameters:
-                - `accept` (str): Accepted file types (default: "*").
-                - `multiple` (bool): Whether multiple files can be selected (default: False).
-                - `label` (str | None): Optional label for the input.
-                - `classes` (list[str] | None): Additional CSS classes.
-                - `unique_id` (str | None): Unique identifier for the input.
+                - accept (str): Accepted file types (default: "*").
+                - multiple (bool): Whether multiple files can be selected (default: False).
+                - label (str | None): Optional label for the input.
+                - classes (list[str] | None): Additional CSS classes.
+                - unique_id (str | None): Unique identifier for the input.
         """
         super().__init__(classes, unique_id)
         self.accept = accept
@@ -51,7 +51,7 @@ class FileUpload(HTMLElement):
         Constructs the HTML and JavaScript representation of the file upload component.
 
         Returns:
-                - `str`: Combined HTML and JavaScript as a string.
+                - str: Combined HTML and JavaScript as a string.
         """
         multiple_attr = "multiple" if self.multiple else ""
         return f"""
@@ -79,7 +79,7 @@ class FileUpload(HTMLElement):
 			
 				function handleFiles(files, inputId) {{
 					const inputElement = document.getElementById(inputId);
-					const uploadedFiles = document.getElementById(`${{inputId}}-uploaded-files`);
+					const uploadedFiles = document.getElementById(${{inputId}}-uploaded-files);
 			
 					uploadedFiles.innerHTML = '';
 					
@@ -88,13 +88,13 @@ class FileUpload(HTMLElement):
 						const fileSize = (file.size / 1024 / 1024).toFixed(2) + ' MB';
 			
 						const listItem = document.createElement('li');
-						listItem.innerHTML = `
+						listItem.innerHTML = 
 							<span class="file-name"><i class="bi bi-file-earmark"></i> ${{file.name}}</span>
 							<span class="file-size">${{fileSize}}</span>
 							<span class="delete-button" onclick="deleteFile('${{inputId}}', ${{index}}, this.parentElement)">
 								<i class="bi bi-trash"></i>
 							</span>
-						`;
+						;
 						uploadedFiles.appendChild(listItem);
 					}});
 					''' if self.show_uploaded else ''}
