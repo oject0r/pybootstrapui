@@ -1,7 +1,8 @@
-from .base import HTMLElement
+from .base import HTMLElement, RGBAColor
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name, guess_lexer
 from pygments.formatters import HtmlFormatter
+import warnings
 
 
 class BootstrapIcon(HTMLElement):
@@ -14,7 +15,7 @@ class BootstrapIcon(HTMLElement):
             icon (str): The name of the Bootstrap icon.
     """
 
-    def __init__(self, icon_name: str):
+    def __init__(self, icon_name: str, color: RGBAColor | None = None):
         """
         Initializes a BootstrapIcon object with the specified icon name.
 
@@ -23,6 +24,7 @@ class BootstrapIcon(HTMLElement):
         """
         super().__init__()
         self.icon = icon_name
+        self.color = color
 
     def construct(self):
         """
@@ -31,7 +33,13 @@ class BootstrapIcon(HTMLElement):
         Returns:
                 str: The HTML code for the <i> element with the Bootstrap icon class.
         """
-        return f'<i class="bi bi-{self.icon}"></i>'
+
+        style_attr = (
+            f'style="color: {self.color.construct()};"' if self.color is not None
+            else ''
+        )
+
+        return f'<i class="bi bi-{self.icon}" {style_attr}></i>'
 
 
 class TextObject(HTMLElement):
@@ -50,12 +58,14 @@ class TextObject(HTMLElement):
 
     def __init__(
         self,
-        label: str,
+        *text: str | BootstrapIcon,
         font_size: int = 18,
+        color: RGBAColor | None = None,
         classes: list[str] | None = None,
         unique_id: str | None = None,
         text_type: str = "p",
         href: str | None = None,
+        text_join: str = " ",
     ):
         """
         Initializes a TextObject with the specified properties.
@@ -69,10 +79,13 @@ class TextObject(HTMLElement):
                 href (str | None): The URL for the hyperlink (relevant only for 'a' type).
         """
         super().__init__(classes, unique_id)
-        self.label = label
+        self.label = text_join.join(
+            i.construct() if isinstance(i, BootstrapIcon) else i for i in text
+        )
         self.size = font_size
         self.type = text_type
         self.href = href
+        self.color = color
 
     def construct(self):
         """
@@ -82,12 +95,20 @@ class TextObject(HTMLElement):
                 str: The HTML code for the text element with the specified properties.
         """
         self.label = self.label.replace("\n", "<br>")
+
+        style_attr = (
+            f'style="font-size: {self.size}px; color: {self.color.construct()};"' if self.color and self.size != 18
+            else f'style="color: {self.color.construct()};"' if self.color and self.size == 18
+            else f'style="font-size: {self.size}px;"' if self.size != 18
+            else ''
+        )
+
+        classes_attr = f'class="{self.classes_str}"' if len(self.classes) > 0 else ''
+        href_attr = f'href="{self.href}"' if self.href else ''
+
+
         return f"""
-		<{self.type} {'href="{href}"'.format(href=self.href) if self.href else ''} 
-		{'class="{classes}"'.format(classes=self.classes_str)} 
-		{'id="{id}"'.format(id=self.id) if self.id else ''} 
-		{'style="font-size: {size}px;"'.format(size=self.size) if self.size else ''}>
-		{self.label}</{self.type}>
+		<{self.type} {href_attr} {classes_attr} {f'id="{self.id}"' if self.id else ''}{style_attr}>{self.label}</{self.type}>
 		"""
 
 
@@ -105,7 +126,8 @@ def bold(text: any, classes: list[str] | str = ""):
     text = str(text)
     if type(classes) == list:
         classes = " ".join(classes)
-    return f'<b class="{classes}">{text}</b>'
+
+    return f'<b class="{classes}">{text}</b>' if classes is "" else f'<b>{text}</b>'
 
 
 def italic(text: str):
@@ -136,8 +158,9 @@ class Text(TextObject):
 
     def __init__(
         self,
-        label: str,
+        *text: str | BootstrapIcon,
         font_size: int = 18,
+        color: RGBAColor | None = None,
         classes: list[str] | None = None,
         unique_id: str | None = None,
         text_join: str = " ",
@@ -151,7 +174,7 @@ class Text(TextObject):
                 unique_id (str | None): Optional unique ID for the element.
         """
 
-        super().__init__(label, font_size, classes, unique_id)
+        super().__init__(*text, font_size=font_size, color=color, classes=classes, unique_id=unique_id, text_join=text_join)
 
 
 class Link(TextObject):
@@ -169,11 +192,13 @@ class Link(TextObject):
 
     def __init__(
         self,
-        label: str,
+        *text: str | BootstrapIcon,
         href: str,
         font_size: int = 18,
+        color: RGBAColor | None = None,
         classes: list[str] | None = None,
         unique_id: str | None = None,
+        text_join: str = " ",
     ):
         """
         Initializes a Link object with the specified label, href, and optional styling.
@@ -185,7 +210,7 @@ class Link(TextObject):
                 classes (list[str] | None): Optional list of classes to apply to the <a> element.
                 unique_id (str | None): Optional unique ID for the <a> element.
         """
-        super().__init__(label, font_size, classes, unique_id, "a", href)
+        super().__init__(*text, href=href, font_size=font_size, color=color, classes=classes, unique_id=unique_id, text_join=text_join)
 
 
 class Header(TextObject):
@@ -197,18 +222,19 @@ class Header(TextObject):
     Attributes:
             label (str): The text content for the header.
             header_size (int): The size of the header (1-6). Defaults to 1 (h1).
-            bootstrap_icon (BootstrapIcon | None): An optional Bootstrap icon to display in the header.
             classes (list[str] | None): Optional list of classes to apply to the header element.
-            unique_id (str | None): Optional unique ID for the header element.
+            id (str | None): Optional unique ID for the header element.
     """
 
     def __init__(
         self,
-        label: str,
+        *text: str | BootstrapIcon,
         header_size: int = 1,
         bi: BootstrapIcon | None = None,
+        color: RGBAColor | None = None,
         classes: list[str] | None = None,
         unique_id: str | None = None,
+        text_join: str = " ",
     ):
         """
         Initializes a Header object with the specified properties.
@@ -220,30 +246,18 @@ class Header(TextObject):
                 classes (list[str] | None): Optional list of classes to apply to the header element.
                 unique_id (str | None): Optional unique ID for the header element.
         """
-        super().__init__(label, 64, classes, unique_id)
-        self.bootstrap_icon = bi
+
+        text = list(text)
+        if bi is not None:
+            text.insert(0, bi)
+            warnings.warn(
+                "The 'bi' parameter in Header is deprecated. Please include it directly within the strings passed via *text.",
+                DeprecationWarning,
+                stacklevel=2
+            )
+
+        super().__init__(*text, classes=classes, color=color, unique_id=unique_id, text_type=f'h{header_size}', text_join=text_join)
         self.header_size = header_size
-        self.label = label
-
-    def construct(self):
-        """
-        Generates the HTML for the header element with the specified properties.
-
-        Returns:
-                str: The HTML code for the header with the optional icon and label.
-
-        Raises:
-                ValueError: If the header size is not between 1 and 6.
-        """
-        self.label = self.label.replace("\n", "<br>")
-        if self.header_size > 6 or self.header_size < 1:
-            raise ValueError("Header size must be from 1 to 6!")
-        return f"""
-		<h{self.header_size} {'class="{classes}"'.format(classes=self.classes_str)} 
-		{'id="{id}"'.format(id=self.id) if self.id else ''}>
-		{self.bootstrap_icon.construct() if self.bootstrap_icon else ''} 
-		{self.label}</h{self.header_size}>
-		"""
 
 
 class Code(HTMLElement):

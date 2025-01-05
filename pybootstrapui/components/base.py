@@ -77,6 +77,17 @@ class HTMLElement:
         del self
 
 
+class RGBAColor:
+    def __init__(self, red: int, green: int, blue: int, alpha: float = 0):
+        self.r = red
+        self.g = green
+        self.b = blue
+        self.a = alpha
+
+    def construct(self):
+        return f'rgba({self.r}, {self.g}, {self.b}, {self.a})'
+
+
 class Div(HTMLElement):
     """
     A class representing a <div> HTML element, which can contain child elements.
