@@ -1,4 +1,4 @@
-from utils.callbacks import wrap_callback
+from pybootstrapui.utils.callbacks import wrap_callback
 from . import add_handler
 from .base import HTMLElement
 from typing import Callable, Awaitable, Union
@@ -135,4 +135,4 @@ class Choice(HTMLElement):
             add_handler("on_choice", self.id, wrap_callback(self.on_choice))
 
         compiled_child = "\n".join([child.construct() for child in self.options])
-        return f"""<select {f'onchange="sendOnChoice({self.id})"' if self.on_choice else ''} class="form-select {self.classes_str}" id="{self.id}" name="{self.name}">{compiled_child}</select>"""
+        return f"""<select {f'onchange="sendOnChoice(this.id)"' if self.on_choice else ''} class="form-select {self.classes_str}" id="{self.id}" name="{self.name}">{compiled_child}</select>"""

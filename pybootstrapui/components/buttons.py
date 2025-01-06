@@ -51,6 +51,7 @@ class Button(HTMLElement):
         data: str | None = None,
         type: str | None = None,
         style: str | None = "primary",
+        size: str | None = None,
         font_size: int = 18,
         classes: list[str] | None = None,
         id: str | None = None,
@@ -64,7 +65,8 @@ class Button(HTMLElement):
             on_click (Callable | Awaitable | None): A server-side function to handle button clicks.
             data (str | None): Additional data associated with the button.
             type (str | None): The type of the button (e.g., 'submit', 'button').
-            style (str): The style type of the button (default is 'primary').
+            style (str | None): The style type of the button (default is 'primary').
+            size (str | None): The size of the button ('btn-lg', 'btn-sm')
             font_size (int): Font size for the button text (default is 18).
             classes (list[str] | None): A list of CSS classes for the button.
             id (str | None): A unique identifier for the button.
@@ -89,6 +91,7 @@ class Button(HTMLElement):
         self.on_click = on_click or None
         self.data = data.replace("`", r"\`")
         self.icon = icon
+        self.size = size
         self.font_size = font_size
 
 
@@ -127,8 +130,7 @@ class Button(HTMLElement):
         )
 
         total_class = (
-            f'class="btn btn-{self.style_type} {self.classes_str}"' if self.style_type is not None
-            else f'class="btn {self.classes_str}"'
+            f'class="btn {f"btn-{self.style_type}" if self.style_type else ""} {self.size if self.size else ""} {self.classes_str}"'
         )
 
         # Generate the HTML string
