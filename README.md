@@ -38,15 +38,14 @@
 
 ```python
 from pybootstrapui import Page
-from pybootstrapui.components import Header, Button
-from pybootstrapui.templates import Default
+from pybootstrapui.components import Header, Button, ButtonStyle, BootstrapIcon
 
 # Create a new page
-page = Page(template_filename=Default, page_title="Hello PyBootstrapUI")
+page = Page(page_title="Hello PyBootstrapUI")
 
 # Add components
-page.add(Header(label="Welcome to PyBootstrapUI!", header_size=1))
-page.add(Button(label="Click Me", btn_style_type="primary"))
+page.add(Header(BootstrapIcon('box-seam-fill'), "Welcome to PyBootstrapUI!"))
+page.add(Button(label="Click Me", style=ButtonStyle.PRIMARY))
 
 # Generate HTML
 print(page.compile())
@@ -57,18 +56,26 @@ print(page.compile())
 #### **🔄 Adding Callbacks**
 
 ```python
-from pybootstrapui import Page
-from pybootstrapui.components import Header, Button
+import asyncio
+from pybootstrapui import Page, ButtonCallbackContext
+from pybootstrapui.components import Header, Button, ButtonStyle
 from pybootstrapui.templates import Default
 
+
 # Define a callback function
-def on_button_click(context):
+async def on_button_click(context: ButtonCallbackContext):
+    context.show_spinner()
+    
     print(f"Button clicked with ID: {context.id}")
+    await asyncio.sleep(15)
+    
+    context.hide_spinner()
+
 
 # Create a page with a button callback
 page = Page(template_filename=Default, page_title="Callback Demo")
-page.add(Header(label="Dynamic Callbacks Example"))
-page.add(Button(label="Click Me", btn_style_type="primary", on_click=on_button_click))
+page.add(Header("Dynamic Callbacks Example"))
+page.add(Button("Click Me", style=ButtonStyle.SUCCESS_OUTLINE, on_click=on_button_click))
 
 # Run as a desktop application
 page.run_in_desktop(
@@ -136,7 +143,7 @@ python -m pybootstrapui build MyProject
 
 ## 📚 **Documentation**
 
-Detailed API reference is available at [PyBootstrapUI Docs](https://pybootstrapui.076s.pw).
+Detailed documentation is available at [PyBootstrapUI Docs](https://pybootstrapui.076s.pw) (WIP).
 
 ---
 
