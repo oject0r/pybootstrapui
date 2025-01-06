@@ -28,7 +28,7 @@ def resource_path(relative_path: str) -> str:
 # Load configuration file
 try:
     config = zeroconfig.Configer().load_sync(resource_path("config.zc"))
-except PermissionError:
+except OSError:
     config = zeroconfig.Configer().load_sync(resource_path("config.zc/config.zc"))
 
 # Get system information

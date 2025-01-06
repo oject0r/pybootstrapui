@@ -16,7 +16,7 @@ class Card(HTMLElement):
 
     def __init__(
         self,
-        children: list[HTMLElement],
+        *children: HTMLElement,
         header: Header | None = None,
         footer: list[HTMLElement] | None = None,
         image: ImageObject | URLImage | None = None,
@@ -27,7 +27,7 @@ class Card(HTMLElement):
         Initializes the Card with optional header, footer, image, and child elements.
 
         Args:
-            children (list[HTMLElement]): The child elements to be included inside the card.
+            *children (HTMLElement): The child elements to be included inside the card.
             header (Header | None): An optional header for the card.
             footer (list[HTMLElement] | None): An optional list of elements for the card footer.
             image (ImageObject | URLImage | None): An optional image object for the card.

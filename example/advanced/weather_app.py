@@ -15,6 +15,7 @@ weather_display = Text('Weather: N/A')
 
 async def fetch_weather(ctx: ButtonCallbackContext):
 	coords = await city_input.get_value()
+	ctx.show_spinner()
 	try:
 		latitude, longitude = map(float, coords.split(','))  # Parse latitude and longitude
 		async with aiohttp.ClientSession() as session:
@@ -35,6 +36,7 @@ async def fetch_weather(ctx: ButtonCallbackContext):
 					weather_display.label = f"Error: Unable to fetch weather data (HTTP {response.status})"
 	except Exception as e:
 		weather_display.label = f"Error: {str(e)}"
+	ctx.hide_spinner()
 	weather_display.update()
 
 

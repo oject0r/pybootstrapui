@@ -247,6 +247,7 @@ class Page:
         compiled_string = (
             "\n".join(compiled)
             + '\n<script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>'
+            + '\n<script src="https://cdnjs.cloudflare.com/ajax/libs/autosize.js/4.0.2/autosize.min.js"></script>'
         )
 
         with open(self.path, "r", encoding="utf-8") as f:

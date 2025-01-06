@@ -1,6 +1,5 @@
 from typing import Type, Any
-
-from pybootstrapui.components import add_task
+from pybootstrapui.components.dynamics.queue import add_task
 
 
 class CallbackContext:
@@ -26,11 +25,16 @@ class ButtonCallbackContext(CallbackContext):
 
 class InputCallbackContext(CallbackContext):
     value: str | int = ""
-    cursor_position: int = 0
+
+    def set_value(self, new_value):
+        self.value = new_value
+        add_task(self.id, 'setValue', value=new_value)
+
 
 
 class ChoiceCallbackContext(CallbackContext):
     value: str = ""
+
 
 
 class BlurCallbackContext(CallbackContext):
@@ -44,10 +48,15 @@ class FocusCallbackContext(CallbackContext):
 class SliderCallbackContext(CallbackContext):
     value: int = 0
 
+    def set_value(self, new_value: int):
+        self.value = new_value
+        add_task(self.id, 'setValue', value=new_value)
+
 
 types: dict[str, Type[CallbackContext]] = {
     "button_click": ButtonCallbackContext,
     "on_input": InputCallbackContext,
+    "on_enter": InputCallbackContext,
     "on_focus": FocusCallbackContext,
     "on_blur": BlurCallbackContext,
     "on_choice": ChoiceCallbackContext,

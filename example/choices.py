@@ -12,7 +12,7 @@ def choice_callback(context: ui.ChoiceCallbackContext):
 
 page.add(
     Text('Pick an option below:'),
-    Choice(options=[Option('Option 1', value='option_1'), Option('Option 2', value='option_2'), Option('Option 3', value='option_3')], on_choice=choice_callback)
+    Choice(Option('Option 1', value='option_1'), Option('Option 2', value='option_2'), Option('Option 3', value='option_3'), on_choice=choice_callback)
 )
 
 if __name__ == '__main__':

@@ -16,7 +16,7 @@ class GridSystem:
 
     def __init__(
         self,
-        elements: list[HTMLElement] = None,
+        *elements: HTMLElement,
         row: bool = True,
         cols: str = "",
         classes: list[str] = None,

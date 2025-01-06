@@ -15,7 +15,7 @@ class Form(HTMLElement):
 
     def __init__(
         self,
-        child_elements: list[HTMLElement],
+        *child_elements: HTMLElement,
         action: str,
         action_type: str = "GET",
         classes: list[str] | None = None,
@@ -25,7 +25,7 @@ class Form(HTMLElement):
         Initializes the Form object with specified child elements, action, and method type.
 
         Args:
-            child_elements (list[HTMLElement]): The child elements to include inside the form.
+            child_elements (HTMLElement): The child elements to include inside the form.
             action (str): The action URL for the form submission.
             action_type (str): The HTTP method for form submission (GET/POST). Defaults to 'GET'.
             classes (list[str] | None): Optional list of classes for the form element.
@@ -33,7 +33,8 @@ class Form(HTMLElement):
 
         Example:
             form = Form(
-                child_elements=[InputField(), Button("Submit")],
+                InputField(),
+                Button("Submit"),
                 action="/submit",
                 action_type="POST",
                 classes=["form-class"]

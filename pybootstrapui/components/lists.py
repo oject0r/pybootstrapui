@@ -13,7 +13,7 @@ class ListElement(HTMLElement):
 
     def __init__(
         self,
-        child_elements: list[HTMLElement],
+        *child_elements: HTMLElement,
         classes: list[str] | None = None,
         id: str | None = None,
     ):
@@ -52,7 +52,7 @@ class List(HTMLElement):
 
     def __init__(
         self,
-        elements: list[ListElement],
+        *elements: ListElement,
         classes: list[str] | None = None,
         id: str | None = None,
     ):

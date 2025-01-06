@@ -1,9 +1,32 @@
-import random
 from typing import Callable, Awaitable, Union
-from . import BootstrapIcon
-from .base import HTMLElement
 from pybootstrapui.components.dynamics.client_to_server import add_handler
 from pybootstrapui.utils.callbacks import wrap_callback
+from pybootstrapui.components.text import BootstrapIcon
+from .base import HTMLElement
+
+
+class ButtonStyle:
+    PRIMARY = "primary"
+    SECONDARY = "secondary"
+    SUCCESS = "success"
+    DANGER = "danger"
+    WARNING = "warning"
+    INFO = "info"
+    LIGHT = "light"
+    DARK = "dark"
+    LINK = "link"
+
+    PRIMARY_OUTLINE = "outline-primary"
+    SECONDARY_OUTLINE = "outline-secondary"
+    SUCCESS_OUTLINE = "outline-success"
+    DANGER_OUTLINE = "outline-danger"
+    WARNING_OUTLINE = "outline-warning"
+    INFO_OUTLINE = "outline-info"
+    LIGHT_OUTLINE = "outline-light"
+
+    LARGE = 'btn-lg'
+    SMALL = 'btn-sm'
+
 
 
 class Button(HTMLElement):
@@ -63,31 +86,11 @@ class Button(HTMLElement):
         self.label = label
         self.style_type = style
         self.type = type
-        self.callback = on_click or None
+        self.on_click = on_click or None
         self.data = data.replace("`", r"\`")
         self.icon = icon
         self.font_size = font_size
 
-        # Register the callback if provided
-        if on_click and self.id:
-            add_handler("button_click", self.id, wrap_callback(on_click))
-
-    def register_callback(
-        self,
-        on_click: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
-    ):
-        """
-        Registers a callback for the button click event.
-
-        Args:
-            on_click (Callable | Awaitable | None): The callback function to execute when the button is clicked.
-
-        Note:
-            If a callback is already registered, it will not be replaced.
-        """
-        if not self.callback:
-            self.callback = on_click
-            add_handler("button_click", self.id, wrap_callback(self.callback))
 
     def construct(self) -> str:
         """
@@ -96,12 +99,17 @@ class Button(HTMLElement):
         Returns:
             str: The HTML code for the <button> element.
         """
+
+        # Register the callback if provided
+        if self.on_click and self.id:
+            add_handler("button_click", self.id, wrap_callback(self.on_click))
+
         # Prepare optional attributes
         type_attr = f'type="{self.type}"' if self.type else ""
         id_attr = f'id="{self.id}"' if self.id else ""
         onclick_attr = (
             f'onclick="sendButtonClick(\'{self.id}\', false, `{self.data}`)"'
-            if self.callback
+            if self.on_click
             else ""
         )
 
@@ -141,7 +149,7 @@ class ButtonGroup(HTMLElement):
 
     def __init__(
         self,
-        buttons: list[Button],
+        *buttons: Button,
         classes: list[str] | None = None,
         id: str | None = None,
     ):

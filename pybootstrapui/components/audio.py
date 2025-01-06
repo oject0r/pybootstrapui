@@ -18,7 +18,7 @@ class Audio(HTMLElement):
 
     def __init__(
         self,
-        sources: list[str],
+        *sources: str,
         controls: bool = True,
         classes: list[str] | None = None,
         unique_id: str | None = None,

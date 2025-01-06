@@ -14,7 +14,7 @@ function fetchJSON(url, options = {}) {
 function sendJSON(url, data) {
     return fetchJSON(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data),
     });
 }
@@ -74,32 +74,31 @@ function handleTask(task) {
 }
 
 
-
 /**
  * Add a spinner to a button and disable it.
  * The original button text is retained, and the spinner is added to the left.
  * @param {string} buttonId - The ID of the button.
  */
 function showButtonSpinner(buttonId) {
-	// Get the button element by its ID
-	const button = document.getElementById(buttonId);
-	if (!button) return;
+    // Get the button element by its ID
+    const button = document.getElementById(buttonId);
+    if (!button) return;
 
-	// Check if spinner already exists to prevent duplicates
-	if (button.querySelector('.spinner-border')) return;
+    // Check if spinner already exists to prevent duplicates
+    if (button.querySelector('.spinner-border')) return;
 
-	// Create spinner element
-	const spinner = document.createElement('span');
-	spinner.classList.add('spinner-border', 'spinner-border-sm', 'me-2');
-	spinner.setAttribute('role', 'status');
-	spinner.setAttribute('aria-hidden', 'true');
-	spinner.style.verticalAlign = 'middle';
+    // Create spinner element
+    const spinner = document.createElement('span');
+    spinner.classList.add('spinner-border', 'spinner-border-sm', 'me-2');
+    spinner.setAttribute('role', 'status');
+    spinner.setAttribute('aria-hidden', 'true');
+    spinner.style.verticalAlign = 'middle';
 
-	// Add spinner to the button
-	button.insertBefore(spinner, button.firstChild);
+    // Add spinner to the button
+    button.insertBefore(spinner, button.firstChild);
 
-	// Disable the button
-	button.disabled = true;
+    // Disable the button
+    button.disabled = true;
 }
 
 /**
@@ -107,18 +106,18 @@ function showButtonSpinner(buttonId) {
  * @param {string} buttonId - The ID of the button.
  */
 function hideButtonSpinner(buttonId) {
-	// Get the button element by its ID
-	const button = document.getElementById(buttonId);
-	if (!button) return;
+    // Get the button element by its ID
+    const button = document.getElementById(buttonId);
+    if (!button) return;
 
-	// Remove the spinner if it exists
-	const spinner = button.querySelector('.spinner-border');
-	if (spinner) {
-		spinner.remove();
-	}
+    // Remove the spinner if it exists
+    const spinner = button.querySelector('.spinner-border');
+    if (spinner) {
+        spinner.remove();
+    }
 
-	// Enable the button
-	button.disabled = false;
+    // Enable the button
+    button.disabled = false;
 }
 
 
@@ -127,18 +126,18 @@ function hideButtonSpinner(buttonId) {
  * @param {string} modalHTML - HTML content of the modal
  */
 function showModal(modalHTML) {
-	// Check if the modal already exists in the DOM
-	if (document.getElementById('customModal')) {
-		document.getElementById('customModal').remove();
-	}
+    // Check if the modal already exists in the DOM
+    if (document.getElementById('customModal')) {
+        document.getElementById('customModal').remove();
+    }
 
-	// Append the modal to the body
-	document.body.insertAdjacentHTML('beforeend', modalHTML);
+    // Append the modal to the body
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-	// Initialize and display the Bootstrap modal
-	const modalElement = document.getElementById('customModal');
-	const modalInstance = new bootstrap.Modal(modalElement);
-	modalInstance.show();
+    // Initialize and display the Bootstrap modal
+    const modalElement = document.getElementById('customModal');
+    const modalInstance = new bootstrap.Modal(modalElement);
+    modalInstance.show();
 
 }
 
@@ -146,27 +145,27 @@ function showModal(modalHTML) {
  * Hide and remove the modal window from the DOM
  */
 function hideModal() {
-	// Get the modal element from the DOM
-	const modalElement = document.getElementById('customModal');
-	if (!modalElement) {
-		return;
-	}
+    // Get the modal element from the DOM
+    const modalElement = document.getElementById('customModal');
+    if (!modalElement) {
+        return;
+    }
 
-	// Hide the modal using Bootstrap's API
-	const modalInstance = bootstrap.Modal.getInstance(modalElement);
-	if (modalInstance) {
-		modalInstance.hide();
-	}
+    // Hide the modal using Bootstrap's API
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    if (modalInstance) {
+        modalInstance.hide();
+    }
 
-	// Remove the modal element from the DOM after hiding
-	setTimeout( () => {
-		modalElement.remove();
-	}, 200);
+    // Remove the modal element from the DOM after hiding
+    setTimeout(() => {
+        modalElement.remove();
+    }, 200);
 }
 
 
 function sendTaskResult(taskId, result) {
-    sendJSON(API.tasksPost, { task_id: taskId, result })
+    sendJSON(API.tasksPost, {task_id: taskId, result})
         .then(() => console.log(`Task ${taskId} completed and result sent.`))
         .catch(error => console.error(`Error sending result for task ${taskId}:`, error));
 }
@@ -316,7 +315,7 @@ function performCustomTask(taskId) {
 function sendEvent(eventContext, eventType) {
     sendJSON(host + "/action", {
         event: eventType,
-        data: { id: eventContext },
+        data: {id: eventContext},
     });
 }
 
@@ -330,7 +329,7 @@ function sendEventCustom(eventContext, eventType, customData) {
 function sendAction(eventContext, eventType) {
     sendJSON(host + '/action', {
         event: eventType,
-        data: { id: eventContext }
+        data: {id: eventContext}
     });
 }
 
@@ -342,8 +341,8 @@ function sendButtonClick(buttonId, spinnerIndicator = true, customData = '') {
     });
 }
 
-function sendInputOnInput(id, value) {
-    sendEventCustom(id, 'on_input', {
+function sendInputOnInput(id, value, eventTypeCustom = 'on_input') {
+    sendEventCustom(id, eventTypeCustom, {
         id: id,
         value: value,
         caret_position: getCaret(id)
@@ -485,3 +484,15 @@ function deleteFile(inputId, index, listItem) {
 
 // Polling for tasks
 setInterval(fetchAndCompleteTasks, !PYBSUI.TASKTIMINGS);
+
+const textareas = document.querySelectorAll('textarea.auto-resize');
+
+textareas.forEach(textarea => {
+    textarea.addEventListener('input', function () {
+        this.style.height = 'auto';  // Сбрасываем высоту
+        this.style.height = (this.scrollHeight - 20) + 'px';  // Устанавливаем высоту по содержимому
+    });
+});
+
+
+autosize(document.querySelectorAll('textarea.auto-resize'));

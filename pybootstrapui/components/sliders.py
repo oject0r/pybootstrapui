@@ -29,7 +29,7 @@ class Slider(HTMLElement):
         value: int = 50,
         label: str | None = None,
         show_value: bool = True,
-        callback: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
+        on_slide: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
         classes: list[str] | None = None,
         id: str | None = None,
     ):
@@ -43,7 +43,7 @@ class Slider(HTMLElement):
             value (int): Default value of the slider.
             label (str | None): Optional label displayed above the slider.
             show_value (bool): Whether to display the current value.
-            callback (Callable | Awaitable | None): Callback executed on value change.
+            on_slide (Callable | Awaitable | None): Callback executed on value change.
             classes (list[str] | None): Additional CSS classes for styling.
             id (str | None): Unique identifier for the slider.
 
@@ -65,11 +65,8 @@ class Slider(HTMLElement):
         self.step = step
         self.value = value
         self.label = label
-        self.callback = callback
+        self.on_slide = on_slide
         self.show_value = show_value
-
-        if callback and self.id:
-            add_handler("on_slider_change", self.id, wrap_callback(callback))
 
     def construct(self) -> str:
         """
@@ -88,9 +85,12 @@ class Slider(HTMLElement):
                 id: '{self.id}',
                 value: this.value
             }});"""
-            if self.callback
+            if self.on_slide
             else ""
         )
+
+        if self.on_slide and self.id:
+            add_handler("on_slider_change", self.id, wrap_callback(self.on_slide))
 
         return f"""
         <div class="slider-container {self.classes_str}">

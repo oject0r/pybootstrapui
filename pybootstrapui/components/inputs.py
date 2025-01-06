@@ -4,6 +4,7 @@ from .base import HTMLElement
 from typing import Literal, Callable, Union, Awaitable
 import pybootstrapui.components.dynamics.queue as queue
 from pybootstrapui.utils.callbacks import wrap_callback
+from pybootstrapui.components.buttons import Button
 
 
 class InputObject(HTMLElement):
@@ -62,9 +63,11 @@ class InputObject(HTMLElement):
         value: str | None = None,
         required: bool = False,
         tag_type: str = "input",
+        buttons: dict[Literal["left", "right"], list[Button]] | None = None,
         on_input: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
         on_focus: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
         on_blur: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
+        on_enter: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
     ):
         """
         Initializes an InputObject with customizable properties.
@@ -94,46 +97,15 @@ class InputObject(HTMLElement):
         self.value = value or ""
         self.required = required
         self.tag = tag_type
+
         self.on_input = on_input
         self.on_focus = on_focus
         self.on_blur = on_blur
+        self.on_enter = on_enter
 
-        if not self.id:
-            self.id = f"i{self.special_id * 3919 * random.randint(3, 5)}"
+        self.buttons_left = buttons['left'] if buttons and 'left' in buttons else None
+        self.buttons_right = buttons['right'] if buttons and 'right' in buttons else None
 
-        self.register_callbacks(
-            on_input=self.on_input, on_focus=self.on_focus, on_blur=self.on_blur
-        )
-
-    def register_callbacks(
-        self,
-        *,
-        on_input: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
-        on_focus: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
-        on_blur: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
-    ):
-        """
-        Registers or updates callbacks for events like `on_input`, `on_focus`, and `on_blur`.
-
-        Args:
-            on_input (Callable | Awaitable | None): Callback for handling the input event.
-            on_focus (Callable | Awaitable | None): Callback for handling the focus event.
-            on_blur (Callable | Awaitable | None): Callback for handling the blur event.
-
-        Note:
-            If a handler is already registered, it will be replaced.
-        """
-        if on_input:
-            self.on_input = on_input
-            add_handler("on_input", self.id, wrap_callback(on_input))
-
-        if on_focus:
-            self.on_focus = on_focus
-            add_handler("on_focus", self.id, wrap_callback(on_focus))
-
-        if on_blur:
-            self.on_blur = on_blur
-            add_handler("on_blur", self.id, wrap_callback(on_blur))
 
     def update_value(self, value: str | None):
         """
@@ -161,7 +133,11 @@ class InputObject(HTMLElement):
 
         task = queue.add_task(self.id, "getValue")
         await task.wait_async()
-        return task.result.get()
+
+        result = task.result.get()
+        self.value = result
+
+        return result
 
     def change_value(self, new_value: str):
         """
@@ -173,24 +149,60 @@ class InputObject(HTMLElement):
         queue.add_task(self.id, "setValue", value=new_value)
         self.value = new_value
 
-    def construct(self) -> str:
+    def construct(self, register_callbacks: bool = True) -> str:
         """
         Generates the HTML for the input element.
 
         Returns:
             str: The HTML code for the input element.
         """
+
+        prefix_compiled = ''
+
+        if register_callbacks:
+
+            if self.on_input:
+                add_handler("on_input", self.id, wrap_callback(self.on_input))
+
+            if self.on_focus:
+                add_handler("on_focus", self.id, wrap_callback(self.on_focus))
+
+            if self.on_blur:
+                add_handler("on_blur", self.id, wrap_callback(self.on_blur))
+
+            if self.on_enter:
+                add_handler("on_enter", self.id, wrap_callback(self.on_enter))
+
+        if self.prefix:
+            prefix_compiled += f'<span class="input-group-text">{self.prefix}</span>'
+
+        if self.prefix and self.buttons_left:
+            prefix_compiled += '\n'
+
+        if self.buttons_left:
+            prefix_compiled += '\n'.join(button.construct() for button in self.buttons_left)
+
+        tag_open = (f'<{self.tag} class="form-control auto-resize" id="{self.id}" '
+                    f'type="{self.type}" name="{self.name}" value="{self.value}" '
+                    f'placeholder="{self.placeholder}" {"required" if self.required else ""}'
+                    
+                    f'{"oninput=\"sendInputOnInput(this.id, this.value)\"" if self.on_input else ""}'
+                    f'{"onfocus=\"sendEvent(this.id, `on_focus`)\"" if self.on_focus else ""}'
+                    f'{"onblur=\"sendEvent(this.id, `on_blur`)\"" if self.on_blur else ''}'
+                    f'{"onkeydown=\"if (event.key === `Enter`) {{ sendInputOnInput(this.id, this.value, `on_enter`) }}\"" if self.on_enter else ""}'
+                    )
+        tag_close = f'</{self.tag}>' if self.tag != 'input' else '/>'
+
         return f"""
-        <div class="input-group mb-3">
-            {f'<span class="input-group-text">{self.prefix}</span>' if self.prefix else ''}
-            <div class="form-floating {self.classes_str}">
-                <{self.tag} class="form-control"
-                    id="{self.id}" type="{self.type}" name="{self.name}" value="{self.value}"
-                    placeholder="{self.placeholder}" {'required' if self.required else ''}
-                >
-                </{self.tag}>
+        <div class="input-group mb-3 {self.classes_str}">
+            {prefix_compiled}
+            <div class="form-floating">
+                {tag_open.strip()}{tag_close}
                 <label for="{self.id}">{self.label}</label>
             </div>
+            {'\n'.join(button.construct() for button in self.buttons_right)
+            if self.buttons_right
+            else ''}
         </div>
         """
 
@@ -207,6 +219,7 @@ class TextInput(InputObject):
         name: str | None = None,
         value: str | None = None,
         required: bool = False,
+        **kwargs
     ):
         super().__init__(
             label,
@@ -217,6 +230,7 @@ class TextInput(InputObject):
             name=name,
             value=value,
             required=required,
+            **kwargs
         )
 
 class Input(TextInput):
@@ -234,6 +248,7 @@ class IntInput(InputObject):
         name: str | None = None,
         value: str | None = None,
         required: bool = False,
+        **kwargs
     ):
         super().__init__(
             label,
@@ -244,6 +259,7 @@ class IntInput(InputObject):
             name=name,
             value=value,
             required=required,
+            **kwargs
         )
 
 
@@ -259,6 +275,7 @@ class EmailInput(InputObject):
         name: str | None = None,
         value: str | None = None,
         required: bool = False,
+        **kwargs
     ):
         super().__init__(
             label,
@@ -269,6 +286,7 @@ class EmailInput(InputObject):
             name=name,
             value=value,
             required=required,
+            **kwargs
         )
 
 
@@ -284,6 +302,7 @@ class PasswordInput(InputObject):
         name: str | None = None,
         value: str | None = None,
         required: bool = False,
+        **kwargs
     ):
         super().__init__(
             label,
@@ -294,6 +313,7 @@ class PasswordInput(InputObject):
             name=name,
             value=value,
             required=required,
+            **kwargs
         )
 
 
@@ -309,6 +329,7 @@ class TextArea(InputObject):
         name: str | None = None,
         value: str | None = None,
         required: bool = False,
+        **kwargs
     ):
         super().__init__(
             label,
@@ -320,4 +341,5 @@ class TextArea(InputObject):
             value=value,
             required=required,
             tag_type="textarea",
+            **kwargs
         )

@@ -13,39 +13,39 @@ import zipfile
 
 # Links for NW.js downloads
 OFFICIAL_LINKS = {
-    "windows_x64": "https://dl.nwjs.io/v0.94.0/nwjs-v0.94.0-win-x64.zip",
-    "linux_x64": "https://dl.nwjs.io/v0.94.0/nwjs-v0.94.0-linux-x64.tar.gz",
-    "macos_x64": "https://dl.nwjs.io/v0.94.0/nwjs-v0.94.0-osx-x64.zip",
-    "windows_x86": "https://dl.nwjs.io/v0.94.0/nwjs-v0.94.0-win-ia32.zip",
-    "linux_x86": "https://dl.nwjs.io/v0.94.0/nwjs-v0.94.0-linux-ia32.tar.gz",
-    "macos_arm64": "https://dl.nwjs.io/v0.94.0/nwjs-v0.94.0-osx-arm64.zip",
+    "windows_x64": "https://dl.nwjs.io/v0.94.1/nwjs-v0.94.1-win-x64.zip",
+    "linux_x64": "https://dl.nwjs.io/v0.94.1/nwjs-v0.94.1-linux-x64.tar.gz",
+    "macos_x64": "https://dl.nwjs.io/v0.94.1/nwjs-v0.94.1-osx-x64.zip",
+    "windows_x86": "https://dl.nwjs.io/v0.94.1/nwjs-v0.94.1-win-ia32.zip",
+    "linux_x86": "https://dl.nwjs.io/v0.94.1/nwjs-v0.94.1-linux-ia32.tar.gz",
+    "macos_arm64": "https://dl.nwjs.io/v0.94.1/nwjs-v0.94.1-osx-arm64.zip",
 }
 
 OFFICIAL_SDK_LINKS = {
-    "windows_x64": "https://dl.nwjs.io/v0.94.0/nwjs-sdk-v0.94.0-win-x64.zip",
-    "linux_x64": "https://dl.nwjs.io/v0.94.0/nwjs-sdk-v0.94.0-linux-x64.tar.gz",
-    "macos_x64": "https://dl.nwjs.io/v0.94.0/nwjs-sdk-v0.94.0-osx-x64.zip",
-    "windows_x86": "https://dl.nwjs.io/v0.94.0/nwjs-sdk-v0.94.0-win-ia32.zip",
-    "linux_x86": "https://dl.nwjs.io/v0.94.0/nwjs-sdk-v0.94.0-linux-ia32.tar.gz",
-    "macos_arm64": "https://dl.nwjs.io/v0.94.0/nwjs-sdk-v0.94.0-osx-arm64.zip",
+    "windows_x64": "https://dl.nwjs.io/v0.94.1/nwjs-sdk-v0.94.1-win-x64.zip",
+    "linux_x64": "https://dl.nwjs.io/v0.94.1/nwjs-sdk-v0.94.1-linux-x64.tar.gz",
+    "macos_x64": "https://dl.nwjs.io/v0.94.1/nwjs-sdk-v0.94.1-osx-x64.zip",
+    "windows_x86": "https://dl.nwjs.io/v0.94.1/nwjs-sdk-v0.94.1-win-ia32.zip",
+    "linux_x86": "https://dl.nwjs.io/v0.94.1/nwjs-sdk-v0.94.1-linux-ia32.tar.gz",
+    "macos_arm64": "https://dl.nwjs.io/v0.94.1/nwjs-sdk-v0.94.1-osx-arm64.zip",
 }
 
 MIRROR_LINKS = {
-    "windows_x64": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.0-win-x64.zip",
-    "linux_x64": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.0-linux-x64.tar.gz",
-    "macos_x64": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.0-osx-x64.zip",
-    "windows_x86": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.0-win-ia32.zip",
-    "linux_x86": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.0-linux-ia32.tar.gz",
-    "macos_arm64": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.0-osx-arm64.zip",
+    "windows_x64": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.1-win-x64.zip",
+    "linux_x64": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.1-linux-x64.tar.gz",
+    "macos_x64": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.1-osx-x64.zip",
+    "windows_x86": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.1-win-ia32.zip",
+    "linux_x86": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.1-linux-ia32.tar.gz",
+    "macos_arm64": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.1-osx-arm64.zip",
 }
 
 MIRROR_SDK_LINKS = {
-    "windows_x64": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.0-win-x64.zip",
-    "linux_x64": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.0-linux-x64.tar.gz",
-    "macos_x64": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.0-osx-x64.zip",
-    "windows_x86": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.0-win-ia32.zip",
-    "linux_x86": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.0-linux-ia32.tar.gz",
-    "macos_arm64": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.0-osx-arm64.zip",
+    "windows_x64": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.1-win-x64.zip",
+    "linux_x64": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.1-linux-x64.tar.gz",
+    "macos_x64": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.1-osx-x64.zip",
+    "windows_x86": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.1-win-ia32.zip",
+    "linux_x86": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.1-linux-ia32.tar.gz",
+    "macos_arm64": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.1-osx-arm64.zip",
 }
 
 

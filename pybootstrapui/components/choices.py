@@ -1,3 +1,4 @@
+from utils.callbacks import wrap_callback
 from . import add_handler
 from .base import HTMLElement
 from typing import Callable, Awaitable, Union
@@ -52,7 +53,7 @@ class Option(HTMLElement):
         Example:
             html = option.construct()
         """
-        return f'<option class="{self.classes_str}" id="{self.id}" value="{self.value if self.value else ""}" {"selected" if self.selected else ""}>{self.label}</option>'
+        return f'<option class="{self.classes_str}" id="{self.id}" value="{self.value if self.value else self.label}" {"selected" if self.selected else ""}>{self.label}</option>'
 
 
 class Choice(HTMLElement):
@@ -69,7 +70,7 @@ class Choice(HTMLElement):
 
     def __init__(
         self,
-        options: list[Option],
+        *options: Option,
         name: str | None = None,
         classes: list[str] | None = None,
         id: str | None = None,
@@ -79,7 +80,7 @@ class Choice(HTMLElement):
         Initializes a Choice object with a list of options and an optional name for the <select> element.
 
         Args:
-            options (list[Option]): A list of Option objects to be included in the <select> element.
+            *options (Option): A list of Option objects to be included in the <select> element.
             name (str | None): The name of the <select> element.
             classes (list[str] | None): Optional list of classes to be applied to the <select> element.
             id (str | None): Optional unique ID for the <select> element.
@@ -97,11 +98,7 @@ class Choice(HTMLElement):
         self.name = name
         self.on_choice = on_choice
 
-        # Register callback if provided
-        if on_choice and self.id:
-            add_handler("on_choice", self.id, on_choice)
-
-    async def get_value(self) -> any:
+    async def get_value(self) -> str:
         """
         Asynchronously retrieves the value of an input element from the frontend.
 
@@ -117,8 +114,6 @@ class Choice(HTMLElement):
             value = await input_element.get_value()
             print(f"The input value is: {value}")
         """
-        if not self.id:
-            return
 
         task = queue.add_task(self.id, "getValue")
         await task.wait_async()
@@ -134,5 +129,10 @@ class Choice(HTMLElement):
         Example:
             html = choice.construct()
         """
+
+        # Register callback if provided
+        if self.on_choice and self.id:
+            add_handler("on_choice", self.id, wrap_callback(self.on_choice))
+
         compiled_child = "\n".join([child.construct() for child in self.options])
         return f"""<select {f'onchange="sendOnChoice({self.id})"' if self.on_choice else ''} class="form-select {self.classes_str}" id="{self.id}" name="{self.name}">{compiled_child}</select>"""
