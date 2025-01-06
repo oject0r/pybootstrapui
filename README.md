@@ -95,13 +95,12 @@ Use the `Page.run_in_desktop` method to run your page as a desktop application.
 ```python
 from pybootstrapui import Page
 from pybootstrapui.components import Header
-from pybootstrapui.templates import Default
 
 # Create the page
-page = Page(template_filename=Default, page_title="My App")
+page = Page(page_title="My App")
 
 # Add components
-page.add(Header(label="This is a desktop app!"))
+page.add(Header("This is a desktop app!"))
 
 # Run the app
 page.run_in_desktop(
