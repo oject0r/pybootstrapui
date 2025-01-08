@@ -73,7 +73,7 @@ async def on_button_click(context: ButtonCallbackContext):
 
 
 # Create a page with a button callback
-page = Page(template_filename=Default, page_title="Callback Demo")
+page = Page(page_title="Callback Demo")
 page.add(Header("Dynamic Callbacks Example"))
 page.add(Button("Click Me", style=ButtonStyle.SUCCESS_OUTLINE, on_click=on_button_click))
 
@@ -137,6 +137,15 @@ python -m pybootstrapui build MyProject
 - **Dependencies Management:** All required packages are bundled.
 - **Optimized Build Process:** Ensures efficient and clean packaging.
 - **Platform-Specific Binaries:** Create executables for Windows, macOS, or Linux seamlessly.
+
+---
+
+## 🚀 **Migration to PyBootstrapUI 1.1.0**
+
+For a detailed step-by-step migration guide, refer to the official tutorial:  
+👉 [**Migrating to v1.1.0**](Migrating%20to%20v1.1.0.MD)  
+
+This guide covers all the key updates and examples to help you transition smoothly.
 
 ---
 
