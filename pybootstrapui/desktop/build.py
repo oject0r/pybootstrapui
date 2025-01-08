@@ -8,6 +8,7 @@ import shutil
 
 
 def start(project_path: str | Path):
+    """Start function."""
     # Ensure project_path is a Path object
     project_path = Path(project_path)
 

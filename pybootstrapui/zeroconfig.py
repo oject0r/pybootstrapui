@@ -2,7 +2,8 @@ import os
 import re
 
 class ConfigSyntaxError(Exception):
-    """Базовый класс для синтаксических ошибок в конфиге."""
+    """Базовый класс для синтаксических ошибок в
+    конфиге."""
     pass
 
 class SchemaValidationError(Exception):
@@ -19,15 +20,27 @@ class Configer:
             debug=False,
             schema=None,
     ):
-        """
-        Расширенный класс для парсинга конфигураций.
+        """Расширенный класс для парсинга
+        конфигураций.
 
-        Args:
-            default_config (dict, optional): начальный словарь настроек.
-            allow_duplicates (bool): Разрешать ли дублирование ключей в одном словаре?
-            enable_macros (bool): Включить ли поддержку макросов вида "!copy key"?
-            debug (bool): Включить ли отладочные сообщения?
-            schema (dict or None): Схема для валидации результата (может быть None).
+        :param default_config: начальный словарь
+            настроек, defaults to None.
+        :type default_config: dict, optional
+        :param allow_duplicates: Разрешать ли
+            дублирование ключей в одном словаре?,
+            defaults to False.
+        :type allow_duplicates: bool, optional
+        :param enable_macros: Включить ли
+            поддержку макросов вида "!copy key"?,
+            defaults to False.
+        :type enable_macros: bool, optional
+        :param debug: Включить ли отладочные
+            сообщения?, defaults to False.
+        :type debug: bool, optional
+        :param schema: Схема для валидации
+            результата (может быть None),
+            defaults to None.
+        :type schema: dict or None, optional
         """
         self.config = default_config or {}
 
@@ -54,11 +67,12 @@ class Configer:
             print("[DEBUG]", message)
 
     def parse_config(self, content: str):
-        """
-        Parses the entire content of the configuration file line by line.
+        """Parses the entire content of the
+        configuration file line by line.
 
-        Args:
-            content (str): The content of the configuration file to parse.
+        :param content: The content of the
+            configuration file to parse.
+        :type content: str
         """
         # Изначально на вершине стека лежит self.config (dict)
         stack = [self.config]
@@ -86,15 +100,16 @@ class Configer:
             )
 
     def parse_line(self, line: str, stack: list):
-        """
-        Parses a single line of the configuration file.
+        """Parses a single line of the
+        configuration file.
 
-        Args:
-            line (str): The line to parse.
-            stack (list): A stack where top is either dict or list.
-
-        Raises:
-            ConfigSyntaxError: if syntax is invalid.
+        :param line: The line to parse.
+        :type line: str
+        :param stack: A stack where top is either
+            dict or list.
+        :type stack: list
+        :raises ConfigSyntaxError: If syntax is
+            invalid.
         """
 
         current_container = stack[-1]  # либо dict, либо list
@@ -289,9 +304,11 @@ class Configer:
             raise ConfigSyntaxError("Internal error: stack top is neither dict nor list.")
 
     def replace_env_variables(self, value: str) -> str:
-        """
-        Расширенная логика ENV: поддержка %VAR% или %VAR:default%.
-        Если %VAR% не задана в окружении и нет default, выводим предупреждение.
+        """Расширенная логика ENV: поддержка
+        %VAR% или %VAR:default%.
+
+        Если %VAR% не задана в окружении и нет
+        default, выводим предупреждение.
         """
 
         pattern = r"%([^%]+)%"
@@ -312,10 +329,12 @@ class Configer:
         return value
 
     def _parse_array(self, array_str: str, file_path, line_idx, line_raw):
-        """
-        Примитивная обработка inline-массива: [val1, val2, ...].
-        Не поддерживает вложенные [] в той же строке.
-        Для вложенных обычно используем многострочный синтаксис.
+        """Примитивная обработка inline-массива:
+        [val1, val2, ...].
+
+        Не поддерживает вложенные [] в той же
+        строке. Для вложенных обычно используем
+        многострочный синтаксис.
         """
         content = array_str.strip()
         if content.startswith("[") and content.endswith("]"):
@@ -335,14 +354,15 @@ class Configer:
         return result
 
     def parse_value(self, value: str):
-        """
-        Parses a value from string format into its corresponding type (bool, int, float, or string).
+        """Parses a value from string format into
+        its corresponding type (bool, int, float,
+        or string).
 
-        Args:
-            value (str): The value to parse.
-
-        Returns:
-            bool, int, float, str: The parsed value, converted to the appropriate type.
+        :param value: The value to parse.
+        :type value: str
+        :return: The parsed value, converted to
+            the appropriate type.
+        :rtype: bool, int, float, str
         """
         value = value.strip()
         # Булевые
@@ -369,11 +389,11 @@ class Configer:
         return value.strip('"').strip("'")
 
     def validate_schema(self, data, schema):
-        """
-        Простая рекурсивная проверка:
-          - Если schema — dict: data должен быть dict, ключи проверяются рекурсивно.
-          - Если schema — list (из 1 элемента, напр. [int]): data должен быть list, каждый элемент int.
-          - Если schema — тип (str, int, bool и т.д.): data должен быть таким типом.
+        """Простая рекурсивная проверка:
+
+        - Если schema — dict: data должен быть dict, ключи проверяются рекурсивно.
+        - Если schema — list (из 1 элемента, напр. [int]): data должен быть list, каждый элемент int.
+        - Если schema — тип (str, int, bool и т.д.): data должен быть таким типом.
         """
         if not isinstance(schema, dict):
             # Может быть список
@@ -406,9 +426,9 @@ class Configer:
         #         raise SchemaValidationError(f"Unexpected key '{k}' in data.")
 
     def _validate_list_schema(self, data, expected_type):
-        """
-        Проверяем, что data — список, и каждый элемент имеет тип expected_type (или вложенную схему).
-        """
+        """Проверяем, что data — список, и каждый
+        элемент имеет тип expected_type (или
+        вложенную схему)."""
         if not isinstance(data, list):
             raise SchemaValidationError(f"Expected list, got {type(data)} with value '{data}'")
 
@@ -428,9 +448,11 @@ class Configer:
                 raise SchemaValidationError(f"Unsupported list schema: {expected_type}")
 
     def parse_array(self, array_str: str):
-        """
-        Примитивная обработка массива в одну строку: [val1, val2, ...].
-        Для многострочных или вложенных списков мы используем многострочный синтаксис.
+        """Примитивная обработка массива в одну
+        строку: [val1, val2, ...].
+
+        Для многострочных или вложенных списков
+        мы используем многострочный синтаксис.
         """
         content = array_str.strip()
         # Удаляем ведущие и конечные скобки
@@ -454,18 +476,21 @@ class Configer:
         return result
 
     def to_dict(self):
-        """
-        Converts the parsed configuration into a dictionary.
+        """Converts the parsed configuration into
+        a dictionary.
 
-        Returns:
-            dict: The configuration as a dictionary.
+        :return: The configuration as a
+            dictionary.
+        :rtype: dict
         """
         return self.config
 
     def _parse_config(self, content: str, root_container: dict, file_path: str = None):
-        """
-        Парсит конфиг из строки content и результат складывает в root_container.
-        file_path нужно, чтобы при ошибках писать, в каком файле ошибка.
+        """Парсит конфиг из строки content и
+        результат складывает в root_container.
+
+        file_path нужно, чтобы при ошибках
+        писать, в каком файле ошибка.
         """
 
         # Сбрасываем состояние парсинга
@@ -511,8 +536,8 @@ class Configer:
             )
 
     def _parse_line(self, line: str, stack: list, file_path: str, line_idx: int, line_raw: str):
-        """
-        Разбор одной строки.
+        """Разбор одной строки.
+
         Если ошибка, кидаем ConfigSyntaxError.
         """
 
@@ -690,9 +715,12 @@ class Configer:
             raise ConfigSyntaxError("Internal error: stack top is neither dict nor list.")
 
     def _append_to_container(self, container, key, value):
-        """Вставить (key:value) в dict или, если list, то {key: value}?
-           Либо можно просто вывести ошибку.
-           Здесь пример: если list — упаковываем в словарь.
+        """Вставить (key:value) в dict или, если
+        list, то {key: value}?
+
+        Либо можно просто вывести ошибку. Здесь
+        пример: если list — упаковываем в
+        словарь.
         """
         if isinstance(container, dict):
             self._set_dict_value(container, key, value)
@@ -704,16 +732,16 @@ class Configer:
             raise ConfigSyntaxError("Container is neither dict nor list.")
 
     def _set_dict_value(self, d: dict, key, value):
-        """Установить d[key] = value с учётом флага allow_duplicates."""
+        """Установить d[key] = value с учётом
+        флага allow_duplicates."""
         if not self.allow_duplicates and key in d:
             raise ConfigSyntaxError(f"Duplicated key '{key}' in dictionary (allow_duplicates=False).")
         d[key] = value
 
     @staticmethod
     def _get_value_by_path(container, path: str):
-        """
-        Ищем значение по точечному пути, например "database.user".
-        """
+        """Ищем значение по точечному пути,
+        например "database.user"."""
         parts = path.split(".")
         current = container
         for p in parts:
@@ -724,9 +752,8 @@ class Configer:
         return current
 
     def _merge_dicts(self, dest: dict, src: dict):
-        """
-        Примитивный мердж словаря src в dest (глубокое слияние).
-        """
+        """Примитивный мердж словаря src в dest
+        (глубокое слияние)."""
         for k, v in src.items():
             if k in dest:
                 if isinstance(dest[k], dict) and isinstance(v, dict):
@@ -740,6 +767,7 @@ class Configer:
                 dest[k] = v
 
     def _parse_file(self, file_path, target):
+        """Parse file."""
         if file_path in self._included_files:
             raise ConfigSyntaxError(...)
 
@@ -752,9 +780,9 @@ class Configer:
         self._parse_config(content, target, file_path)
 
     async def _parse_file_async(self, file_path: str, target: dict):
-        """
-        Внутренний метод для асинхронного парсинга отдельного файла и мерджа результата в target.
-        """
+        """Внутренний метод для асинхронного
+        парсинга отдельного файла и мерджа
+        результата в target."""
         if file_path in self._included_files:
             raise ConfigSyntaxError(f"Include cycle detected for file '{file_path}'.")
         self._included_files.add(file_path)
@@ -768,6 +796,7 @@ class Configer:
         self._merge_dicts(target, partial_config)
 
     def load_sync(self, file_path: str) -> dict:
+        """Load sync."""
         self.log_debug(f"Loading file (sync): {file_path}")
         self.config = {}
         self._included_files.clear()  # сбрасываем список уже включённых

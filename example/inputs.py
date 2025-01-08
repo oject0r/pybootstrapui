@@ -10,7 +10,7 @@ page = ui.Page(ui.templates.Default)
 def input_callback(context: ui.InputCallbackContext):
     print(f"Input value: {context.value}")
 
-my_input = TextInput(label='Your Input', placeholder='Start typing...')
+my_input = Input(label='Your Input', placeholder='Start typing...')
 my_input.register_callbacks(on_input=input_callback)
 
 page.add(

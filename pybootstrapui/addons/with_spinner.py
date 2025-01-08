@@ -1,33 +1,42 @@
 from functools import wraps
 from pybootstrapui.components import add_task
+import asyncio
+from typing import Callable, Any
 
 
-def with_spinner_indicator(func):
+def with_spinner_indicator(func: Callable) -> Callable:
     """
-    Decorator to display a fullscreen spinner indicator during the execution of an asynchronous function.
+    Decorator to display a fullscreen spinner indicator during the execution of a function.
 
     This decorator adds a task to show a fullscreen spinner before the function starts
-    and hides it after the function completes.
+    and hides it after the function completes, regardless of success or failure.
 
-    Args:
-            func (Callable): An asynchronous function to be wrapped.
+    Parameters:
+        func (Callable): An asynchronous or synchronous function to be wrapped.
 
     Returns:
-            Callable: The wrapped asynchronous function with spinner management.
+        Callable: The wrapped function with spinner management.
 
     Example:
-            @with_spinner_indicator
-            async def fetch_data():
-                    await some_async_operation()
+        @with_spinner_indicator
+        async def fetch_data():
+            await some_async_operation()
     """
-
     @wraps(func)
-    async def wrapper(*args, **kwargs):
+    async def async_wrapper(*args, **kwargs) -> Any:
         add_task("", "showFullscreenSpinner")
         try:
-            result = await func(*args, **kwargs)
+            return await func(*args, **kwargs)
         finally:
             add_task("", "hideFullscreenSpinner")
-        return result
 
-    return wrapper
+    @wraps(func)
+    def sync_wrapper(*args, **kwargs) -> Any:
+        add_task("", "showFullscreenSpinner")
+        try:
+            return func(*args, **kwargs)
+        finally:
+            add_task("", "hideFullscreenSpinner")
+
+    # Determine if the function is async or sync
+    return async_wrapper if asyncio.iscoroutinefunction(func) else sync_wrapper

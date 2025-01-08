@@ -6,15 +6,14 @@ from pybootstrapui.__main__ import get_system_info
 
 
 def resource_path(relative_path: str) -> str:
-    """
-    Get absolute path to a resource, compatible with both development
-    and PyInstaller environments.
+    """Get absolute path to a resource,
+    compatible with both development and
+    PyInstaller environments.
 
     Parameters:
         - relative_path (str): Relative path to the resource.
-
-    Returns:
-        - str: Absolute path to the resource.
+    :return: Absolute path to the resource.
+    :rtype: - str
     """
     try:
         # If running as a bundled application (PyInstaller)
@@ -29,7 +28,7 @@ def resource_path(relative_path: str) -> str:
 # Load configuration file
 try:
     config = zeroconfig.Configer().load_sync(resource_path("config.zc"))
-except PermissionError:
+except OSError:
     config = zeroconfig.Configer().load_sync(resource_path("config.zc/config.zc"))
 
 # Get system information

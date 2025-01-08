@@ -4,15 +4,19 @@ Demonstrates a button with a click event.
 
 import pybootstrapui as ui
 from pybootstrapui.components import *
+import asyncio
+
 
 page = ui.Page(ui.templates.Default)
 
-def button_callback(context: ui.ButtonCallbackContext):
-    print("Button clicked!")
+async def button_callback(context: ui.ButtonCallbackContext):
+    context.show_spinner()
+    await asyncio.sleep(15)
+    context.hide_spinner()
 
 page.add(
     Text('Press the button below:'),
-    Button('Click Me', btn_style_type=ui.enums.ButtonStyle.PRIMARY, on_click=button_callback)
+    Button('Click Me', style=ui.enums.ButtonStyle.PRIMARY, on_click=button_callback)
 )
 
 if __name__ == '__main__':

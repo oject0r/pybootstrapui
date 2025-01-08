@@ -4,6 +4,7 @@ from pybootstrapui.desktop.built import NWJSPath
 
 class MainPage(Page):
     def __init__(self):
+        """Init function."""
         super().__init__()
 
         self.add(

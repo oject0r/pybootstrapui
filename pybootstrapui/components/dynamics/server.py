@@ -1,9 +1,15 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
 from .client_to_server import handle_action
 from .queue_handler import fetch_task_results, get_tasks
 
 app = FastAPI()
+
+app.pybsui_page = None
+
+@app.get('/')
+async def get_page():
+    return HTMLResponse(await app.pybsui_page.compile_async())
 
 
 @app.post("/action")

@@ -3,13 +3,13 @@ from .base import HTMLElement
 
 class Table(HTMLElement):
     """
-    A class for creating Bootstrap tables.
+    Represents a Bootstrap-styled HTML table.
 
     Attributes:
-            - `headers` (list[str]): The table headers.
-            - `rows` (list[list[str]]): The table rows.
-            - `classes` (list[str] | None): Additional CSS classes for the table.
-            - `unique_id` (str | None): Unique identifier for the table.
+        headers (list[str]): A list of table headers.
+        rows (list[list[str]]): A list of rows, where each row is represented as a list of strings.
+        classes (list[str] | None): Additional CSS classes for styling the table.
+        id (str | None): A unique identifier for the table.
     """
 
     def __init__(
@@ -17,56 +17,53 @@ class Table(HTMLElement):
         headers: list[str] | None = None,
         rows: list[list[str]] | None = None,
         classes: list[str] | None = None,
-        unique_id: str | None = None,
+        id: str | None = None,
     ):
         """
-        Initializes the Table object with headers, rows, and optional CSS classes.
+        Initializes a `Table` object with headers, rows, and optional CSS classes.
 
-        Parameters:
-                - `headers` (list[str] | None): The table headers (optional).
-                - `rows` (list[list[str]] | None): The table rows (optional).
-                - `classes` (list[str] | None): Additional CSS classes for the table (optional).
-                - `unique_id` (str | None): Unique identifier for the table (optional).
+        Args:
+            headers (list[str] | None): The table headers (optional).
+            rows (list[list[str]] | None): The table rows (optional).
+            classes (list[str] | None): Additional CSS classes for the table (optional).
+            id (str | None): A unique identifier for the table (optional).
 
         Example:
-                ```
-                table = Table(
-                        headers=["Name", "Age", "City"],
-                        rows=[["Alice", "30", "New York"], ["Bob", "25", "Los Angeles"]],
-                        classes=["table-striped"]
-                )
-                ```
+            table = Table(
+                headers=["Name", "Age", "City"],
+                rows=[
+                    ["Alice", "30", "New York"],
+                    ["Bob", "25", "Los Angeles"]
+                ],
+                classes=["table-striped"]
+            )
         """
-        super().__init__(classes, unique_id)
+        super().__init__(classes, id)
         self.headers = headers or []
         self.rows = rows or []
 
     def add_row(self, row: list[str]):
         """
-        Adds a row to the table.
+        Adds a new row to the table.
 
-        Parameters:
-                - `row` (list[str]): A list of strings representing the row cells.
+        Args:
+            row (list[str]): A list of strings representing the row cells.
 
         Example:
-                ```
-                table.add_row(["Charlie", "35", "Chicago"])
-                ```
+            table.add_row(["Charlie", "35", "Chicago"])
         """
         self.rows.append(row)
 
     def construct(self) -> str:
         """
-        Constructs the HTML for the table.
+        Constructs the HTML representation of the table.
 
         Returns:
-                - `str`: The HTML representation of the table.
+            str: The HTML string representing the table.
 
         Example:
-                ```
-                html = table.construct()
-                print(html)
-                ```
+            html = table.construct()
+            print(html)
         """
         header_html = "".join(
             [f"<th scope='col'>{header}</th>" for header in self.headers]
@@ -79,13 +76,14 @@ class Table(HTMLElement):
         )
         classes_str = " ".join((self.classes or []) + ["table"])
         id_attr = f'id="{self.id}"' if self.id else ""
+
         return f"""
-		<table class="{classes_str}" {id_attr}>
-			<thead>
-				<tr>{header_html}</tr>
-			</thead>
-			<tbody>
-				{rows_html}
-			</tbody>
-		</table>
-		"""
+        <table class="{classes_str}" {id_attr}>
+            <thead>
+                <tr>{header_html}</tr>
+            </thead>
+            <tbody>
+                {rows_html}
+            </tbody>
+        </table>
+        """

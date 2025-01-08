@@ -7,17 +7,18 @@ from ..utils.callbacks import wrap_callback
 
 class Slider(HTMLElement):
     """
-    A class representing a range slider component.
+    Represents a range slider component.
 
     Attributes:
-            - `min` (int): Minimum value of the slider.
-            - `max` (int): Maximum value of the slider.
-            - `step` (int): Increment step for the slider.
-            - `value` (int): Default value of the slider.
-            - `label` (str | None): Optional label for the slider.
-            - `callback` (Callable | None): Function called on value change.
-            - `classes` (list[str] | None): Additional CSS classes.
-            - `unique_id` (str | None): Unique identifier.
+        min (int): Minimum value of the slider.
+        max (int): Maximum value of the slider.
+        step (int): Increment step for the slider.
+        value (int): Default value of the slider.
+        label (str | None): Optional label displayed above the slider.
+        show_value (bool): Whether to display the current value.
+        callback (Callable | Awaitable | None): Function to execute when the slider value changes.
+        classes (list[str] | None): Additional CSS classes for styling.
+        id (str | None): Unique identifier for the slider.
     """
 
     def __init__(
@@ -28,83 +29,68 @@ class Slider(HTMLElement):
         value: int = 50,
         label: str | None = None,
         show_value: bool = True,
-        callback: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
+        on_slide: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
         classes: list[str] | None = None,
-        unique_id: str | None = None,
+        id: str | None = None,
     ):
         """
-        Initializes a slider component.
+        Initializes a `Slider` object.
 
-        Parameters:
-                - `min` (int): Minimum value of the slider.
-                - `max` (int): Maximum value of the slider.
-                - `step` (int): Increment step.
-                - `value` (int): Default value of the slider.
-                - `label` (str | None): Optional label displayed above the slider.
-                - `callback` (Callable | None): Function to be executed when the slider value changes.
-                - `classes` (list[str] | None): Additional CSS classes for styling the slider.
-                - `unique_id` (str | None): Unique identifier for the slider element.
+        Args:
+            min (int): Minimum value of the slider.
+            max (int): Maximum value of the slider.
+            step (int): Increment step for the slider.
+            value (int): Default value of the slider.
+            label (str | None): Optional label displayed above the slider.
+            show_value (bool): Whether to display the current value.
+            on_slide (Callable | Awaitable | None): Callback executed on value change.
+            classes (list[str] | None): Additional CSS classes for styling.
+            id (str | None): Unique identifier for the slider.
 
-        Notes:
-                - If `callback` is provided, it will be executed every time the slider value changes.
-                - The `unique_id` is required for identifying slider events on the frontend.
+        Example:
+            slider = Slider(
+                min=0,
+                max=100,
+                step=5,
+                value=50,
+                label="Volume",
+                show_value=True,
+                callback=on_slider_change,
+                classes=["custom-slider"]
+            )
         """
-        super().__init__(classes, unique_id)
+        super().__init__(classes, id)
         self.min = min
         self.max = max
         self.step = step
         self.value = value
         self.label = label
-        self.callback = callback
+        self.on_slide = on_slide
         self.show_value = show_value
-
-        # Register the callback if provided
-        if callback and self.id:
-            add_handler("on_slider_change", self.id, wrap_callback(callback))
 
     def construct(self) -> str:
         """
         Constructs the HTML and JavaScript representation of the slider.
 
         Returns:
-                - `str`: Combined HTML and JavaScript as a string.
+            str: The HTML structure for the slider component.
 
-        HTML Structure:
-        - A `div` container wraps the slider, an optional label, and the displayed value.
-        - The slider is created using an `<input>` of type `range`.
-        - A `<span>` element displays the current value dynamically.
-
-        JavaScript Behavior:
-        - The `oninput` event updates the displayed value in real-time.
-        - If a callback is set, an event is triggered on the server-side with the new value.
-
-        Example Output:
-        ```html
-        <div class="slider-container">
-                <label for="slider-id">Volume</label>
-                <input
-                        type="range"
-                        id="slider-id"
-                        min="0"
-                        max="100"
-                        step="1"
-                        value="50"
-                        oninput="document.getElementById('slider-id-value').innerText = this.value; sendEventCustom('slider-id', 'on_slider_change', {id: 'slider-id', value: this.value});"
-                >
-                <span id="slider-id-value">50</span>
-        </div>
-        ```
+        Example:
+            html = slider.construct()
+            print(html)
         """
         callback_js = (
             f"""
             sendEventCustom('{self.id}', 'on_slider_change', {{
-            	id: '{self.id}',
+                id: '{self.id}',
                 value: this.value
-            }});
-        """
-            if self.callback
+            }});"""
+            if self.on_slide
             else ""
         )
+
+        if self.on_slide and self.id:
+            add_handler("on_slider_change", self.id, wrap_callback(self.on_slide))
 
         return f"""
         <div class="slider-container {self.classes_str}">
@@ -125,19 +111,17 @@ class Slider(HTMLElement):
 
     def set_value(self, new_value: int):
         """
-        Sets the slider's value dynamically.
+        Dynamically updates the slider's value.
 
-        Parameters:
-                - `new_value` (int): The new value to set for the slider.
+        Args:
+            new_value (int): The new value to set for the slider.
 
-        Notes:
-                - The value is updated both on the frontend and server-side.
-                - The value is clamped between `min` and `max`.
+        Note:
+            - The value is clamped between `min` and `max`.
+            - Updates the slider value both on the frontend and server-side.
 
         Example:
-                ```python
-                slider.set_value(75)
-                ```
+            slider.set_value(75)
         """
         self.value = max(self.min, min(new_value, self.max))
         add_task(self.id, "setValue", value=new_value)
@@ -150,20 +134,18 @@ class Slider(HTMLElement):
 
     async def get_value(self) -> int:
         """
-        Asynchronously retrieves the current value of the slider.
+        Asynchronously retrieves the current slider value from the frontend.
 
         Returns:
-                - `int`: The current value of the slider.
+            int: The current value of the slider.
 
-        Notes:
-                - This method queues a task to fetch the slider's value dynamically from the frontend.
-                - If the value cannot be fetched, it will return the last known value.
+        Note:
+            - Queues a task to fetch the slider value dynamically.
+            - If fetching fails, returns the last known value.
 
         Example:
-                ```python
-                current_value = await slider.get_value()
-                print(f"Slider value: {current_value}")
-                ```
+            current_value = await slider.get_value()
+            print(f"Slider value: {current_value}")
         """
         task = add_task(self.id, "getValue")
         await task.wait_async()

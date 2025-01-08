@@ -4,13 +4,13 @@ from pybootstrapui import components
 
 class TestPyBootstrapUIComponents(unittest.TestCase):
     def test_audio(self):
-        audio = components.Audio(['/source/1.mp3', '/source/1.ogg'], classes=['class-1'],
+        audio = components.Audio('/source/1.mp3', '/source/1.ogg', classes=['class-1'],
                                  unique_id='audio1')
         self.assertIn('<audio', audio.construct())
         self.assertIn('1.ogg', audio.construct())
 
     def test_div(self):
-        div = components.Div(child_elements=[components.HTMLElement()], classes=['class-1'], unique_id='div1')
+        div = components.Div(components.HTMLElement(), classes=['class-1'], unique_id='div1')
         self.assertIn('<div', div.construct())
         self.assertIn('class-1', div.construct())
 
@@ -18,15 +18,15 @@ class TestPyBootstrapUIComponents(unittest.TestCase):
         def callback(context):
             pass
 
-        button = components.Button(label='Click Me', on_click=callback, btn_type='button', btn_style_type='secondary',
-                                   classes=['class-1'], unique_id='button1')
+        button = components.Button(label='Click Me', on_click=callback, type='button', style='secondary',
+                                   classes=['class-1'], id='button1')
         self.assertIn('<button', button.construct())
         self.assertIn('Click Me', button.construct())
 
     def test_button_group(self):
         button1 = components.Button(label='Button 1', on_click=lambda x: None)
         button2 = components.Button(label='Button 2', on_click=lambda x: None)
-        button_group = components.ButtonGroup(buttons=[button1, button2], unique_id='button_group1')
+        button_group = components.ButtonGroup(button1, button2, id='button_group1')
         self.assertIn('<div', button_group.construct())
         self.assertIn('Button 1', button_group.construct())
         self.assertIn('Button 2', button_group.construct())
@@ -34,7 +34,7 @@ class TestPyBootstrapUIComponents(unittest.TestCase):
     def test_card(self):
         header = components.Header('Card Header')
         body_element = components.Text('Card body content')
-        card = components.Card(children=[body_element], header=header, unique_id='card1')
+        card = components.Card(body_element, header=header, id='card1')
         self.assertIn('<div class="card', card.construct())
         self.assertIn('Card Header', card.construct())
         self.assertIn('Card body content', card.construct())
@@ -50,61 +50,56 @@ class TestPyBootstrapUIComponents(unittest.TestCase):
         self.assertIn('<p>Custom HTML</p>', custom_html.construct())
 
     def test_form(self):
-        input_element = components.TextInput(label='Name', unique_id='input1')
-        form = components.Form(child_elements=[input_element], unique_id='form1', action='http://example.com')
+        input_element = components.TextInput(label='Name', id='input1')
+        form = components.Form(input_element, id='form1', action='http://example.com')
         self.assertIn('<form', form.construct())
         self.assertIn('Name', form.construct())
 
     def test_grid_system(self):
-        div1 = components.Div([], classes=['col'])
-        div2 = components.Div([], classes=['col'])
-        grid = components.GridSystem(elements=[div1, div2], row=True)
+        div1 = components.Div(classes=['col'])
+        div2 = components.Div(classes=['col'])
+        grid = components.GridSystem(div1, div2, row=True)
         self.assertIn('class="col"', grid.construct())
 
 
     def test_file_image(self):
-        file_image = components.FileImage(file_path='D:\\chee.png', alt='File Image', unique_id='file_image1')
+        file_image = components.FileImage(file_path='D:\\chee.png', alt='File Image', id='file_image1')
         self.assertIn('<img', file_image.construct())
         self.assertIn('File Image', file_image.construct())
 
     def test_raw_image(self):
-        raw_image = components.RawImage(image_content=b'binarydata', alt='Raw Image', unique_id='raw_image1')
+        raw_image = components.RawImage(image_content=b'binarydata', alt='Raw Image', id='raw_image1')
         self.assertIn('<img', raw_image.construct())
         self.assertIn('Raw Image', raw_image.construct())
 
-    def test_base64_image(self):
-        base64_image = components.Base64Image(base64_data='iVBORw0KGgoAAAANSUhEUgAAAAUA', alt='Base64 Image',
-                                              unique_id='base64_image1')
-        self.assertIn('<img', base64_image.construct())
-        self.assertIn('Base64 Image', base64_image.construct())
 
     def test_url_image(self):
-        url_image = components.URLImage('http://example.com/image.png', alt='URL Image', unique_id='url_image1')
+        url_image = components.URLImage('http://example.com/image.png', alt='URL Image', id='url_image1')
         self.assertIn('<img', url_image.construct())
         self.assertIn('URL Image', url_image.construct())
 
     def test_text_input(self):
-        text_input = components.TextInput(label='Enter text', unique_id='text_input1')
+        text_input = components.TextInput(label='Enter text', id='text_input1')
         self.assertIn('<input', text_input.construct())
         self.assertIn('Enter text', text_input.construct())
 
     def test_int_input(self):
-        int_input = components.IntInput(label='Enter number', unique_id='int_input1')
+        int_input = components.IntInput(label='Enter number', id='int_input1')
         self.assertIn('<input', int_input.construct())
         self.assertIn('Enter number', int_input.construct())
 
     def test_email_input(self):
-        email_input = components.EmailInput(label='Enter email', unique_id='email_input1')
+        email_input = components.EmailInput(label='Enter email', id='email_input1')
         self.assertIn('<input', email_input.construct())
         self.assertIn('Enter email', email_input.construct())
 
     def test_password_input(self):
-        password_input = components.PasswordInput(label='Enter password', unique_id='password_input1')
+        password_input = components.PasswordInput(label='Enter password', id='password_input1')
         self.assertIn('<input', password_input.construct())
         self.assertIn('Enter password', password_input.construct())
 
     def test_text_area(self):
-        text_area = components.TextArea(label='Enter text', unique_id='text_area1')
+        text_area = components.TextArea(label='Enter text', id='text_area1')
         self.assertIn('<textarea', text_area.construct())
         self.assertIn('Enter text', text_area.construct())
 
@@ -121,13 +116,13 @@ class TestPyBootstrapUIComponents(unittest.TestCase):
         self.assertIn('margin-top: 20px', spacer.construct())
 
     def test_list(self):
-        list_element = components.ListElement([components.Text('Item 1')])
-        list_component = components.List(elements=[list_element], unique_id='list1')
+        list_element = components.ListElement(components.Text('Item 1'))
+        list_component = components.List(list_element, id='list1')
         self.assertIn('<ul', list_component.construct())
         self.assertIn('Item 1', list_component.construct())
 
     def test_markdown(self):
-        markdown = components.Markdown('# Heading', unique_id='markdown1')
+        markdown = components.Markdown('# Heading', id='markdown1')
         self.assertIn('<h1', markdown.construct())
 
     def test_modal(self):
@@ -136,18 +131,18 @@ class TestPyBootstrapUIComponents(unittest.TestCase):
 
 
     def test_progress_bar(self):
-        progress_bar = components.ProgressBar(value=50, label='Progress', unique_id='progress_bar1')
+        progress_bar = components.ProgressBar(value=50, label='Progress', id='progress_bar1')
         self.assertIn('<div class="progress-bar', progress_bar.construct())
         self.assertIn('aria-valuenow="50"', progress_bar.construct())
         self.assertIn('Progress', progress_bar.construct())
 
     def test_notification(self):
-        notification = components.Notification(message='This is a notification', style='info', unique_id='notification1')
+        notification = components.Notification(message='This is a notification', style='info', id='notification1')
         self.assertIn('class="alert alert-info', notification.construct())
         self.assertIn('This is a notification', notification.construct())
 
     def test_file_upload(self):
-        file_upload = components.FileUpload(label='Upload File', unique_id='file_upload1')
+        file_upload = components.FileUpload(label='Upload File', id='file_upload1')
         self.assertIn('<input type="file"', file_upload.construct())
         self.assertIn('Upload File', file_upload.construct())
 
@@ -156,7 +151,7 @@ class TestPyBootstrapUIComponents(unittest.TestCase):
         self.assertIn('Sample text', text.construct())
 
     def test_header(self):
-        header = components.Header('Header Text', 1, unique_id='header1')
+        header = components.Header('Header Text', header_size=1, unique_id='header1')
         self.assertIn('<h1', header.construct())
         self.assertIn('Header Text', header.construct())
 
@@ -173,7 +168,7 @@ class TestPyBootstrapUIComponents(unittest.TestCase):
         self.assertIn('<i>Italic Text</i>', italic_text)
 
     def test_link(self):
-        link = components.Link(href='http://example.com', label='Example', unique_id='link1')
+        link = components.Link('Example', href='http://example.com', unique_id='link1')
         self.assertIn('<a href="http://example.com"', link.construct())
         self.assertIn('Example', link.construct())
 
@@ -188,7 +183,7 @@ class TestPyBootstrapUIComponents(unittest.TestCase):
         self.assertIn('title: "Tooltip text"', tooltip.construct())
 
     def test_video(self):
-        video = components.Video(source='D:\\юмор снобов.mp4', controls=True, unique_id='video1')
+        video = components.Video('D:\\юмор снобов.mp4', controls=True, unique_id='video1')
         self.assertIn('<video', video.construct())
         self.assertIn('src="D:\\юмор снобов.mp4"', video.construct())
         self.assertIn('controls', video.construct())

@@ -10,15 +10,15 @@ class Audio(HTMLElement):
     and fallback text for unsupported environments.
 
     Attributes:
-            - `sources` (list[str]): A list of audio source URLs.
-            - `controls` (bool): Whether to display audio controls (default: True).
-            - `classes` (list[str] | None): CSS classes applied to the audio element.
-            - `unique_id` (str | None): A unique identifier for the audio element.
+        sources (list[str]): A list of audio source URLs.
+        controls (bool): Whether to display audio controls (default: True).
+        classes (list[str] | None): CSS classes applied to the audio element.
+        id (str | None): A unique identifier for the audio element.
     """
 
     def __init__(
         self,
-        sources: list[str],
+        *sources: str,
         controls: bool = True,
         classes: list[str] | None = None,
         unique_id: str | None = None,
@@ -26,20 +26,18 @@ class Audio(HTMLElement):
         """
         Initializes the Audio element.
 
-        Parameters:
-                - `sources` (list[str]): A list of audio source URLs.
-                - `controls` (bool): Whether to display audio controls (default: True).
-                - `classes` (list[str] | None): Optional CSS classes applied to the audio element.
-                - `unique_id` (str | None): Optional unique identifier for the audio element.
+        Args:
+            sources (list[str]): A list of audio source URLs.
+            controls (bool): Whether to display audio controls (default: True).
+            classes (list[str] | None): Optional CSS classes applied to the audio element.
+            unique_id (str | None): Optional unique identifier for the audio element.
 
         Example:
-                ```
-                audio = Audio(
-                        sources=["audio1.mp3", "audio2.ogg"],
-                        controls=True,
-                        classes=["audio-player"]
-                )
-                ```
+            audio = Audio(
+                sources=["audio1.mp3", "audio2.ogg"],
+                controls=True,
+                classes=["audio-player"]
+            )
         """
         super().__init__(classes, unique_id)
         self.sources = sources
@@ -50,13 +48,11 @@ class Audio(HTMLElement):
         Generates the HTML representation of the audio element.
 
         Returns:
-                - `str`: The HTML string for the <audio> element.
+            str: The HTML string for the <audio> element.
 
         Example:
-                ```
-                html = audio.construct()
-                print(html)
-                ```
+            html = audio.construct()
+            print(html)
         """
         sources_html = "\n".join(
             [
@@ -66,12 +62,12 @@ class Audio(HTMLElement):
         )
 
         return f"""
-		<audio{' controls' if self.controls else ''}>
-			{sources_html}
-			<p>
-				Looks like this web engine doesn't support HTML5 audio.
-				Consider upgrading to a modern browser engine (such as Blink/Webkit or Gecko).
-				If you can't upgrade, here is an <a href="{self.sources[0]}">audio link</a>.
-			</p>
-		</audio>
-		"""
+        <audio{' controls' if self.controls else ''}>
+            {sources_html}
+            <p>
+                Looks like this web engine doesn't support HTML5 audio.
+                Consider upgrading to a modern browser engine (such as Blink/Webkit or Gecko).
+                If you can't upgrade, here is an <a href="{self.sources[0]}">audio link</a>.
+            </p>
+        </audio>
+        """

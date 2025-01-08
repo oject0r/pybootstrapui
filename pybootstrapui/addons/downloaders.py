@@ -6,6 +6,7 @@ from pybootstrapui.components.progress import ProgressBar
 
 
 def format_size(size):
+    """Format size."""
     if size >= 1 << 30:
         return f"{size / (1 << 30):.2f} GB"
     elif size >= 1 << 20:
@@ -21,30 +22,25 @@ async def download_file(
     progressbar: ProgressBar | None = None,
     progressbar_format: str = "{percentage}% - {downloaded_size} - {download_speed}",
 ):
-    """
-    Download a file asynchronously with an optional progress bar.
+    """Download a file asynchronously with an optional progress bar.
 
     Args:
-            file_url (str): The URL of the file to download.
-            end_path (str | Path): The local file path where the downloaded file will be saved.
-            progressbar (ProgressBar | None, optional): An optional progress bar to visualize the download progress.
-            progressbar_format (str, optional): A format string to customize progress display.
-                    Available placeholders:
-                            - {percentage}: Download progress percentage.
-                            - {downloaded_size}: Total downloaded size (auto-formatted in KB, MB, GB).
-                            - {download_speed}: Current download speed (auto-formatted in KB/s, MB/s, GB/s).
+        file_url (str): The URL of the file to download.
+        end_path (str | Path): The local file path where the downloaded file will be saved.
+        progressbar (ProgressBar | None, optional): An optional progress bar to visualize the download progress.
+        progressbar_format (str, optional): A format string to customize progress display.
 
     Raises:
-            httpx.HTTPStatusError: If the HTTP request fails.
-            IOError: If file writing encounters an error.
+        httpx.HTTPStatusError: If the HTTP request fails.
+        IOError: If file writing encounters an error.
 
     Example:
-            await download_file(
-                    file_url='https://example.com/file.zip',
-                    end_path='downloads/file.zip',
-                    progressbar=my_progress_bar,
-                    progressbar_format='{percentage}% - {downloaded_size} - {download_speed}'
-            )
+        await download_file(
+            file_url='https://example.com/file.zip',
+            end_path='downloads/file.zip',
+            progressbar=my_progress_bar,
+            progressbar_format='{percentage}% - {downloaded_size} - {download_speed}'
+        )
     """
     end_path = Path(end_path)
     end_path.parent.mkdir(parents=True, exist_ok=True)
@@ -82,3 +78,13 @@ async def download_file(
                                     download_speed=f"{format_size(speed)}/s",
                                 ),
                             )
+
+            if progressbar:
+                progressbar.change_value(
+                    100,
+                    progressbar_format.format(
+                        percentage="100.00",
+                        downloaded_size=format_size(downloaded_size),
+                        download_speed="Completed",
+                    ),
+                )

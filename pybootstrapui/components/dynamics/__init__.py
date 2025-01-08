@@ -11,10 +11,10 @@ app.add_middleware(
 )
 
 
-def start_ajax_server(log_level="error"):
-    """
-    Запускает сервер FastAPI для AJAX.
-    """
+def start_ajax_server(page, log_level="error"):
+    """Запускает сервер FastAPI для AJAX."""
     import uvicorn
+
+    app.pybsui_page = page
 
     uvicorn.run(app, host=constants.HOST, port=constants.AJAX_PORT, log_level=log_level)

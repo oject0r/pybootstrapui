@@ -5,7 +5,7 @@ class MainPage(Page):
         super().__init__(templates.Default)
 
         self.add(
-            components.Header('Welcome to the Custom Page Object!', bi=components.BootstrapIcon('box-seam-fill')),
+            components.Header(components.BootstrapIcon('box-seam-fill'), 'Welcome to the Custom Page Object!'),
             components.Hr(),
             components.Text(
                 'This example demonstrates how to create a custom page object using the PyBootstrapUI framework. '
