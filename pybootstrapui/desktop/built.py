@@ -51,7 +51,29 @@ nwjs_dev_path = (
     .joinpath(config["pybootstrapui"]["nwjs_directory"])
 )
 
-print(nwjs_dev_path)
+
+def find_nwjs_binary(root_directory: str):
+    binary_name = ""
+
+    if os_type == "windows":
+        binary_name = nwjs_paths["windows"]
+    elif os_type == "linux":
+        binary_name = nwjs_paths["linux"]
+    elif os_type == "darwin":
+        binary_name = nwjs_paths["macos"]
+    else:
+        raise ValueError(f"Unsupported platform: {os_type}")
+
+    for root, dirs, files in os.walk(root_directory):
+        if os_type == "macos":
+            app_path = os.path.join(root, binary_name)
+            if os.path.exists(app_path) and os.path.isfile(app_path):
+                return app_path
+        else:
+            if binary_name in files:
+                return os.path.join(root, binary_name)
+
+    return None
 
 if nwjs_dev_path.exists():
     NWJSPath = nwjs_dev_path / nwjs_paths[os_type]
@@ -59,6 +81,12 @@ if nwjs_dev_path.exists():
 # If not found, check in the bundled PyInstaller environment
 else:
     nwjs_resource_path = Path(resource_path(config["pybootstrapui"]["nwjs_directory"]))
-    print(nwjs_resource_path)
     if nwjs_resource_path.exists():
         NWJSPath = nwjs_resource_path / nwjs_paths[os_type]
+    else:
+        maybe_nwjs = find_nwjs_binary(os.getcwd())
+        if maybe_nwjs:
+            NWJSPath = maybe_nwjs
+
+if not NWJSPath:
+    print('WARNING: Could not find NW.js binaries.')
