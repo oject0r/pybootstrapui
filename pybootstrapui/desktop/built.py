@@ -47,9 +47,11 @@ NWJSPath = ""
 # First, check if NW.js exists in the development environment
 nwjs_dev_path = (
     Path(os.getcwd())
-    .parent.absolute()
+    .absolute()
     .joinpath(config["pybootstrapui"]["nwjs_directory"])
 )
+
+print(nwjs_dev_path)
 
 if nwjs_dev_path.exists():
     NWJSPath = nwjs_dev_path / nwjs_paths[os_type]
@@ -57,5 +59,6 @@ if nwjs_dev_path.exists():
 # If not found, check in the bundled PyInstaller environment
 else:
     nwjs_resource_path = Path(resource_path(config["pybootstrapui"]["nwjs_directory"]))
+    print(nwjs_resource_path)
     if nwjs_resource_path.exists():
         NWJSPath = nwjs_resource_path / nwjs_paths[os_type]
