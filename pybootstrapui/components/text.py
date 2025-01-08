@@ -271,6 +271,7 @@ class Link(TextObject):
             color=color,
             classes=classes,
             unique_id=unique_id,
+            text_type='a',
             text_join=text_join,
         )
 

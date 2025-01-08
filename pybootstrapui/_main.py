@@ -2,10 +2,8 @@ import os
 import random
 import aiofiles
 import rjsmin
-import pybootstrapui.components
 from pybootstrapui.components import add_task
 from pybootstrapui.components.base import HTMLElement
-from pybootstrapui.components.modals import Modal
 from pybootstrapui.components.inputs import InputObject
 from pybootstrapui.components.dynamics import start_ajax_server, constants
 from pybootstrapui.desktop.nw_runner import run_page_in_desktop
@@ -347,7 +345,7 @@ class Page:
         """
         self.running = True
         if self.dynamic:
-            thread = threading.Thread(target=start_ajax_server, daemon=True)
+            thread = threading.Thread(target=lambda: start_ajax_server(self), daemon=True)
             thread.start()
 
     async def clear(self):
