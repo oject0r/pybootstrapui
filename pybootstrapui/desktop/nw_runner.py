@@ -88,8 +88,10 @@ def run_page_in_desktop(
             raise FileNotFoundError(f"Icon file not found at {icon}")
         shutil.copy(icon, os.path.join(directory, path_icon.name))
 
+    args = [nwjs_path, directory]
+
     # Run the NW.js application
-    subprocess.run([nwjs_path, directory])
+    subprocess.run(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     # Clean up temporary files
     shutil.rmtree(directory)

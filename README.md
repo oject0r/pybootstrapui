@@ -10,7 +10,7 @@
 - **💻 Desktop Applications:** Launch web pages as standalone desktop apps using NW.js.
 - **📦 Prebuilt Components:** Access a library of ready-to-use HTML components like buttons, headers, forms, modals, and more.
 - **🎨 Custom Templates:** Use predefined themes or your own HTML templates for quick styling.
-- **🔗 Seamless Integration:** Works well with FastAPI and Bootstrap for modern web development.
+- **🔗 Seamless Integration:** Works well with Bootstrap (and other frameworks in the future) for modern web development.
 
 ---
 

@@ -1,12 +1,12 @@
+import multiprocessing
 import os
 import random
-import aiofiles
-import rjsmin
 from pybootstrapui.components import add_task
 from pybootstrapui.components.base import HTMLElement
 from pybootstrapui.components.inputs import InputObject
 from pybootstrapui.components.dynamics import start_ajax_server, constants
 from pybootstrapui.desktop.nw_runner import run_page_in_desktop
+from pybootstrapui.utils.minify_js import jsmin
 import threading
 import pybootstrapui.templates as templates
 from pybootstrapui.components.dynamics import queue
@@ -155,9 +155,12 @@ class Page:
             - This method is useful for large or complex JavaScript files.
             - The JavaScript is automatically minified.
         """
+
+        import aiofiles
+
         async with aiofiles.open(js_file, "r", encoding="utf-8") as f:
             self.javascript = await f.read()
-            self.javascript = rjsmin.jsmin_for_posers(self.javascript)
+            self.javascript = jsmin(self.javascript)
 
     @staticmethod
     def show_spinner():
@@ -253,7 +256,7 @@ class Page:
 
         self.javascript += (
             '</script>\n<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script><script>\n'
-            + rjsmin.jsmin_for_posers(
+            + jsmin(
                 websocket_javascript.replace(
                     "!PYBSUI.INSERTHOST",
                     f"http://{constants.HOST}:{constants.AJAX_PORT}",
@@ -280,6 +283,9 @@ class Page:
             html = await page.compile_async()
             print(html)
         """
+
+        import aiofiles
+
         compiled = [element.construct() for element in self.content]
         compiled_string = (
             "\n".join(compiled)
@@ -291,7 +297,7 @@ class Page:
 
         self.javascript += (
             '</script>\n<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script><script>\n'
-            + rjsmin.jsmin_for_posers(
+            + jsmin(
                 websocket_javascript.replace(
                     "!PYBSUI.INSERTHOST",
                     f"http://{constants.HOST}:{constants.AJAX_PORT}",
@@ -345,8 +351,13 @@ class Page:
         """
         self.running = True
         if self.dynamic:
-            thread = threading.Thread(target=lambda: start_ajax_server(self), daemon=True)
-            thread.start()
+            if os.name == 'nt':  # cuz this method works on nt for some reason
+                thread = threading.Thread(target=lambda: start_ajax_server(self), daemon=True)
+                thread.start()
+                return
+
+            process = multiprocessing.Process(target=lambda: start_ajax_server(self), daemon=True)
+            process.start()
 
     async def clear(self):
         """
@@ -416,6 +427,7 @@ class Page:
 
         constants.set_host(server_bind)
         constants.set_port(server_port)
+        self.compile()
         self.run_server()
         run_page_in_desktop(self, str(nwjs_path), icon, title, width, height, resizable)
 

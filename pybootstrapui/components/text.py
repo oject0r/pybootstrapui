@@ -1,8 +1,4 @@
 from .base import HTMLElement, RGBAColor
-from pygments import highlight
-from pygments.lexers import get_lexer_by_name, guess_lexer
-from pygments.formatters import HtmlFormatter
-import warnings
 
 
 class BootstrapIcon(HTMLElement):
@@ -376,6 +372,7 @@ class Code(HTMLElement):
                 classes=["code-block"]
             )
         """
+
         super().__init__(classes, unique_id)
         self.code = code
         self.language = language
@@ -392,6 +389,14 @@ class Code(HTMLElement):
             print(html)
         """
         # Determine the appropriate lexer
+        try:
+            from pygments import highlight
+            from pygments.lexers import get_lexer_by_name, guess_lexer
+            from pygments.formatters import HtmlFormatter
+        except ImportError:
+            raise ModuleNotFoundError('Pygments must be installed to use Code! Install it via pip:\npip install pygments')
+
+
         try:
             if self.language == "auto":
                 lexer = guess_lexer(self.code)

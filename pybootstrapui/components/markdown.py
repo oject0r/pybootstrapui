@@ -1,5 +1,4 @@
 from .base import HTMLElement
-import markdown
 
 
 class Markdown(HTMLElement):
@@ -35,6 +34,7 @@ class Markdown(HTMLElement):
                 classes=["markdown-content"]
             )
         """
+
         super().__init__(classes, id)
         self.src = markdown_source
 
@@ -49,6 +49,14 @@ class Markdown(HTMLElement):
             html = markdown_element.construct()
             print(html)
         """
+
+
+        try:
+            import markdown
+        except ImportError:
+            raise ModuleNotFoundError('To use markdown objects please install markdown via pip:\npip install markdown')
+
+
         html_content = markdown.markdown(self.src, output_format="html")
         class_attr = f'class="{self.classes_str}"' if self.classes_str else ""
         id_attr = f'id="{self.id}"' if self.id else ""

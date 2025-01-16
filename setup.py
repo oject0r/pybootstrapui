@@ -7,7 +7,7 @@ def parse_requirements(filename):
 
 setup(
     name="pybootstrapui",
-    version="1.1.0",
+    version="1.1.1",
     description="A Python library for building web interfaces with dynamic and desktop features.",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
@@ -18,15 +18,8 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'aiofiles',
-        'rjsmin',
-        'fastapi',
-        'uvicorn',
         'typing_extensions',
-        'markdown',
-        'pyinstaller',
-        'httpx',
-        'pygments',
+        'aiohttp'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
