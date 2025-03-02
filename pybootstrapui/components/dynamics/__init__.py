@@ -1,20 +1,26 @@
 from .server import app
 import pybootstrapui.components.dynamics.constants as constants
-from fastapi.middleware.cors import CORSMiddleware
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Разрешить все источники
-    allow_credentials=True,
-    allow_methods=["*"],  # Разрешить все методы
-    allow_headers=["*"],  # Разрешить все заголовки
-)
+from aiohttp import web
+import logging
+import random
 
 
-def start_ajax_server(page, log_level="error"):
-    """Запускает сервер FastAPI для AJAX."""
-    import uvicorn
+async def init_pybsui_page(app, page):
+    app['pybsui_page'] = page
 
-    app.pybsui_page = page
 
-    uvicorn.run(app, host=constants.HOST, port=constants.AJAX_PORT, log_level=log_level)
+def start_ajax_server(page):
+    logging.getLogger('aiohttp.access').setLevel(logging.ERROR)
+    logging.getLogger('aiohttp.server').setLevel(logging.ERROR)
+    logging.getLogger('aiohttp.web').setLevel(logging.ERROR)
+    logging.getLogger('aiohttp.client').setLevel(logging.ERROR)
+
+    app.on_startup.append(lambda app: init_pybsui_page(app, page))
+
+    success = False
+    while not success:
+        try:
+            web.run_app(app, host=constants.HOST, port=constants.AJAX_PORT, print=None)
+            success = True
+        except OSError:
+            constants.AJAX_PORT = random.randint(51000, 65535)

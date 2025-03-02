@@ -1,10 +1,51 @@
 import os
-from PyInstaller.__main__ import run as pyi_run
 import sys
 from pathlib import Path
 from pybootstrapui import zeroconfig
 from pybootstrapui.templates import InternalTemplates
 import shutil
+import subprocess
+
+
+def find_py_files(directory, py_files=None):
+    if py_files is None:
+        py_files = []
+
+    try:
+        for entry in os.scandir(directory):
+            if entry.is_file() and entry.name.endswith('.py'):
+                py_files.append(entry.path)
+            elif entry.is_dir():
+                find_py_files(entry.path, py_files)
+    except PermissionError:
+        pass
+    except Exception as e:
+        print(f"Error processing {directory}: {e}")
+
+    return py_files
+
+
+def obfuscate_with_pyarmor(script_path, output_dir):
+    """
+    Obfuscates a Python script using PyArmor.
+    """
+    if not os.path.exists(script_path):
+        print(f"Error: File {script_path} not found.")
+        return
+
+    try:
+        # Build the PyArmor command
+        command = [
+            "pyarmor", "obfuscate",
+            "--output", output_dir,  # Specify the output directory
+            script_path  # Path to the source script
+        ]
+        # Run the command
+        subprocess.run(command, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error while executing the command: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
 
 
 def start(project_path: str | Path):
@@ -54,7 +95,58 @@ def start(project_path: str | Path):
 
     # Pack the library templates inside the _MEIPASS
     pack_templates_option = f"--add-data={InternalTemplates.TemplatesFolder}{data_separator}pybootstrapui/templates"
-    pack_config_option = f"--add-data={str(project_path.absolute() / 'config.zc')}{data_separator}config.zc"
+    pack_config_option = f"--add-data={str(project_path.absolute() / "config.zc")}{data_separator}config.zc"
+
+    obfuscate_code = config["pybootstrapui"].get("obfuscate_code", False)
+
+    if obfuscate_code:
+        try:
+            import pyarmor  # PyArmor import check
+        except ImportError:
+            print(
+                "FATAL: (code obfuscate) PyArmor package not found!\n"
+                "Please install it via pip:\n"
+                "pip install pyarmor\n"
+                "Or disable code obfuscation in compiling config:\n"
+                "obfuscate_code true —> obfuscate_code false"
+            )
+            sys.exit(1)
+
+        print(
+            "Code obfuscation is currently in beta.\n"
+            "For better results, consider manually obfuscating the code.\n"
+            "Code obfuscation may trigger antivirus, so proceed at your own risk."
+        )
+
+        # Create output directory for obfuscated files
+        obf_dir = f"{project_name}_obf"
+        if not os.path.exists(obf_dir):
+            try:
+                os.mkdir(obf_dir)
+            except OSError as e:
+                print(f"Error creating obfuscation directory '{obf_dir}': {e}")
+                sys.exit(1)
+
+        # Find all .py files in the project
+        py_files = find_py_files(project_path)
+        if not py_files:
+            print("No .py files found in the project directory.")
+            sys.exit(0)
+
+        # Obfuscate each Python file
+        for file in py_files:
+            try:
+                obfuscate_with_pyarmor(os.path.abspath(file), obf_dir)
+            except Exception as e:
+                print(f"Error obfuscating {file}: {e}")
+
+        # Copy the main file to the obfuscated directory
+        try:
+            main_file_obf_path = os.path.join(obf_dir, os.path.basename(main_file_path))
+            shutil.copy(main_file_path, main_file_obf_path)
+        except Exception as e:
+            print(f"Error copying main file to obfuscation directory: {e}")
+
 
     # Retrieve additional PyInstaller arguments from the configuration
     additional_args = config.get("pyinstaller_args", [])
@@ -73,6 +165,16 @@ def start(project_path: str | Path):
 
     if add_data_option:
         pyi_args.insert(4, add_data_option)
+
+    try:
+        from PyInstaller.__main__ import run as pyi_run
+    except ImportError:
+        print(
+            "FATAL: PyInstaller package not found!\n"
+            "Please install it via pip:\n"
+            "pip install pyinstaller"
+        )
+        sys.exit(1)
 
     pyi_run(pyi_args)
 

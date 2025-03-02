@@ -1,5 +1,3 @@
-import httpx
-import aiofiles
 import time
 from pathlib import Path
 from pybootstrapui.components.progress import ProgressBar
@@ -42,6 +40,10 @@ async def download_file(
             progressbar_format='{percentage}% - {downloaded_size} - {download_speed}'
         )
     """
+
+    import httpx
+    import aiofiles
+
     end_path = Path(end_path)
     end_path.parent.mkdir(parents=True, exist_ok=True)
 

@@ -12,4 +12,4 @@ page.add(
 )
 
 if __name__ == '__main__':
-	page.run_in_desktop('/path/to/nwjs', title='Simple PyBootstrapUI Example')
+	page.run('/path/to/nwjs', title='Simple PyBootstrapUI Example')

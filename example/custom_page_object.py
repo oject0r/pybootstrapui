@@ -6,7 +6,7 @@ class MainPage(Page):
 
         self.add(
             components.Header(components.BootstrapIcon('box-seam-fill'), 'Welcome to the Custom Page Object!'),
-            components.Hr(),
+            components.HorizontalLine,
             components.Text(
                 'This example demonstrates how to create a custom page object using the PyBootstrapUI framework. '
                 'By leveraging this framework, developers can efficiently build modern web interfaces with dynamic user interactions. '
@@ -17,4 +17,4 @@ class MainPage(Page):
         )
 
 if __name__ == '__main__':
-    MainPage().run_in_desktop('/path/to/nwjs')
+    MainPage().run('/path/to/nwjs')

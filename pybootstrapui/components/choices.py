@@ -1,6 +1,6 @@
 from pybootstrapui.utils.callbacks import wrap_callback
 from . import add_handler
-from .base import HTMLElement
+from .base import HTMLElement, HasValue
 from typing import Callable, Awaitable, Union
 import pybootstrapui.components.dynamics.queue as queue
 
@@ -56,7 +56,7 @@ class Option(HTMLElement):
         return f'<option class="{self.classes_str}" id="{self.id}" value="{self.value if self.value else self.label}" {"selected" if self.selected else ""}>{self.label}</option>'
 
 
-class Choice(HTMLElement):
+class Choice(HasValue):
     """
     A class representing a <select> dropdown element containing multiple options.
 
@@ -97,27 +97,6 @@ class Choice(HTMLElement):
         self.options = options
         self.name = name
         self.on_choice = on_choice
-
-    async def get_value(self) -> str:
-        """
-        Asynchronously retrieves the value of an input element from the frontend.
-
-        Creates a task of type 'getValue' and waits for the result asynchronously.
-        This method is typically used to fetch the current value of an input field
-        from the frontend through the task queue system.
-
-        Returns:
-            any: The value of the input element, as returned by the frontend.
-            None: If the element does not have a unique ID.
-
-        Example:
-            value = await input_element.get_value()
-            print(f"The input value is: {value}")
-        """
-
-        task = queue.add_task(self.id, "getValue")
-        await task.wait_async()
-        return task.result.get()
 
     def construct(self) -> str:
         """

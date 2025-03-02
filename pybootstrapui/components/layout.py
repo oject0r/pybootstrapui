@@ -1,8 +1,6 @@
 from .base import HTMLElement
-from typing_extensions import deprecated
 
 
-@deprecated("Use Spacer instead (supports flex and margins)")
 class Br(HTMLElement):
     """
     Represents a <br> HTML element (line break).
@@ -26,6 +24,7 @@ class Br(HTMLElement):
         """
         return "<br>"
 
+LineBreak = Br()
 
 class Hr(HTMLElement):
     """
@@ -48,6 +47,9 @@ class Hr(HTMLElement):
             str: The HTML string representing an <hr> element.
         """
         return "<hr>"
+
+
+HorizontalLine = Hr()
 
 
 class Spacer(HTMLElement):

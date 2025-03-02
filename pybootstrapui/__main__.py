@@ -1,5 +1,7 @@
 import os
 import shutil
+import subprocess
+
 from pybootstrapui.desktop.build import start
 from pybootstrapui import templates
 import sys
@@ -10,42 +12,25 @@ import argparse
 import tarfile
 import zipfile
 
+from pybootstrapui.zeroconfig import Configer
 
 # Links for NW.js downloads
 OFFICIAL_LINKS = {
-    "windows_x64": "https://dl.nwjs.io/v0.94.1/nwjs-v0.94.1-win-x64.zip",
-    "linux_x64": "https://dl.nwjs.io/v0.94.1/nwjs-v0.94.1-linux-x64.tar.gz",
-    "macos_x64": "https://dl.nwjs.io/v0.94.1/nwjs-v0.94.1-osx-x64.zip",
-    "windows_x86": "https://dl.nwjs.io/v0.94.1/nwjs-v0.94.1-win-ia32.zip",
-    "linux_x86": "https://dl.nwjs.io/v0.94.1/nwjs-v0.94.1-linux-ia32.tar.gz",
-    "macos_arm64": "https://dl.nwjs.io/v0.94.1/nwjs-v0.94.1-osx-arm64.zip",
+    "windows_x64": "https://dl.nwjs.io/v0.96.0/nwjs-v0.96.0-win-x64.zip",
+    "linux_x64": "https://dl.nwjs.io/v0.96.0/nwjs-v0.96.0-linux-x64.tar.gz",
+    "macos_x64": "https://dl.nwjs.io/v0.96.0/nwjs-v0.96.0-osx-x64.zip",
+    "windows_x86": "https://dl.nwjs.io/v0.96.0/nwjs-v0.96.0-win-ia32.zip",
+    "linux_x86": "https://dl.nwjs.io/v0.96.0/nwjs-v0.96.0-linux-ia32.tar.gz",
+    "macos_arm64": "https://dl.nwjs.io/v0.96.0/nwjs-v0.96.0-osx-arm64.zip",
 }
 
 OFFICIAL_SDK_LINKS = {
-    "windows_x64": "https://dl.nwjs.io/v0.94.1/nwjs-sdk-v0.94.1-win-x64.zip",
-    "linux_x64": "https://dl.nwjs.io/v0.94.1/nwjs-sdk-v0.94.1-linux-x64.tar.gz",
-    "macos_x64": "https://dl.nwjs.io/v0.94.1/nwjs-sdk-v0.94.1-osx-x64.zip",
-    "windows_x86": "https://dl.nwjs.io/v0.94.1/nwjs-sdk-v0.94.1-win-ia32.zip",
-    "linux_x86": "https://dl.nwjs.io/v0.94.1/nwjs-sdk-v0.94.1-linux-ia32.tar.gz",
-    "macos_arm64": "https://dl.nwjs.io/v0.94.1/nwjs-sdk-v0.94.1-osx-arm64.zip",
-}
-
-MIRROR_LINKS = {
-    "windows_x64": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.1-win-x64.zip",
-    "linux_x64": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.1-linux-x64.tar.gz",
-    "macos_x64": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.1-osx-x64.zip",
-    "windows_x86": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.1-win-ia32.zip",
-    "linux_x86": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.1-linux-ia32.tar.gz",
-    "macos_arm64": "http://076s.space:9987/files/pybootstrap/nwjs-v0.94.1-osx-arm64.zip",
-}
-
-MIRROR_SDK_LINKS = {
-    "windows_x64": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.1-win-x64.zip",
-    "linux_x64": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.1-linux-x64.tar.gz",
-    "macos_x64": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.1-osx-x64.zip",
-    "windows_x86": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.1-win-ia32.zip",
-    "linux_x86": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.1-linux-ia32.tar.gz",
-    "macos_arm64": "http://076s.space:9987/files/pybootstrap/nwjs-sdk-v0.94.1-osx-arm64.zip",
+    "windows_x64": "https://dl.nwjs.io/v0.96.0/nwjs-sdk-v0.96.0-win-x64.zip",
+    "linux_x64": "https://dl.nwjs.io/v0.96.0/nwjs-sdk-v0.96.0-linux-x64.tar.gz",
+    "macos_x64": "https://dl.nwjs.io/v0.96.0/nwjs-sdk-v0.96.0-osx-x64.zip",
+    "windows_x86": "https://dl.nwjs.io/v0.96.0/nwjs-sdk-v0.96.0-win-ia32.zip",
+    "linux_x86": "https://dl.nwjs.io/v0.96.0/nwjs-sdk-v0.96.0-linux-ia32.tar.gz",
+    "macos_arm64": "https://dl.nwjs.io/v0.96.0/nwjs-sdk-v0.96.0-osx-arm64.zip",
 }
 
 
@@ -162,40 +147,27 @@ def extract_archive(archive_path: str, dest_folder: str):
     print(f"Archive extracted successfully to: {dest_folder}")
 
 
-def download_nwjs(source, version, dest_folder):
+def download_nwjs(version, dest_folder):
     """Download NW.js based on user's choice of
     source."""
     os_type, arch = get_system_info()
     key = f"{os_type}_{arch}"
 
-    if version == "normal" and source == "mirror" and key in MIRROR_LINKS:
-        print("Using mirror link for download.")
-        return download_file(MIRROR_LINKS[key], dest_folder)
-    elif version == "normal" and source == "official" and key in OFFICIAL_LINKS:
+    if version == "normal" and key in OFFICIAL_LINKS:
         print("Using official link for download.")
         return download_file(OFFICIAL_LINKS[key], dest_folder)
-    elif version == "sdk" and source == "mirror" and key in MIRROR_SDK_LINKS:
-        print("Using mirror link for download.")
-        return download_file(MIRROR_SDK_LINKS[key], dest_folder)
-    elif version == "sdk" and source == "official" and key in OFFICIAL_SDK_LINKS:
+    elif version == "sdk" and key in OFFICIAL_SDK_LINKS:
         print("Using official link for download.")
         return download_file(OFFICIAL_SDK_LINKS[key], dest_folder)
     else:
         print(
-            f"No valid download link found for your platform.\nYour platform: {key}\n\nSupported platforms: {'\n'.join(MIRROR_LINKS.keys())}"
+            f"No valid download link found for your platform.\nYour platform: {key}\n\nSupported platforms: {'\n'.join(OFFICIAL_LINKS.keys())}"
         )
 
 
 def download(path_to_nwjs: Path):
     """Download NW.js to the specified
     directory."""
-
-    print("Which source would you like to use for download?")
-    print("1. Official NW.js website (slow download, more reliable)")
-    print("2. Mirror server (faster download, less reliable)")
-
-    user_choice = input("Enter your choice (1/2): ")
-    source = "mirror" if user_choice == "2" else "official"
 
     print("Which version of NW.js would you like to download?")
     print("1. Normal version")
@@ -204,7 +176,7 @@ def download(path_to_nwjs: Path):
     user_choice = input("Enter your choice (1/2): ")
     version = "sdk" if user_choice == "2" else "normal"
 
-    zip_path = download_nwjs(source, version, str(path_to_nwjs))
+    zip_path = download_nwjs(version, str(path_to_nwjs))
 
     if not zip_path:
         return
@@ -219,8 +191,8 @@ def download(path_to_nwjs: Path):
 
 
 def create_project(project_path: Path):
-    """Create a new NW.js project with system-
-    specific configurations.
+    """
+    Create a new NW.js project with system-specific configurations.
 
     Parameters:
         - project_path (Path): Path where the project will be created.
@@ -259,14 +231,28 @@ def create_project(project_path: Path):
             f"""
 pybootstrapui {{
     project_name {project_path.name.capitalize() if not project_path.name[0].isupper() else project_path.name}
-    
+
     main_file main.py
     nwjs_directory nwjs  # enter relative paths from project root only
-    
+
     compiling_method PackNWjs  # either PackNWjs or ExternalNWjs.
     # If PackNWjs doesn't work for you, switch to ExternalNWjs.
     # Enter anything, but PackNWjs or ExternalNWjs if you want to pack NW.js custom way.
-    
+
+    # ----------------------------
+    # WIP Section (doesn't work)
+    # ----------------------------
+
+    # obfuscate_code false  # obfuscate the code when building? will not affect source code
+    # install "pyarmor" package before using (pip install pyarmor)
+
+
+    # building_method PyInstaller  # either PyInstaller or Briefcase (beta, pip install briefcase).
+    # # Briefcase can cause you some bugs and it doesn't support PackNWjs option
+    # # but it's better in startup times and overall speed. Also it supports
+    # # Android, iOS, macOS, Linux, Windows. Briefcase currently supports only Python 3.9 - 3.12
+    # # I recommend you using Briefcase, but if you want popular decision that is well documented
+    # # and every issue is listed, use PyInstaller.
 }}
 
 pyinstaller_args ["--onefile", "--windowed"]
@@ -317,6 +303,73 @@ def handle_existing_nwjs(project_path: Path):
         print("Directory doesn't exist! Please try again.")
 
 
+def run_project(project_path: Path):
+    """Run the PyBootstrapUI project.
+
+    Parameters:
+        - project_path (Path): Path to the PyBootstrapUI project.
+    """
+
+    if not (project_path / "config.zc").exists():
+        print("Config file doesn't exist!")
+        return
+
+    configer = Configer()
+    config = configer.load_sync(str(project_path / "config.zc"))
+
+    nwjs_directory = Path(config["pybootstrapui"]["nwjs_directory"])
+
+    # System-specific NW.js path replacements
+    os_type, _ = get_system_info()
+    nwjs_paths = {
+        "windows": r"nw.exe",
+        "linux": r"nw",
+        "macos": "nwjs.app/Contents/MacOS/nwjs",
+    }
+
+    if not nwjs_directory.exists():
+        print("Looks like NW.js is not installed! Would you like to install it?\n1. - Yes\n2. - No")
+
+        user_input = input("Enter your choice (1/2): ").strip()
+
+        if user_input == "1":
+            download(nwjs_directory)
+        elif user_input == "2":
+            print("Exiting...")
+            return
+        else:
+            print("Invalid choice. Please run the command again.")
+            return
+
+    if not (nwjs_directory / nwjs_paths[os_type]).exists():
+        print("Looks like NW.js installation is invalid. Would you like to re-install it?\n1. - Yes\n2. - No")
+
+        user_input = input("Enter your choice (1/2): ").strip()
+
+        if user_input == "1":
+            shutil.rmtree(nwjs_directory)
+            download(nwjs_directory)
+        elif user_input == "2":
+            print("Exiting...")
+            return
+        else:
+            print("Invalid choice. Please run the command again.")
+            return
+
+    bef_path = os.getcwd()
+    os.chdir(project_path)
+
+    # Run the PyBootstrapUI project
+    subprocess.call(
+        [
+            sys.executable,
+            str(Path(config["pybootstrapui"]["main_file"]).absolute())
+        ]
+    )
+
+    os.chdir(bef_path)
+
+
 def parse_args():
     """Parse command-line arguments and execute
     the appropriate function."""
@@ -352,9 +405,20 @@ def parse_args():
         "project_path", type=str, help="Path where project is going to be."
     )
 
+    run_parser = subparsers.add_parser(
+        "run", help="Run the PyBootstrapUI project."
+    )
+    run_parser.add_argument(
+        "project_path", type=str, help="Path to the PyBootstrapUI project.", default="./"
+    )
+
     args = parser.parse_args()
 
     if args.command == "build":
+        try:
+            import pyinstaller
+        except ImportError:
+            print('FATAL: PyInstaller is not installed. Please install it via:\npip install pyinstaller')
         print(
             "Warning: Building PyBootstrapUI apps is beta feature. There may be some bugs, but not much of them.\nYou can build projects that was generated by pybootstrapui create"
         )
@@ -371,6 +435,10 @@ def parse_args():
         path_to_project.mkdir(parents=True, exist_ok=True)
 
         create_project(path_to_project)
+
+    elif args.command == "run":
+        path_to_project = Path(args.project_path if args.project_path else ".")
+        run_project(path_to_project)
 
     else:
         parser.print_help()

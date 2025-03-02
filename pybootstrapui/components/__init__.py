@@ -2,7 +2,6 @@ from .audio import Audio
 from .base import *
 from .buttons import *
 from .cards import *
-from .charts import *
 from .choices import *
 from .custom import *
 from .forms import *
@@ -20,6 +19,7 @@ from .lists import *
 from .markdown import *
 from .modals import *
 from .tables import *
+from .selectors import *
 from .sliders import Slider
 from .progress import *
 from .notifications import *
@@ -33,11 +33,11 @@ __all__ = [
     "HTMLElement",
     "Div",
     "Button",
-    "ButtonStyle",
     "ButtonGroup",
     "Card",
     "Choice",
     "Option",
+    # "Check",
     "CustomHTML",
     "Form",
     "GridSystem",

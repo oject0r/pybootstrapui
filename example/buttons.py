@@ -4,6 +4,7 @@ Demonstrates a button with a click event.
 
 import pybootstrapui as ui
 from pybootstrapui.components import *
+from pybootstrapui.modifiers import *
 import asyncio
 
 
@@ -16,8 +17,8 @@ async def button_callback(context: ui.ButtonCallbackContext):
 
 page.add(
     Text('Press the button below:'),
-    Button('Click Me', style=ui.enums.ButtonStyle.PRIMARY, on_click=button_callback)
+    Button('Click Me', on_click=button_callback, modifier=ButtonModifier.color(ButtonStyle.PRIMARY))
 )
 
 if __name__ == '__main__':
-    page.run_in_desktop('/path/to/nwjs', title='Button Example')
+    page.run('/path/to/nwjs', title='Button Example')

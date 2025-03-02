@@ -10,7 +10,7 @@
 - **💻 Desktop Applications:** Launch web pages as standalone desktop apps using NW.js.
 - **📦 Prebuilt Components:** Access a library of ready-to-use HTML components like buttons, headers, forms, modals, and more.
 - **🎨 Custom Templates:** Use predefined themes or your own HTML templates for quick styling.
-- **🔗 Seamless Integration:** Works well with FastAPI and Bootstrap for modern web development.
+- **🔗 Seamless Integration:** Works well with Bootstrap (and other frameworks in the future) for modern web development.
 
 ---
 
@@ -38,14 +38,15 @@
 
 ```python
 from pybootstrapui import Page
-from pybootstrapui.components import Header, Button, ButtonStyle, BootstrapIcon
+from pybootstrapui.components import Header, Button, BootstrapIcon
+from pybootstrapui.modifiers import *
 
 # Create a new page
 page = Page(page_title="Hello PyBootstrapUI")
 
 # Add components
 page.add(Header(BootstrapIcon('box-seam-fill'), "Welcome to PyBootstrapUI!"))
-page.add(Button(label="Click Me", style=ButtonStyle.PRIMARY))
+page.add(Button(label="Click Me", modifier=ButtonModifier.color(ButtonStyle.PRIMARY)))
 
 # Generate HTML
 print(page.compile())
@@ -75,7 +76,7 @@ async def on_button_click(context: ButtonCallbackContext):
 # Create a page with a button callback
 page = Page(page_title="Callback Demo")
 page.add(Header("Dynamic Callbacks Example"))
-page.add(Button("Click Me", style=ButtonStyle.SUCCESS_OUTLINE, on_click=on_button_click))
+page.add(Button("Click Me", modifier=ButtonModifier.color(ButtonStyle.SUCCESS), on_click=on_button_click))
 
 # Run as a desktop application
 page.run_in_desktop(

@@ -2,5 +2,60 @@
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "PyBootstrapUI"
+version = "1.1.1"
+dependencies = [
+    "aiohttp",
+    "aiofiles",
+]
+requires-python = ">= 3.10"
+authors = [
+    { name = "oject0r", email = "hd076@protonmail.com" }
+]
+maintainers = [
+    { name = "oject0r", email = "hd076@protonmail.com" }
+]
+description = "A Python library for building web interfaces with dynamic and desktop features."
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = [
+    "PyBootstrapUI",
+    "bootstrap",
+    "web",
+    "desktop",
+    "gui",
+    "nwjs",
+    "nwjs-python",
+    "pyinstaller",
+    "pyinstaller-nwjs",
+    "interface",
+    "ui",
+    "user-interface",
+    "dynamic",
+    "dynamic-ui",
+    "dynamic-user-interface",
+    "dynamic-interface",
+    "aiohttp"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: User Interfaces",
+    "Development Status :: 4 - Beta"
+]
+
+
+[project.optional-dependencies]
+all = [
+    "aiofiles",
+    "pygments",
+    "pyinstaller",
+    "markdown",
+    "httpx"
+]
+
 [tool.black]
 skip-string-normalization = true

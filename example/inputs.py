@@ -11,7 +11,7 @@ def input_callback(context: ui.InputCallbackContext):
     print(f"Input value: {context.value}")
 
 my_input = Input(label='Your Input', placeholder='Start typing...')
-my_input.register_callbacks(on_input=input_callback)
+my_input.on_input = input_callback
 
 page.add(
     Text('Type something below:'),
@@ -19,4 +19,4 @@ page.add(
 )
 
 if __name__ == '__main__':
-    page.run_in_desktop('/path/to/nwjs', title='Input Example')
+    page.run('/path/to/nwjs', title='Input Example')

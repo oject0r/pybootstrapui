@@ -1,12 +1,12 @@
+import multiprocessing
 import os
 import random
-import aiofiles
-import rjsmin
 from pybootstrapui.components import add_task
 from pybootstrapui.components.base import HTMLElement
 from pybootstrapui.components.inputs import InputObject
 from pybootstrapui.components.dynamics import start_ajax_server, constants
 from pybootstrapui.desktop.nw_runner import run_page_in_desktop
+from pybootstrapui.utils.minify_js import jsmin
 import threading
 import pybootstrapui.templates as templates
 from pybootstrapui.components.dynamics import queue
@@ -155,9 +155,12 @@ class Page:
             - This method is useful for large or complex JavaScript files.
             - The JavaScript is automatically minified.
         """
+
+        import aiofiles
+
         async with aiofiles.open(js_file, "r", encoding="utf-8") as f:
             self.javascript = await f.read()
-            self.javascript = rjsmin.jsmin_for_posers(self.javascript)
+            self.javascript = jsmin(self.javascript)
 
     @staticmethod
     def show_spinner():
@@ -251,20 +254,17 @@ class Page:
         with open(self.path, "r", encoding="utf-8") as f:
             content = f.read()
 
-        self.javascript += (
-            '</script>\n<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script><script>\n'
-            + rjsmin.jsmin_for_posers(
+        content = content.replace("{nav_content}", "")
+        content = content.replace("{page_main}", compiled_string)
+        content = content.replace("{page_name}", self.title if self.title else "")
+        content = content.replace("{javascript_here}", self.javascript + (
+            '</script>\n<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script><script>\n' + jsmin(
                 websocket_javascript.replace(
                     "!PYBSUI.INSERTHOST",
                     f"http://{constants.HOST}:{constants.AJAX_PORT}",
                 ).replace("!PYBSUI.TASKTIMINGS", str(self.dynamic_timing))
             )
-        )
-
-        content = content.replace("{nav_content}", "")
-        content = content.replace("{page_main}", compiled_string)
-        content = content.replace("{page_name}", self.title if self.title else "")
-        content = content.replace("{javascript_here}", self.javascript)
+        ))
         content = content.replace("{custom_head}", self.head + custom_head_additions)
         return content
 
@@ -280,6 +280,9 @@ class Page:
             html = await page.compile_async()
             print(html)
         """
+
+        import aiofiles
+
         compiled = [element.construct() for element in self.content]
         compiled_string = (
             "\n".join(compiled)
@@ -291,7 +294,7 @@ class Page:
 
         self.javascript += (
             '</script>\n<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script><script>\n'
-            + rjsmin.jsmin_for_posers(
+            + jsmin(
                 websocket_javascript.replace(
                     "!PYBSUI.INSERTHOST",
                     f"http://{constants.HOST}:{constants.AJAX_PORT}",
@@ -302,7 +305,14 @@ class Page:
         content = content.replace("{nav_content}", "")
         content = content.replace("{page_main}", compiled_string)
         content = content.replace("{page_name}", self.title if self.title else "")
-        content = content.replace("{javascript_here}", self.javascript)
+        content = content.replace("{javascript_here}", self.javascript + (
+            '</script>\n<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script><script>\n' + jsmin(
+                websocket_javascript.replace(
+                    "!PYBSUI.INSERTHOST",
+                    f"http://{constants.HOST}:{constants.AJAX_PORT}",
+                ).replace("!PYBSUI.TASKTIMINGS", str(self.dynamic_timing))
+            )
+        ))
         content = content.replace("{custom_head}", self.head + custom_head_additions)
 
         return content
@@ -345,8 +355,37 @@ class Page:
         """
         self.running = True
         if self.dynamic:
-            thread = threading.Thread(target=lambda: start_ajax_server(self), daemon=True)
-            thread.start()
+            if os.name == 'nt':  # cuz this method works on nt for some reason
+                thread = threading.Thread(target=lambda: start_ajax_server(self), daemon=True)
+                thread.start()
+                return
+
+            process = multiprocessing.Process(target=lambda: start_ajax_server(self), daemon=True)
+            process.start()
+
+    def get_by_id(self, id: str) -> HTMLElement | None:
+        """
+        Retrieve an element by its unique HTML ID.
+
+        This method searches for an element within the current page content
+        that matches the specified `id`. The search is limited to HTMLElements
+        added via `page.add()`, `page.content`, or similar methods that
+        populate the `self.content`.
+
+        Args:
+            id (str): The unique HTML ID of the element to search for.
+
+        Returns:
+            HTMLElement | None:
+                - The HTMLElement with the matching ID, if found.
+                - None, if no element with the specified ID exists.
+
+        Note:
+            Ensure all HTMLElements have unique IDs within the `self.content`
+            to guarantee accurate retrieval.
+        """
+
+        return next((elem for elem in self.content if elem.id == id), None)
 
     async def clear(self):
         """
@@ -416,6 +455,8 @@ class Page:
 
         constants.set_host(server_bind)
         constants.set_port(server_port)
+        self.compile()
         self.run_server()
         run_page_in_desktop(self, str(nwjs_path), icon, title, width, height, resizable)
 
+    run = run_in_desktop

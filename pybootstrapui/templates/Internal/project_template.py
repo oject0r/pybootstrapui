@@ -1,17 +1,24 @@
-from pybootstrapui import Page, components
+from pybootstrapui import Page, components, modifiers
 from pybootstrapui.desktop.built import NWJSPath
 
 
 class MainPage(Page):
+
+    CENTER_MODIFIER = modifiers.Modifier \
+        .display(modifiers.DisplayValues.FLEX) \
+        .justify_content(modifiers.JustifyContent.CENTER)
+
     def __init__(self):
         """Init function."""
         super().__init__()
 
         self.add(
-            components.Header(
-                "Welcome to PyBootstrapUI", bi=components.BootstrapIcon("box-seam-fill")
+            self.CENTER_MODIFIER.apply(
+                components.Div( components.Header(
+                    components.BootstrapIcon("box-seam-fill"), "Welcome to PyBootstrapUI"
+                ) )
             ),
-            components.Hr(),
+            components.HorizontalLine,
             components.Text(
                 "This example demonstrates how to create a custom page object using the PyBootstrapUI framework. "
                 "By leveraging this framework, developers can efficiently build modern web interfaces with dynamic user interactions. "
