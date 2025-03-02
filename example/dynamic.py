@@ -1,9 +1,11 @@
-from pybootstrapui.mishmash import Page, Default, ButtonStyle, ButtonCallbackContext, Spacing, Position
 import pybootstrapui.components as components
+from pybootstrapui import Page, ButtonCallbackContext
+from pybootstrapui.templates import Default
+from pybootstrapui.modifiers import *
 
 page = Page(Default)
 
-header_1 = components.Header('PyBootstrapUI', bi=components.BootstrapIcon('box-seam-fill'))
+header_1 = components.Header(components.BootstrapIcon('box-seam-fill'), 'PyBootstrapUI')
 
 page.set_additional_head('''
 <style>
@@ -20,13 +22,13 @@ page.set_additional_head('''
 ''')
 
 def add_new_callback(context: ButtonCallbackContext):
-	page.add(components.Text('Hello!', classes=[Spacing.MARGIN_TOP_2]))
+	page.add(components.Text('Hello!'))
 
 page.add(
 	header_1,
 	components.Text('This file is made to show dynamic additions to pages.'),
-	components.Button('Click me!', style=ButtonStyle.SUCCESS, on_click=add_new_callback, classes=['bottom-left-corner'])
+	components.Button('Click me!', modifier=ButtonModifier.color(ButtonStyle.SUCCESS), on_click=add_new_callback, classes=['bottom-left-corner'])
 )
 
 if __name__ == '__main__':
-	page.run_in_desktop('/path/to/nwjs')
+	page.run('/path/to/nwjs', title='Dynamic Example')

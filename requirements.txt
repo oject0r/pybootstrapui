@@ -1,5 +1,2 @@
-typing_extensions~=4.12.2
-markdown~=3.7
-
 setuptools~=75.6.0
 aiohttp

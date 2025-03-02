@@ -1,5 +1,6 @@
 import unittest
 from pybootstrapui import components
+from pybootstrapui.modifiers import ButtonModifier, ButtonStyle
 
 
 class TestPyBootstrapUIComponents(unittest.TestCase):
@@ -10,7 +11,7 @@ class TestPyBootstrapUIComponents(unittest.TestCase):
         self.assertIn('1.ogg', audio.construct())
 
     def test_div(self):
-        div = components.Div(components.HTMLElement(), classes=['class-1'], unique_id='div1')
+        div = components.Div(components.Text(), classes=['class-1'], unique_id='div1')
         self.assertIn('<div', div.construct())
         self.assertIn('class-1', div.construct())
 
@@ -18,7 +19,7 @@ class TestPyBootstrapUIComponents(unittest.TestCase):
         def callback(context):
             pass
 
-        button = components.Button(label='Click Me', on_click=callback, type='button', style='secondary',
+        button = components.Button(label='Click Me', on_click=callback, type='button', modifier=ButtonModifier.color(ButtonStyle.PRIMARY),
                                    classes=['class-1'], id='button1')
         self.assertIn('<button', button.construct())
         self.assertIn('Click Me', button.construct())
@@ -60,12 +61,6 @@ class TestPyBootstrapUIComponents(unittest.TestCase):
         div2 = components.Div(classes=['col'])
         grid = components.GridSystem(div1, div2, row=True)
         self.assertIn('class="col"', grid.construct())
-
-
-    def test_file_image(self):
-        file_image = components.FileImage(file_path='D:\\chee.png', alt='File Image', id='file_image1')
-        self.assertIn('<img', file_image.construct())
-        self.assertIn('File Image', file_image.construct())
 
     def test_raw_image(self):
         raw_image = components.RawImage(image_content=b'binarydata', alt='Raw Image', id='raw_image1')
@@ -181,11 +176,5 @@ class TestPyBootstrapUIComponents(unittest.TestCase):
         tooltip = components.Tooltip(target='button1', content='Tooltip text', unique_id='tooltip1')
         self.assertIn('new bootstrap.Tooltip', tooltip.construct())
         self.assertIn('title: "Tooltip text"', tooltip.construct())
-
-    def test_video(self):
-        video = components.Video('D:\\юмор снобов.mp4', controls=True, unique_id='video1')
-        self.assertIn('<video', video.construct())
-        self.assertIn('src="D:\\юмор снобов.mp4"', video.construct())
-        self.assertIn('controls', video.construct())
 
 

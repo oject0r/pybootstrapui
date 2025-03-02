@@ -38,5 +38,4 @@ def get_tasks() -> dict[str, dict[str, Union[int, str, dict]]]:
         tasks[task.task_id] = task_data
 
     task_queue.clear()
-
     return tasks

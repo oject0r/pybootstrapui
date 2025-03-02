@@ -209,12 +209,6 @@ class Text(TextObject):
         )
 
 
-from .base import HTMLElement, RGBAColor
-from pygments import highlight
-from pygments.lexers import get_lexer_by_name, guess_lexer
-from pygments.formatters import HtmlFormatter
-import warnings
-
 
 class Link(TextObject):
     """
@@ -289,7 +283,6 @@ class Header(TextObject):
         self,
         *text: str | BootstrapIcon,
         header_size: int = 1,
-        bi: BootstrapIcon | None = None,
         color: RGBAColor | None = None,
         classes: list[str] | None = None,
         unique_id: str | None = None,
@@ -301,7 +294,6 @@ class Header(TextObject):
         Args:
             text (str | BootstrapIcon): Text content or Bootstrap icons.
             header_size (int): Header size (`1-6`). Default is `1` (`<h1>`).
-            bi (BootstrapIcon | None): An optional Bootstrap icon.
             color (RGBAColor | None): Optional RGBA color for the text.
             classes (list[str] | None): Additional CSS classes.
             unique_id (str | None): Unique identifier for the header.
@@ -319,13 +311,6 @@ class Header(TextObject):
             )
         """
         text = list(text)
-        if bi is not None:
-            text.insert(0, bi)
-            warnings.warn(
-                "The 'bi' parameter in Header is deprecated. Please include it directly within the strings passed via *text.",
-                DeprecationWarning,
-                stacklevel=2,
-            )
 
         super().__init__(
             *text,

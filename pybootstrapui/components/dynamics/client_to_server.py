@@ -1,6 +1,7 @@
 import inspect
+import traceback
 from typing import Callable
-import pybootstrapui.types.context_types as ctx_types
+import pybootstrapui.context_types as ctx_types
 
 
 handlers: dict[str, dict[str, Callable]] | dict[None, None] = {}
@@ -42,8 +43,12 @@ async def call_handler(event: str, ctx_id: str, data: dict):
     # Здесь можно отладить, что происходит с data_typed
     data_typed = ctx_types.types[event](ctx_id)
     data_typed.from_dict(data)
-
-    if inspect.iscoroutinefunction(handler):
-        await handler(data_typed)
-    else:
-        handler(data_typed)
+    try:
+        if inspect.iscoroutinefunction(handler):
+            await handler(data_typed)
+        else:
+            handler(data_typed)
+    except Exception as e:
+        if isinstance(data_typed, ctx_types.ButtonCallbackContext):
+            data_typed.hide_spinner()
+        print(f'Error occurred while executing callback for {data_typed.id}.\n{traceback.format_exc()}')

@@ -1,11 +1,10 @@
 from typing import Union, Callable, Awaitable
 from . import add_handler
-from .base import HTMLElement
-from pybootstrapui.components.dynamics.queue import add_task
+from .base import HasValue
 from ..utils.callbacks import wrap_callback
 
 
-class Slider(HTMLElement):
+class Slider(HasValue):
     """
     Represents a range slider component.
 
@@ -108,45 +107,3 @@ class Slider(HTMLElement):
             <span id="{self.id}-value" class="slider-value" {'style="display: none;"' if not self.show_value else ''}>{self.value}</span>
         </div>
         """
-
-    def set_value(self, new_value: int):
-        """
-        Dynamically updates the slider's value.
-
-        Args:
-            new_value (int): The new value to set for the slider.
-
-        Note:
-            - The value is clamped between `min` and `max`.
-            - Updates the slider value both on the frontend and server-side.
-
-        Example:
-            slider.set_value(75)
-        """
-        self.value = max(self.min, min(new_value, self.max))
-        add_task(self.id, "setValue", value=new_value)
-        add_task(
-            f"{self.id}-value",
-            "rewriteContent",
-            newContent=str(new_value),
-            transitionTime=0,
-        )
-
-    async def get_value(self) -> int:
-        """
-        Asynchronously retrieves the current slider value from the frontend.
-
-        Returns:
-            int: The current value of the slider.
-
-        Note:
-            - Queues a task to fetch the slider value dynamically.
-            - If fetching fails, returns the last known value.
-
-        Example:
-            current_value = await slider.get_value()
-            print(f"Slider value: {current_value}")
-        """
-        task = add_task(self.id, "getValue")
-        await task.wait_async()
-        return task.result.result.get("value", self.value)

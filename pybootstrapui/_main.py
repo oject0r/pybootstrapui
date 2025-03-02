@@ -254,20 +254,17 @@ class Page:
         with open(self.path, "r", encoding="utf-8") as f:
             content = f.read()
 
-        self.javascript += (
-            '</script>\n<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script><script>\n'
-            + jsmin(
+        content = content.replace("{nav_content}", "")
+        content = content.replace("{page_main}", compiled_string)
+        content = content.replace("{page_name}", self.title if self.title else "")
+        content = content.replace("{javascript_here}", self.javascript + (
+            '</script>\n<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script><script>\n' + jsmin(
                 websocket_javascript.replace(
                     "!PYBSUI.INSERTHOST",
                     f"http://{constants.HOST}:{constants.AJAX_PORT}",
                 ).replace("!PYBSUI.TASKTIMINGS", str(self.dynamic_timing))
             )
-        )
-
-        content = content.replace("{nav_content}", "")
-        content = content.replace("{page_main}", compiled_string)
-        content = content.replace("{page_name}", self.title if self.title else "")
-        content = content.replace("{javascript_here}", self.javascript)
+        ))
         content = content.replace("{custom_head}", self.head + custom_head_additions)
         return content
 
@@ -308,7 +305,14 @@ class Page:
         content = content.replace("{nav_content}", "")
         content = content.replace("{page_main}", compiled_string)
         content = content.replace("{page_name}", self.title if self.title else "")
-        content = content.replace("{javascript_here}", self.javascript)
+        content = content.replace("{javascript_here}", self.javascript + (
+            '</script>\n<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script><script>\n' + jsmin(
+                websocket_javascript.replace(
+                    "!PYBSUI.INSERTHOST",
+                    f"http://{constants.HOST}:{constants.AJAX_PORT}",
+                ).replace("!PYBSUI.TASKTIMINGS", str(self.dynamic_timing))
+            )
+        ))
         content = content.replace("{custom_head}", self.head + custom_head_additions)
 
         return content
@@ -358,6 +362,30 @@ class Page:
 
             process = multiprocessing.Process(target=lambda: start_ajax_server(self), daemon=True)
             process.start()
+
+    def get_by_id(self, id: str) -> HTMLElement | None:
+        """
+        Retrieve an element by its unique HTML ID.
+
+        This method searches for an element within the current page content
+        that matches the specified `id`. The search is limited to HTMLElements
+        added via `page.add()`, `page.content`, or similar methods that
+        populate the `self.content`.
+
+        Args:
+            id (str): The unique HTML ID of the element to search for.
+
+        Returns:
+            HTMLElement | None:
+                - The HTMLElement with the matching ID, if found.
+                - None, if no element with the specified ID exists.
+
+        Note:
+            Ensure all HTMLElements have unique IDs within the `self.content`
+            to guarantee accurate retrieval.
+        """
+
+        return next((elem for elem in self.content if elem.id == id), None)
 
     async def clear(self):
         """
@@ -431,3 +459,4 @@ class Page:
         self.run_server()
         run_page_in_desktop(self, str(nwjs_path), icon, title, width, height, resizable)
 
+    run = run_in_desktop

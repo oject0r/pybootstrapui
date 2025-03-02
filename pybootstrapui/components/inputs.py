@@ -1,13 +1,11 @@
-import random
 from . import add_handler
-from .base import HTMLElement
+from .base import HasValue
 from typing import Literal, Callable, Union, Awaitable
-import pybootstrapui.components.dynamics.queue as queue
 from pybootstrapui.utils.callbacks import wrap_callback
 from pybootstrapui.components.buttons import Button
 
 
-class InputObject(HTMLElement):
+class InputObject(HasValue):
     """
     Represents an input element with customizable properties and event handlers.
 
@@ -115,39 +113,6 @@ class InputObject(HTMLElement):
             value (str | None): The new value for the input field. If None, resets to an empty string.
         """
         self.value = value or ""
-
-    async def get_value(self) -> any:
-        """
-        Asynchronously retrieves the value of an input element from the frontend.
-
-        Returns:
-            any: The value of the input element, as returned by the frontend.
-            None: If the element does not have an `id`.
-
-        Example:
-            value = await input_element.get_value()
-            print(f"The input value is: {value}")
-        """
-        if not self.id:
-            return
-
-        task = queue.add_task(self.id, "getValue")
-        await task.wait_async()
-
-        result = task.result.get()
-        self.value = result
-
-        return result
-
-    def change_value(self, new_value: str):
-        """
-        Dynamically updates the value of the input element on the frontend.
-
-        Args:
-            new_value (str): The new value to be set in the input element.
-        """
-        queue.add_task(self.id, "setValue", value=new_value)
-        self.value = new_value
 
     def construct(self, register_callbacks: bool = True) -> str:
         """

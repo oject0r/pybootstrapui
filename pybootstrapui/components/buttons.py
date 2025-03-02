@@ -3,30 +3,8 @@ from pybootstrapui.components.dynamics.client_to_server import add_handler
 from pybootstrapui.utils.callbacks import wrap_callback
 from pybootstrapui.components.text import BootstrapIcon
 from .base import HTMLElement
-
-
-class ButtonStyle:
-    PRIMARY = "primary"
-    SECONDARY = "secondary"
-    SUCCESS = "success"
-    DANGER = "danger"
-    WARNING = "warning"
-    INFO = "info"
-    LIGHT = "light"
-    DARK = "dark"
-    LINK = "link"
-
-    PRIMARY_OUTLINE = "outline-primary"
-    SECONDARY_OUTLINE = "outline-secondary"
-    SUCCESS_OUTLINE = "outline-success"
-    DANGER_OUTLINE = "outline-danger"
-    WARNING_OUTLINE = "outline-warning"
-    INFO_OUTLINE = "outline-info"
-    LIGHT_OUTLINE = "outline-light"
-
-    LARGE = 'btn-lg'
-    SMALL = 'btn-sm'
-
+from pybootstrapui.modifiers.buttons import ButtonModifier
+from .dynamics import queue
 
 
 class Button(HTMLElement):
@@ -50,8 +28,7 @@ class Button(HTMLElement):
         on_click: Union[Callable[..., None], Callable[..., Awaitable[None]]] = None,
         data: str | None = None,
         type: str | None = None,
-        style: str | None = "primary",
-        size: str | None = None,
+        modifier: ButtonModifier = ButtonModifier.color('primary'),
         font_size: int = 18,
         classes: list[str] | None = None,
         id: str | None = None,
@@ -65,8 +42,7 @@ class Button(HTMLElement):
             on_click (Callable | Awaitable | None): A server-side function to handle button clicks.
             data (str | None): Additional data associated with the button.
             type (str | None): The type of the button (e.g., 'submit', 'button').
-            style (str | None): The style type of the button (default is 'primary').
-            size (str | None): The size of the button ('btn-lg', 'btn-sm')
+            modifier (ButtonModifier): Modifier of the button (def: ButtonModifier().color("primary")).
             font_size (int): Font size for the button text (default is 18).
             classes (list[str] | None): A list of CSS classes for the button.
             id (str | None): A unique identifier for the button.
@@ -86,14 +62,12 @@ class Button(HTMLElement):
             raise ValueError('At least one of "label" or "icon" should be provided.')
 
         self.label = label
-        self.style_type = style
+        self.modifier = modifier
         self.type = type
         self.on_click = on_click or None
         self.data = data.replace("`", r"\`")
         self.icon = icon
-        self.size = size
         self.font_size = font_size
-
 
     def construct(self) -> str:
         """
@@ -106,6 +80,7 @@ class Button(HTMLElement):
         # Register the callback if provided
         if self.on_click and self.id:
             add_handler("button_click", self.id, wrap_callback(self.on_click))
+
 
         # Prepare optional attributes
         type_attr = f'type="{self.type}"' if self.type else ""
@@ -130,7 +105,7 @@ class Button(HTMLElement):
         )
 
         total_class = (
-            f'class="btn {f"btn-{self.style_type}" if self.style_type else ""} {self.size if self.size else ""} {self.classes_str}"'
+            f'class="btn {self.classes_str} {self.modifier.construct()}"'
         )
 
         # Generate the HTML string
