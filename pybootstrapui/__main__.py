@@ -231,22 +231,22 @@ def create_project(project_path: Path):
             f"""
 pybootstrapui {{
     project_name {project_path.name.capitalize() if not project_path.name[0].isupper() else project_path.name}
-    
+
     main_file main.py
     nwjs_directory nwjs  # enter relative paths from project root only
-    
+
     compiling_method PackNWjs  # either PackNWjs or ExternalNWjs.
     # If PackNWjs doesn't work for you, switch to ExternalNWjs.
     # Enter anything, but PackNWjs or ExternalNWjs if you want to pack NW.js custom way.
-    
+
     # ----------------------------
     # WIP Section (doesn't work)
     # ----------------------------
-    
+
     # obfuscate_code false  # obfuscate the code when building? will not affect source code
     # install "pyarmor" package before using (pip install pyarmor)
-    
-    
+
+
     # building_method PyInstaller  # either PyInstaller or Briefcase (beta, pip install briefcase).
     # # Briefcase can cause you some bugs and it doesn't support PackNWjs option
     # # but it's better in startup times and overall speed. Also it supports
@@ -314,7 +314,6 @@ def run_project(project_path: Path):
         print("Config file doesn't exist!")
         return
 
-
     configer = Configer()
     config = configer.load_sync(str(project_path / "config.zc"))
 
@@ -356,7 +355,6 @@ def run_project(project_path: Path):
         else:
             print("Invalid choice. Please run the command again.")
             return
-
 
     bef_path = os.getcwd()
     os.chdir(project_path)
@@ -411,7 +409,7 @@ def parse_args():
         "run", help="Run the PyBootstrapUI project."
     )
     run_parser.add_argument(
-        "project_path", type=str, help="Path to the PyBootstrapUI project.", required=False
+        "project_path", type=str, help="Path to the PyBootstrapUI project.", default="./"
     )
 
     args = parser.parse_args()

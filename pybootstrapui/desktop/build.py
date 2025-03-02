@@ -1,5 +1,4 @@
 import os
-from PyInstaller.__main__ import run as pyi_run
 import sys
 from pathlib import Path
 from pybootstrapui import zeroconfig
@@ -166,6 +165,16 @@ def start(project_path: str | Path):
 
     if add_data_option:
         pyi_args.insert(4, add_data_option)
+
+    try:
+        from PyInstaller.__main__ import run as pyi_run
+    except ImportError:
+        print(
+            "FATAL: PyInstaller package not found!\n"
+            "Please install it via pip:\n"
+            "pip install pyinstaller"
+        )
+        sys.exit(1)
 
     pyi_run(pyi_args)
 
