@@ -4,7 +4,7 @@ from pybootstrapui.desktop.built import NWJSPath
 
 class MainPage(Page):
 
-    CENTER_MODIFIER = modifiers.Modifier() \
+    CENTER_MODIFIER = modifiers.Modifier \
         .display(modifiers.DisplayValues.FLEX) \
         .justify_content(modifiers.JustifyContent.CENTER)
 
